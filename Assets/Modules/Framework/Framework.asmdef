@@ -1,0 +1,24 @@
+{
+    "name": "Framework",
+    "rootNamespace": "Framework",
+    "references": [
+        "GUID:72d1fea872bd7a449bf3818f2b0a6708",
+        "GUID:68765d262e2128e4ab49c983f3411946",
+        "GUID:48d677b425fa7b642ad4281d1c5cbd37",
+        "GUID:797ee0ee46ab2704087c3ba7277b8368",
+        "GUID:60bfecf5cb232594891bc622f40d6bed",
+        "GUID:08d1c582746949b40ba6a45cdb776bdf",
+        "GUID:fe25561d224ed4743af4c60938a59d0b",
+        "GUID:6055be8ebefd69e48b49212b09b47b2f",
+        "GUID:7c88a4a7926ee5145ad2dfa06f454c67"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2b26901ac937fe41801f0254cb15929, type: 3}
+  m_Name: PrefabFactory
+  m_EditorClassIdentifier: Framework:Framework:PrefabFactory
+  dontDestroyOnloadManager: {fileID: 8963154345588137166, guid: 5ea1dbf56c77a124a8f95e41fea259fb,
+    type: 3}
+  textPrefab: {fileID: 6053683390545495231, guid: 2377e2fb17d7ac5409a365d17d6211cc,
+    type: 3}
+  audioSourcePrefab: {fileID: 7142884410866609616, guid: b83a1f4d64c9b844db36a6b63753a64a,
+    type: 3}
+  wardModel: {fileID: 7165811681677566439, guid: 526da9e7ec8ede5408ba8040f44dfa26,
+    type: 3}
+  ward: {fileID: 7165811681677566439, guid: f34ed426e0b487a4b8f819d181362406, type: 3}
