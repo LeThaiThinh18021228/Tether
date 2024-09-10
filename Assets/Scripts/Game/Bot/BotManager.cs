@@ -11,9 +11,9 @@ using UnityEngine;
 
 namespace Bot
 {
-    public class BotManager : SingletonNetwork<BotManager>
+    public class BotManager : NetworkBehaviour
     {
-        private readonly List<BotBehaviour> bots = new();
+        public readonly List<BotPlayer> bots = new();
         int initBot;
         RoomServerManager roomServerManager;
         [SerializeField] GameObject botPrefab;
@@ -38,8 +38,8 @@ namespace Bot
             initBot = roomController.Options.CustomOptions.AsInt(Mst.Args.Names.RoomBotNumner);
             for (int i = 0; i < initBot; i++)
             {
-                //bots.Add(botPrefab.InstantiateNetworked<BotBehaviour>(null));
-                SpawnClientBotProcess();
+                SpawnBotObject(null);
+                //SpawnClientBotProcess();
             }
         }
         private void OnTerminatedRoom(RoomController roomController)
@@ -54,9 +54,11 @@ namespace Bot
             processArguments.Set(Mst.Args.Names.GameId, roomServerManager.RoomController.RoomId);
             ProcessManager.RunProcess(Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.Parent.FullName, "Builds/App/Win/ClientRoom/ClientRoom.exe"), processArguments.ToReadableString(" ", " "));
         }
-         public void SpawnBotObject(NetworkConnection conn)
+        public void SpawnBotObject(NetworkConnection conn)
         {
-            bots.Add(botPrefab.InstantiateNetworked<BotBehaviour>(conn));
+            botPrefab.GetComponent<Player>().IsBot = true;
+            var bot = botPrefab.InstantiateNetworked<BotPlayer>(conn);
+            bots.Add(bot);
         }
     }
 }

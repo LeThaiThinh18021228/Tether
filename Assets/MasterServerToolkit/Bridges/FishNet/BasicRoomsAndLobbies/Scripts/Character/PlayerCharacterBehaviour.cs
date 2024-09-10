@@ -27,6 +27,7 @@ namespace MasterServerToolkit.Bridges.FishNetworking.Character
         /// Check if this behaviour is ready
         /// </summary>
         public virtual bool IsReady { get; protected set; } = true;
+        public virtual bool IsBot { get; set; } = false;
 
         protected virtual void Awake()
         {

@@ -64,6 +64,7 @@ namespace FishNet.CodeGenerating.Processing.Rpc
         private const string DATALENGTH_NAME = nameof(RpcAttribute.DataLength);
         private const string VALIDATETARGET_NAME = nameof(TargetRpcAttribute.ValidateTarget);
         private const string DATAORDERTYPE_NAME = nameof(RpcAttribute.OrderType);
+        private const string LOGGING_NAME = nameof(ServerRpcAttribute.Logging);
         #endregion
 
         public override bool ImportReferences()
@@ -394,7 +395,7 @@ namespace FishNet.CodeGenerating.Processing.Rpc
             //PROSTART
             if (!CodeStripping.StripBuild)
                 //PROEND
-                CreateClientRpcConditionsForServer(writerMd);
+                CreateClientRpcConditionsForServer(writerMd, cr.Attribute);
 
             VariableDefinition channelVariableDef = CreateAndPopulateChannelVariable(writerMd, channelParameterDef);
             /* Create a local PooledWriter variable. */
@@ -864,7 +865,8 @@ namespace FishNet.CodeGenerating.Processing.Rpc
             if (requireOwnership)
                 base.GetClass<NetworkBehaviourHelper>().CreateLocalClientIsOwnerCheck(methodDef, LoggingType.Warning, false, false, true);
             //If (!base.IsClient)
-            base.GetClass<NetworkBehaviourHelper>().CreateIsClientCheck(methodDef, LoggingType.Warning, false, true, false);
+            LoggingType loggingType = rpcAttribute.GetField(LOGGING_NAME, LoggingType.Warning);
+            base.GetClass<NetworkBehaviourHelper>().CreateIsClientCheck(methodDef, loggingType, false, true, false);
         }
 
         /// <summary>
@@ -888,10 +890,11 @@ namespace FishNet.CodeGenerating.Processing.Rpc
         /// Creates conditions that server must pass to process a ClientRpc.
         /// </summary>
         /// <param name="createdProcessor"></param>
-        private void CreateClientRpcConditionsForServer(MethodDefinition methodDef)
+        private void CreateClientRpcConditionsForServer(MethodDefinition methodDef, CustomAttribute rpcAttribute)
         {
+            LoggingType loggingType = rpcAttribute.GetField(LOGGING_NAME, LoggingType.Warning);
             //If (!base.IsServer)
-            base.GetClass<NetworkBehaviourHelper>().CreateIsServerCheck(methodDef, LoggingType.Warning, false, false, false);
+            base.GetClass<NetworkBehaviourHelper>().CreateIsServerCheck(methodDef, loggingType, false, false, false);
         }
 
         /// <summary>

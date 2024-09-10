@@ -7,6 +7,7 @@ using Framework.FishNet;
 using MasterServerToolkit.Bridges.FishNetworking.Character;
 using MasterServerToolkit.MasterServer;
 using Sirenix.OdinInspector;
+using System.Collections.Generic;
 using UnityEngine;
 public enum PlayerInputState
 {
@@ -28,7 +29,7 @@ public partial class Player : PlayerCharacter
 
     public PlayerData Data;
 
-    [ShowInInspector] protected readonly SyncVar<PlayerInputState> stateInput = new(PlayerInputState.NONE); [ServerRpc(RunLocally = true)] private void SetStateInput(PlayerInputState value) => stateInput.Value = value;
+    [ShowInInspector] public readonly SyncVar<PlayerInputState> StateInput = new(PlayerInputState.NONE); [ServerRpc(RunLocally = true)] private void SetStateInput(PlayerInputState value) => StateInput.Value = value;
     public StateMachine<PlayerInputState> InputStateMachine = new();
     readonly SyncVar<Vector3> ward1Pos = new();
     readonly SyncVar<Vector3> ward2Pos = new();
@@ -37,7 +38,7 @@ public partial class Player : PlayerCharacter
     public const float distanceToCurrency = 10f;
     public Movable Movable { get; private set; }
     [SerializeField] Animator animator;
-
+    public List<Link> Links = new();
     #region Networkbehavior
     public override void OnStartNetwork()
     {
@@ -51,17 +52,11 @@ public partial class Player : PlayerCharacter
     public override void OnStartServer()
     {
         base.OnStartServer();
-        if (Mst.Args.IsBotClient)
-        {
-            Debug.Log("BotCreated");
-            BotManager.Instance.SpawnBotObject(Owner);
-            Despawn(gameObject);
-        }
         InputStateMachine.AddDelegate(PlayerInputState.NONE, null, Player_NONE_Update_Server, null);
         InputStateMachine.AddDelegate(PlayerInputState.WARDING, Player_WARDING_Start_Server, Player_WARDING_Update_Server, Player_WARDING_End_Server);
         InputStateMachine.CurrentState = PlayerInputState.NONE;
         Movable.Dir.OnChange += Dir_OnChangeServer;
-        stateInput.OnChange += StateInput_OnChangeServer;
+        StateInput.OnChange += StateInput_OnChangeServer;
         ward1Pos.OnChange += Ward1Pos_OnChangeServer;
         ward2Pos.OnChange += Ward2Pos_OnChangeServer;
         if (!Data)
@@ -74,7 +69,7 @@ public partial class Player : PlayerCharacter
     {
         base.OnStopServer();
         Movable.Dir.OnChange -= Dir_OnChangeServer;
-        stateInput.OnChange -= StateInput_OnChangeServer;
+        StateInput.OnChange -= StateInput_OnChangeServer;
         ward1Pos.OnChange -= Ward1Pos_OnChangeServer;
         ward2Pos.OnChange -= Ward2Pos_OnChangeServer;
     }
@@ -82,7 +77,7 @@ public partial class Player : PlayerCharacter
     {
         base.Awake();
         Movable = GetComponent<Movable>();
-        stateInput.UpdateSettings(NetworkConfig.SyncTypeSettingsClientAuthorized);
+        StateInput.UpdateSettings(NetworkConfig.SyncTypeSettingsClientAuthorized);
     }
     protected void Start()
     {
@@ -131,7 +126,7 @@ public partial class Player : PlayerCharacter
     }
     protected virtual void Player_WARDING_Update_Server()
     {
-        if (stateInput.Value != PlayerInputState.WARDING) return;
+        if (StateInput.Value != PlayerInputState.WARDING) return;
         if (Movable.Dir.Value != Vector3.zero)
         {
             Vector3 dis = transform.position - ward1Pos.Value;
@@ -161,21 +156,21 @@ public partial class Player : PlayerCharacter
     #endregion
     #region Private
     [ServerRpc(RequireOwnership = true)]
-    protected void PlaceWardRPC()
+    public void PlaceWardRPC()
     {
-        if (stateInput.Value == PlayerInputState.NONE)
+        if (StateInput.Value == PlayerInputState.NONE)
         {
             SetStateInput(PlayerInputState.WARDING);
             ward1Pos.Value = transform.position;
         }
-        else if (stateInput.Value == PlayerInputState.WARDING)
+        else if (StateInput.Value == PlayerInputState.WARDING)
         {
             CreateWardLink();
             SetStateInput(PlayerInputState.NONE);
         }
     }
     [ServerRpc(RunLocally = true, RequireOwnership = true)]
-    protected void UnplaceWardRPC()
+    public void UnplaceWardRPC()
     {
         SetStateInput(PlayerInputState.NONE);
         UnplaceWardObserver();
@@ -189,8 +184,7 @@ public partial class Player : PlayerCharacter
         nob1.transform.position = ward1Pos.Value;
         Ward nob2 = PrefabFactory.Ward.InstantiateNetworked<Ward>(Owner);
         nob2.transform.position = ward1Pos.Value + dis.normalized * CurrencyAwait.Value / distanceToCurrency;
-        nob1.CreateLink(nob2);
-
+        Links.Add(nob1.CreateLink(nob2));
         Data.AddCurrrency(-CurrencyAwait.Value);
         CurrencyAwait.Value = 0;
     }

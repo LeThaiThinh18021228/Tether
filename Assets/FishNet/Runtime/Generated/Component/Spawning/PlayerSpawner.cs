@@ -154,7 +154,6 @@ namespace FishNet.Component.Spawning
 
         protected virtual NetworkObject SetPrefab()
         {
-            Debug.Log("SetPrefab");
             return _playerPrefab;
         }
     }

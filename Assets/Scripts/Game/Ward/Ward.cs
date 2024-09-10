@@ -25,17 +25,14 @@ public class Ward : NetworkBehaviour
     }
 
     [Server(Logging = FishNet.Managing.Logging.LoggingType.Off)]
-    public void CreateLink(Ward ward)
+    public Link CreateLink(Ward ward)
     {
-        if (IsServerInitialized)
-        {
-            Link link = VFXFactory.Electric.InstantiateNetworked<Link>(Owner, WardRoot.Instance.transform);
-            link.interval = 5;
-            link.duration = 3;
-            link.SetPosition(this, ward);
-            this.transform.parent = WardRoot.Instance.transform;
-            ward.transform.parent = WardRoot.Instance.transform;
-        }
-
+        Link link = VFXFactory.Electric.InstantiateNetworked<Link>(Owner, WardRoot.Instance.transform);
+        link.interval = 5;
+        link.duration = 3;
+        link.SetPosition(this, ward);
+        this.transform.parent = WardRoot.Instance.transform;
+        ward.transform.parent = WardRoot.Instance.transform;
+        return link;
     }
 }

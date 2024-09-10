@@ -451,8 +451,10 @@ GameObject:
   - component: {fileID: 1277849655012020109}
   - component: {fileID: 1923569040417011058}
   - component: {fileID: -1703091351039084370}
+  - component: {fileID: 9145271928763253487}
+  - component: {fileID: 6111255287520961987}
   - component: {fileID: 3236071356546674897}
-  - component: {fileID: -8625070308634342183}
+  - component: {fileID: 5536891867518079215}
   m_Layer: 0
   m_Name: Bot
   m_TagString: Player
@@ -501,7 +503,7 @@ MonoBehaviour:
   - {fileID: 3758520510867460743}
   - {fileID: 1923569040417011058}
   - {fileID: -1703091351039084370}
-  - {fileID: 3236071356546674897}
+  - {fileID: 9145271928763253487}
   - {fileID: 2085763567451256952}
   <SerializedRootNetworkBehaviour>k__BackingField: {fileID: 0}
   <SerializedNestedNetworkObjects>k__BackingField: []
@@ -735,6 +737,59 @@ MonoBehaviour:
   _componentIndexCache: 4
   _addedNetworkObject: {fileID: 3811835367428141371}
   _networkObjectCache: {fileID: 3811835367428141371}
+--- !u!114 &9145271928763253487
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1090099261691024214}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0af8d527857139a4c950c305cbfd7d6a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _componentIndexCache: 5
+  _addedNetworkObject: {fileID: 3811835367428141371}
+  _networkObjectCache: {fileID: 3811835367428141371}
+  logLevel: 3
+  Data: {fileID: -1703091351039084370}
+  animator: {fileID: 5354032425081265959}
+  Links: []
+  skin: {fileID: 2805377912021866738}
+  wardingRadius: {fileID: 5572867311681662291}
+  body: {fileID: 8854371797491691904}
+  botId: 0
+--- !u!114 &6111255287520961987
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1090099261691024214}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d1c4e0b1822b495aa52bc52839ecb30, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_BrainParameters:
+    VectorObservationSize: 1
+    NumStackedVectorObservations: 2
+    m_ActionSpec:
+      m_NumContinuousActions: 2
+      BranchSizes: 02000000
+    VectorActionSize: 
+    VectorActionDescriptions: []
+    VectorActionSpaceType: 0
+    hasUpgradedBrainParametersWithActionSpec: 1
+  m_Model: {fileID: 0}
+  m_InferenceDevice: 0
+  m_BehaviorType: 0
+  m_BehaviorName: BotAgent
+  TeamId: 0
+  m_UseChildSensors: 1
+  m_UseChildActuators: 1
+  m_ObservableAttributeHandling: 0
 --- !u!114 &3236071356546674897
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -744,15 +799,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 1090099261691024214}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a045823b9ffe11a4ca535d02273075c4, type: 3}
+  m_Script: {fileID: 11500000, guid: 529b53144b05d1f40b1d4cc770a782eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _componentIndexCache: 5
-  _addedNetworkObject: {fileID: 3811835367428141371}
-  _networkObjectCache: {fileID: 3811835367428141371}
-  botId: 0
-  player: {fileID: -8625070308634342183}
---- !u!114 &-8625070308634342183
+  agentParameters:
+    maxStep: 0
+  hasUpgradedFromAgentParameters: 1
+  MaxStep: 0
+  botPlayer: {fileID: 0}
+--- !u!114 &5536891867518079215
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -761,18 +816,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1090099261691024214}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 76a9c49f046f89e4bb64c45aa463a27c, type: 3}
+  m_Script: {fileID: 11500000, guid: 3a5c9d521e5ef4759a8246a07d52221e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _componentIndexCache: 255
-  _addedNetworkObject: {fileID: 3811835367428141371}
-  _networkObjectCache: {fileID: 0}
-  logLevel: 3
-  Data: {fileID: -1703091351039084370}
-  animator: {fileID: 5354032425081265959}
-  skin: {fileID: 2805377912021866738}
-  wardingRadius: {fileID: 5572867311681662291}
-  body: {fileID: 8854371797491691904}
+  DecisionPeriod: 5
+  TakeActionsBetweenDecisions: 1
 --- !u!1 &1157478665284053361
 GameObject:
   m_ObjectHideFlags: 0
@@ -3469,7 +3517,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 908bb9c8106a32b47a18fa082d82dda6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: -8625070308634342183}
+  player: {fileID: 9145271928763253487}
   currencyHUDImage: {fileID: 8690342062443779052}
   currencyHUDText: {fileID: 6309102043234408381}
   nameHUDText: {fileID: 4130586979420849395}

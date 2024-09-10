@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: adb973ff97ef2e64fa7ee071a778fc02, type: 3}
   m_Name: BuildWinClient
   m_EditorClassIdentifier: 
-  isEnable: 1
+  isEnable: 0
   type: 0
   scenes:
   - Assets/Scenes/Loading.unity

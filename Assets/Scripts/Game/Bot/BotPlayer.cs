@@ -3,28 +3,28 @@ using Framework;
 using UnityEngine;
 namespace Bot
 {
-    public class BotBehaviour : NetworkBehaviour
+    public class BotPlayer : Player
     {
+        public override bool IsBot { get; set; } = true;
         public int botId;
-        [SerializeField]Player player;
         // Start is called before the first frame update
         public override void OnStartServer()
         {
             base.OnStartServer();
             Debug.Log("BotCreated");
             Vector3 des = MapManager.RandomPositionInsideMap();
-            player.Movable.Dir.OnChange += Dir_OnChangeServer;
-            player.Movable.SetDes(des);
+            Movable.SetDes(des);
         }
-        protected void Dir_OnChangeServer(Vector3 prev, Vector3 next, bool asServer)
+        protected override void Dir_OnChangeServer(Vector3 prev, Vector3 next, bool asServer)
         {
+            base.Dir_OnChangeServer(prev, next, asServer);
             if (asServer)
             {
                 if (next == Vector3.zero)
                 {
                     Vector3 des = MapManager.RandomPositionInsideMap();
                     PDebug.Log($"Bot {botId} moving from {transform.position} to {des}");
-                    player.Movable.SetDes(des);
+                    Movable.SetDes(des);
                 }
             }
         }

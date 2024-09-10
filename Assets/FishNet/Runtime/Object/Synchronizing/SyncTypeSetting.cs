@@ -72,7 +72,7 @@ namespace FishNet.Object.Synchronizing
 
         public SyncTypeSettings(WritePermission writePermissions, ReadPermission readPermissions, float sendRate, Channel channel)
         {
-
+                
             WritePermission = writePermissions;
             ReadPermission = readPermissions;
             SendRate = sendRate;

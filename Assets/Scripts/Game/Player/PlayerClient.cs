@@ -20,7 +20,7 @@ public partial class Player : PlayerCharacter
         InputStateMachine.AddDelegate(PlayerInputState.WARDING, Player_WARDING_Start_Client, Player_WARDING_Update_Client, Player_WARDING_End_Client);
         InputStateMachine.CurrentState = PlayerInputState.NONE;
         Movable.Dir.OnChange += Dir_OnChangeClient;
-        stateInput.OnChange += StateInput_OnChangeClient;
+        StateInput.OnChange += StateInput_OnChangeClient;
         ward1Pos.OnChange += Ward1Pos_OnChangeClient;
         ward2Pos.OnChange += Ward2Pos_OnChangeClient;
 
@@ -56,7 +56,7 @@ public partial class Player : PlayerCharacter
             Destroy(ward2);
         }
         Movable.Dir.OnChange -= Dir_OnChangeClient;
-        stateInput.OnChange -= StateInput_OnChangeClient;
+        StateInput.OnChange -= StateInput_OnChangeClient;
         ward1Pos.OnChange -= Ward1Pos_OnChangeClient;
         ward2Pos.OnChange -= Ward2Pos_OnChangeClient;
     }
@@ -114,18 +114,17 @@ public partial class Player : PlayerCharacter
     }
     protected virtual void Player_WARDING_Update_Client()
     {
-        if (stateInput.Value != PlayerInputState.WARDING) return;
+        if (StateInput.Value != PlayerInputState.WARDING) return;
         if (IsOwner)
         {
             Movable.SetDirRPC(Movable.DirInput());
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                CreateWardLink();
-                SetStateInput(PlayerInputState.NONE);
+                PlaceWardRPC();
             }
             if (Input.GetKeyDown(KeyCode.Escape))
             {
-                PlaceWardRPC();
+                UnplaceWardRPC();
             }
         }
     }

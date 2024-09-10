@@ -85,8 +85,8 @@ namespace MasterServerToolkit.MasterServer
         #endregion
 
         public readonly Dictionary<int, RoomPlayer> Players = new();
-        public readonly Dictionary<int, PlayerCharacter> Characters = new();
         public readonly Dictionary<string, List<NetworkObject>> Objects = new();
+        public readonly Dictionary<int, PlayerCharacter> Characters = new();
 
         /// <summary>
         /// Options of this room we must share with clients
@@ -646,7 +646,7 @@ namespace MasterServerToolkit.MasterServer
 
         private void PlayerCharacter_OnServerCharacterOwnershipEvent(PlayerCharacter player)
         {
-            if (!Mst.Args.IsBotClient)
+            if (!player.IsBot)
             {
                 Characters.Add(player.OwnerId, player);
                 if (isPersitentObjects)

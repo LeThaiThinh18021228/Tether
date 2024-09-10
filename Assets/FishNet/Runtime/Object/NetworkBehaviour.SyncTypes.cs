@@ -474,9 +474,10 @@ namespace FishNet.Object
                 if (!canWrite)
                     continue;
 
-                written++;
-
+                int startWriterPosition = writer.Position;
                 sb.WriteFull(writer);
+                if (writer.Position != startWriterPosition)
+                    written++;
             }
 
             //If any where written.
@@ -502,6 +503,7 @@ namespace FishNet.Object
             for (int i = 0; i < written; i++)
             {
                 byte syncTypeId = reader.ReadUInt8Unpacked();
+                
                 if (_syncTypes.TryGetValueIL2CPP(syncTypeId, out SyncBase sb))
                     sb.Read(reader, asServer: true);
                 else
