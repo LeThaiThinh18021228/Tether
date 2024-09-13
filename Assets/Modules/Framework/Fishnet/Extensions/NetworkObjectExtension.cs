@@ -2,7 +2,6 @@
 using FishNet;
 using FishNet.Connection;
 using FishNet.Object;
-using System;
 using UnityEngine;
 
 namespace Framework.FishNet
@@ -12,6 +11,12 @@ namespace Framework.FishNet
         public static T InstantiateNetworked<T>(this GameObject obj, NetworkConnection conn, Transform parent, Vector3 pos, Quaternion rot) where T : NetworkBehaviour
         {
             T nob = InstanceFinder.NetworkManager.GetPooledInstantiated(obj, pos, rot, parent, true).GetComponent<T>();
+            InstanceFinder.ServerManager.Spawn(nob.gameObject, conn);
+            return nob;
+        }
+        public static T InstantiateNetworked<T>(this GameObject obj, NetworkConnection conn, Transform parent, Vector3 pos) where T : NetworkBehaviour
+        {
+            T nob = InstanceFinder.NetworkManager.GetPooledInstantiated(obj, pos, Quaternion.identity, parent, true).GetComponent<T>();
             InstanceFinder.ServerManager.Spawn(nob.gameObject, conn);
             return nob;
         }

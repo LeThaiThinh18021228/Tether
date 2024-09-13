@@ -759,7 +759,6 @@ MonoBehaviour:
   skin: {fileID: 2805377912021866738}
   wardingRadius: {fileID: 5572867311681662291}
   body: {fileID: 8854371797491691904}
-  botId: 0
 --- !u!114 &6111255287520961987
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -773,11 +772,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 1
+    VectorObservationSize: 10772
     NumStackedVectorObservations: 2
     m_ActionSpec:
       m_NumContinuousActions: 2
-      BranchSizes: 02000000
+      BranchSizes: 03000000
     VectorActionSize: 
     VectorActionDescriptions: []
     VectorActionSpaceType: 0
@@ -805,8 +804,8 @@ MonoBehaviour:
   agentParameters:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
-  MaxStep: 0
-  botPlayer: {fileID: 0}
+  MaxStep: 1000
+  player: {fileID: 9145271928763253487}
 --- !u!114 &5536891867518079215
 MonoBehaviour:
   m_ObjectHideFlags: 0

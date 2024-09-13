@@ -1,5 +1,3 @@
-using FishNet;
-using FishNet.Component.Spawning;
 using FishNet.Connection;
 using FishNet.Object;
 using Framework;
@@ -15,27 +13,28 @@ namespace Bot
     {
         public readonly List<BotPlayer> bots = new();
         int initBot;
-        RoomServerManager roomServerManager;
         [SerializeField] GameObject botPrefab;
         public override void OnStartNetwork()
         {
             base.OnStartNetwork();
-            if (!roomServerManager)
-            {
-                roomServerManager = InstanceFinder.ServerManager.GetComponent<RoomServerManager>();
-            }
-            roomServerManager.OnRoomRegisteredEvent.AddListener(OnRoomRegistered);
-            roomServerManager.OnTerminatedRoom.AddListener(OnTerminatedRoom);
+            GameManager.Instance.RoomServerManager.OnRoomRegisteredEvent.AddListener(OnRoomRegistered);
+            GameManager.Instance.RoomServerManager.OnTerminatedRoom.AddListener(OnTerminatedRoom);
         }
-        public override void OnStartClient()
+        public override void OnStartServer()
         {
-            base.OnStartClient();
-            initBot = Mst.Args.AsInt(Mst.Args.Names.RoomBotNumner);
+            base.OnStartServer();
 
         }
         private void OnRoomRegistered(RoomController roomController)
         {
-            initBot = roomController.Options.CustomOptions.AsInt(Mst.Args.Names.RoomBotNumner);
+            Debug.Log("IsServerInitialized" + IsServerInitialized);
+            initBot = GameManager.Instance.RoomServerManager.RoomController.Options.CustomOptions.AsInt(Mst.Args.Names.RoomBotNumner);
+#if !UNITY_SERVER && UNITY_EDITOR
+            if (IsServerInitialized)
+            {
+                initBot = 3;
+            }
+#endif
             for (int i = 0; i < initBot; i++)
             {
                 SpawnBotObject(null);
@@ -44,20 +43,21 @@ namespace Bot
         }
         private void OnTerminatedRoom(RoomController roomController)
         {
-            
+
         }
         void SpawnClientBotProcess()
         {
             // Create process args string
             var processArguments = new MstProperties();
             processArguments.Set(Mst.Args.Names.IsBotClient, true);
-            processArguments.Set(Mst.Args.Names.GameId, roomServerManager.RoomController.RoomId);
+            processArguments.Set(Mst.Args.Names.GameId, GameManager.Instance.RoomServerManager.RoomController.RoomId);
             ProcessManager.RunProcess(Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.Parent.FullName, "Builds/App/Win/ClientRoom/ClientRoom.exe"), processArguments.ToReadableString(" ", " "));
         }
         public void SpawnBotObject(NetworkConnection conn)
         {
             botPrefab.GetComponent<Player>().IsBot = true;
-            var bot = botPrefab.InstantiateNetworked<BotPlayer>(conn);
+            var bot = botPrefab.InstantiateNetworked<BotPlayer>(conn, transform);
+            bot.Id = bots.Count;
             bots.Add(bot);
         }
     }

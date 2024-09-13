@@ -1,0 +1,483 @@
+Mono path[0] = 'D:/Unity/Repo/Tether/Builds/App/Win/Room/Room_Data/Managed'
+Mono config path = 'D:/Unity/Repo/Tether/Builds/App/Win/Room/MonoBleedingEdge/etc'
+Starting managed debugger on port 56871
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=0.0.0.0:56871
+Found 1 interfaces on host : 0) 192.168.1.31
+Player connection [2368]  Target information:
+
+Player connection [2368]  * "[IP] 192.168.1.31 [Port] 55002 [Flags] 2 [Guid] 4081389871 [EditorId] 3918300107 [Version] 1048832 [Id] WindowsPlayer(2,PC) [Debug] 1 [PackageName] WindowsPlayer [ProjectName] Tether" 
+
+Player connection [2368] Started UDP target info broadcast (1) on [225.0.0.222:54997].
+
+Initialize engine version: 6000.0.16f1 (ae37dbaefed8)
+[Subsystems] Discovering subsystems at path D:/Unity/Repo/Tether/Builds/App/Win/Room/Room_Data/UnitySubsystems
+kGfxThreadingModeSplitJobs is not supported on Direct3D 11. Reverting to kGfxThreadingModeClientWorkerJobs instead.
+GfxDevice: creating device client; kGfxThreadingModeClientWorkerJobs
+Direct3D:
+    Version:  Direct3D 11.0 [level 11.1]
+    Renderer: Intel(R) UHD Graphics 630 (ID=0x9bc8)
+    Vendor:   Intel
+    VRAM:     8106 MB
+    Driver:   30.0.101.1273
+Begin MonoManager ReloadAssembly
+Symbol file LoadedFromMemory is not a mono symbol file
+- Loaded All Assemblies, in  0.258 seconds
+- Finished resetting the current domain, in  0.004 seconds
+[PhysX] Initialized MultithreadedTaskDispatcher with 12 workers.
+[SRDebugger] No SRDebugger settings object found - using defaults. (Open SRDebugger Settings window in the Unity Editor to create settings file)
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at C:/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:37)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+SRDebugger.Settings:GetOrCreateInstance () (at D:/Unity/Repo/Tether/Assets/ThirdParties/StompyRobot/SRDebugger/Scripts/Settings.cs:669)
+SRDebugger.Settings:get_Instance () (at D:/Unity/Repo/Tether/Assets/ThirdParties/StompyRobot/SRDebugger/Scripts/Settings.cs:97)
+SRDebugger.AutoInitialize:OnLoadBeforeScene () (at D:/Unity/Repo/Tether/Assets/ThirdParties/StompyRobot/SRDebugger/Scripts/AutoInitialize.cs:25)
+
+(Filename: D:/Unity/Repo/Tether/Assets/ThirdParties/StompyRobot/SRDebugger/Scripts/Settings.cs Line: 669)
+
+<RI> Initializing input.
+XInput1_3.dll not found. Trying XInput9_1_0.dll instead...
+<RI> Input initialized.
+<RI> Initialized touch support.
+UnloadTime: 1.341700 ms
+DontDestroyOnLoad only works for root GameObjects or components on root GameObjects.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at C:/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:37)
+UnityEngine.Object:DontDestroyOnLoad (UnityEngine.Object)
+MasterServerToolkit.Utils.SingletonBehaviour`1<MasterServerToolkit.MasterServer.ClientToMasterConnector>:Awake () (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/Tools/Utilities/Scripts/SingletonBehaviour.cs:50)
+MasterServerToolkit.MasterServer.ConnectionHelper`1<MasterServerToolkit.MasterServer.ClientToMasterConnector>:Awake () (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Client/ConnectionHelper.cs:74)
+MasterServerToolkit.MasterServer.ClientToMasterConnector:Awake () (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Client/ClientToMasterConnector.cs:10)
+UnityEngine.Object:Internal_CloneSingle (UnityEngine.Object)
+UnityEngine.Object:Instantiate<UnityEngine.GameObject> (UnityEngine.GameObject) (at C:/build/output/unity/unity/Runtime/Export/Scripting/UnityEngineObject.bindings.cs:400)
+Framework.GameObjectExtensions:Create (UnityEngine.GameObject) (at D:/Unity/Repo/Tether/Assets/Modules/Framework/Extensions/GameObjectExtensions.cs:69)
+Framework.PrefabFactory:Init () (at D:/Unity/Repo/Tether/Assets/Modules/Framework/System/Config/Factory/PrefabFactory.cs:16)
+
+[D:/Unity/Repo/Tether/Assets/Modules/Framework/System/Config/Factory/PrefabFactory.cs line 16]
+
+DontDestroyOnLoad only works for root GameObjects or components on root GameObjects.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at C:/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:37)
+UnityEngine.Object:DontDestroyOnLoad (UnityEngine.Object)
+MasterServerToolkit.Utils.SingletonBehaviour`1<MasterServerToolkit.Utils.ScreenshotMaker>:Awake () (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/Tools/Utilities/Scripts/SingletonBehaviour.cs:50)
+UnityEngine.Object:Internal_CloneSingle (UnityEngine.Object)
+UnityEngine.Object:Instantiate<UnityEngine.GameObject> (UnityEngine.GameObject) (at C:/build/output/unity/unity/Runtime/Export/Scripting/UnityEngineObject.bindings.cs:400)
+Framework.GameObjectExtensions:Create (UnityEngine.GameObject) (at D:/Unity/Repo/Tether/Assets/Modules/Framework/Extensions/GameObjectExtensions.cs:69)
+Framework.PrefabFactory:Init () (at D:/Unity/Repo/Tether/Assets/Modules/Framework/System/Config/Factory/PrefabFactory.cs:16)
+
+[D:/Unity/Repo/Tether/Assets/Modules/Framework/System/Config/Factory/PrefabFactory.cs line 16]
+
+Odin Serializer ArchitectureInfo initialization with defaults (all unaligned read/writes disabled).
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at C:/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:37)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+Sirenix.Serialization.ArchitectureInfo:.cctor ()
+Sirenix.Serialization.UnitySerializationInitializer:Initialize ()
+Sirenix.Serialization.UnitySerializationInitializer:InitializeRuntime ()
+
+Odin Serializer detected whitelisted runtime platform WindowsPlayer and memory read test succeeded; enabling all unaligned memory read/writes.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at C:/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:37)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+Sirenix.Serialization.ArchitectureInfo:SetRuntimePlatform (UnityEngine.RuntimePlatform)
+Sirenix.Serialization.UnitySerializationInitializer:Initialize ()
+Sirenix.Serialization.UnitySerializationInitializer:InitializeRuntime ()
+
+RenderGraph is now disabled.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at C:/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:37)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+UnityEngine.Rendering.Universal.UniversalRenderPipeline:.ctor (UnityEngine.Rendering.Universal.UniversalRenderPipelineAsset) (at ./Library/PackageCache/com.unity.render-pipelines.universal/Runtime/UniversalRenderPipeline.cs:252)
+UnityEngine.Rendering.Universal.UniversalRenderPipelineAsset:CreatePipeline () (at ./Library/PackageCache/com.unity.render-pipelines.universal/Runtime/Data/UniversalRenderPipelineAsset.cs:799)
+UnityEngine.Rendering.RenderPipelineAsset:InternalCreatePipeline () (at C:/build/output/unity/unity/Runtime/Export/RenderPipeline/RenderPipelineAsset.cs:15)
+UnityEngine.Rendering.RenderPipelineManager:TryPrepareRenderPipeline (UnityEngine.Rendering.RenderPipelineAsset) (at C:/build/output/unity/unity/Runtime/Export/RenderPipeline/RenderPipelineManager.cs:165)
+UnityEngine.Rendering.RenderPipelineManager:DoRenderLoop_Internal (UnityEngine.Rendering.RenderPipelineAsset,intptr,UnityEngine.Object) (at C:/build/output/unity/unity/Runtime/Export/RenderPipeline/RenderPipelineManager.cs:139)
+
+(Filename: ./Library/PackageCache/com.unity.render-pipelines.universal/Runtime/UniversalRenderPipeline.cs Line: 252)
+
+[Info | ClientToMasterConnector] Starting  Client To Master Connector...
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at C:/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:37)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+MasterServerToolkit.Logging.LogAppenders:UnityConsoleAppender (MasterServerToolkit.Logging.Logger,MasterServerToolkit.Logging.LogLevel,object) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Logger/LogAppenders.cs:13)
+MasterServerToolkit.Logging.Logger:Log (MasterServerToolkit.Logging.LogLevel,object) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Logger/Logger.cs:134)
+MasterServerToolkit.Logging.Logger:Info (object) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Logger/Logger.cs:70)
+MasterServerToolkit.MasterServer.ConnectionHelper`1<MasterServerToolkit.MasterServer.ClientToMasterConnector>:StartConnectionProcess (string,int,int) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Client/ConnectionHelper.cs:203)
+MasterServerToolkit.MasterServer.ConnectionHelper`1<MasterServerToolkit.MasterServer.ClientToMasterConnector>:StartConnection (string,int,int) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Client/ConnectionHelper.cs:190)
+MasterServerToolkit.MasterServer.ConnectionHelper`1<MasterServerToolkit.MasterServer.ClientToMasterConnector>:StartConnection (int) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Client/ConnectionHelper.cs:176)
+MasterServerToolkit.MasterServer.ConnectionHelper`1<MasterServerToolkit.MasterServer.ClientToMasterConnector>:StartConnection () (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Client/ConnectionHelper.cs:171)
+MasterServerToolkit.MasterServer.ConnectionHelper`1<MasterServerToolkit.MasterServer.ClientToMasterConnector>:<Start>b__23_0 () (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Client/ConnectionHelper.cs:114)
+MasterServerToolkit.Networking.MstTimer/<StartWaitingForSeconds>d__22:MoveNext () (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/Networking/Scripts/MstTimer.cs:198)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at C:/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
+
+(Filename: D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Logger/Logger.cs Line: 70)
+
+[Info | ClientToMasterConnector]  Client To Master Connector is connecting to server at: 127.0.0.1:5000
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at C:/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:37)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+MasterServerToolkit.Logging.LogAppenders:UnityConsoleAppender (MasterServerToolkit.Logging.Logger,MasterServerToolkit.Logging.LogLevel,object) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Logger/LogAppenders.cs:13)
+MasterServerToolkit.Logging.Logger:Log (MasterServerToolkit.Logging.LogLevel,object) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Logger/Logger.cs:134)
+MasterServerToolkit.Logging.Logger:Info (object) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Logger/Logger.cs:70)
+MasterServerToolkit.MasterServer.ConnectionHelper`1<MasterServerToolkit.MasterServer.ClientToMasterConnector>:StartConnectionProcess (string,int,int) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Client/ConnectionHelper.cs:204)
+MasterServerToolkit.MasterServer.ConnectionHelper`1<MasterServerToolkit.MasterServer.ClientToMasterConnector>:StartConnection (string,int,int) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Client/ConnectionHelper.cs:190)
+MasterServerToolkit.MasterServer.ConnectionHelper`1<MasterServerToolkit.MasterServer.ClientToMasterConnector>:StartConnection (int) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Client/ConnectionHelper.cs:176)
+MasterServerToolkit.MasterServer.ConnectionHelper`1<MasterServerToolkit.MasterServer.ClientToMasterConnector>:StartConnection () (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Client/ConnectionHelper.cs:171)
+MasterServerToolkit.MasterServer.ConnectionHelper`1<MasterServerToolkit.MasterServer.ClientToMasterConnector>:<Start>b__23_0 () (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Client/ConnectionHelper.cs:114)
+MasterServerToolkit.Networking.MstTimer/<StartWaitingForSeconds>d__22:MoveNext () (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/Networking/Scripts/MstTimer.cs:198)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at C:/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
+
+(Filename: D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Logger/Logger.cs Line: 70)
+
+[Debug | WebSocket] WebSocket opened connection
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at C:/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:37)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+MasterServerToolkit.Logging.LogAppenders:UnityConsoleAppender (MasterServerToolkit.Logging.Logger,MasterServerToolkit.Logging.LogLevel,object) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Logger/LogAppenders.cs:13)
+MasterServerToolkit.Logging.Logger:Log (MasterServerToolkit.Logging.LogLevel,object) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Logger/Logger.cs:134)
+MasterServerToolkit.Logging.Logger:Debug (object) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Logger/Logger.cs:57)
+MasterServerToolkit.Networking.WebSocket:<Connect>b__23_1 (object,System.EventArgs) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/Networking/Plugins/WebSocketSharp/WebSocket.cs:205)
+WebSocketSharp.Ext:Emit (System.EventHandler,object,System.EventArgs)
+WebSocketSharp.WebSocket:open ()
+WebSocketSharp.WebSocket/<>c__DisplayClass187_0:<ConnectAsync>b__0 (System.IAsyncResult)
+System.Runtime.Remoting.Messaging.AsyncResult:System.Threading.IThreadPoolWorkItem.ExecuteWorkItem ()
+System.Threading.ThreadPoolWorkQueue:Dispatch ()
+System.Threading._ThreadPoolWaitCallback:PerformWaitCallback ()
+
+(Filename: D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Logger/Logger.cs Line: 57)
+
+[Info | RoomServerManager] Room server connected to master server as client
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at C:/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:37)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+MasterServerToolkit.Logging.LogAppenders:UnityConsoleAppender (MasterServerToolkit.Logging.Logger,MasterServerToolkit.Logging.LogLevel,object) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Logger/LogAppenders.cs:13)
+MasterServerToolkit.Logging.Logger:Log (MasterServerToolkit.Logging.LogLevel,object) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Logger/Logger.cs:134)
+MasterServerToolkit.Logging.Logger:Info (object) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Logger/Logger.cs:70)
+MasterServerToolkit.MasterServer.RoomServerManager:OnConnectedToMasterEventHandler (MasterServerToolkit.Networking.IClientSocket) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Modules/Rooms/RoomServerManager.cs:175)
+MasterServerToolkit.Networking.WsClientSocket/<>c__DisplayClass61_0:<SetStatus>b__0 (bool,string) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/Networking/Scripts/Transports/WebSocketsSharp/WsClientSocket.cs:260)
+MasterServerToolkit.MasterServer.MstSecurity/<>c__DisplayClass23_0:<DefaultAuthenticator>b__0 (MasterServerToolkit.Networking.ResponseStatus,MasterServerToolkit.Networking.IIncomingMessage) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Mst/MstSecurity.cs:100)
+MasterServerToolkit.Networking.BasePeer:TriggerAck (int,MasterServerToolkit.Networking.ResponseStatus,MasterServerToolkit.Networking.IIncomingMessage) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/Networking/Scripts/BasePeer.cs:549)
+MasterServerToolkit.Networking.BasePeer:HandleDataReceived (byte[],int) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/Networking/Scripts/BasePeer.cs:588)
+MasterServerToolkit.Networking.BasePeer:HandleReceivedData (byte[]) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/Networking/Scripts/BasePeer.cs:569)
+MasterServerToolkit.Networking.WsClientSocket:DoUpdate () (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/Networking/Scripts/Transports/WebSocketsSharp/WsClientSocket.cs:224)
+MasterServerToolkit.Networking.MstUpdateRunner:Update () (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/Networking/Scripts/MstUpdateRunner.cs:29)
+
+(Filename: D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Logger/Logger.cs Line: 70)
+
+[Info | RoomNetworkManager] Starting Room Server: :7777
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at C:/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:37)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+MasterServerToolkit.Logging.LogAppenders:UnityConsoleAppender (MasterServerToolkit.Logging.Logger,MasterServerToolkit.Logging.LogLevel,object) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Logger/LogAppenders.cs:13)
+MasterServerToolkit.Logging.Logger:Log (MasterServerToolkit.Logging.LogLevel,object) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Logger/Logger.cs:134)
+MasterServerToolkit.Logging.Logger:Info (object) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Logger/Logger.cs:70)
+MasterServerToolkit.Bridges.FishNetworking.RoomNetworkManager:StartRoomServer () (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/Bridges/FishNet/BasicRoomsAndLobbies/Scripts/Room/RoomNetworkManager.cs:78)
+UnityEngine.Events.InvokableCall:Invoke () (at C:/build/output/unity/unity/Runtime/Export/UnityEvent/UnityEvent.cs:178)
+UnityEngine.Events.UnityEvent`1<MasterServerToolkit.MasterServer.RoomOptions>:Invoke (MasterServerToolkit.MasterServer.RoomOptions) (at C:/build/output/unity/unity/artifacts/generated/UnityEvent/UnityEvent_1.cs:62)
+MasterServerToolkit.MasterServer.RoomServerManager:OnConnectedToMasterEventHandler (MasterServerToolkit.Networking.IClientSocket) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Modules/Rooms/RoomServerManager.cs:194)
+MasterServerToolkit.Networking.WsClientSocket/<>c__DisplayClass61_0:<SetStatus>b__0 (bool,string) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/Networking/Scripts/Transports/WebSocketsSharp/WsClientSocket.cs:260)
+MasterServerToolkit.MasterServer.MstSecurity/<>c__DisplayClass23_0:<DefaultAuthenticator>b__0 (MasterServerToolkit.Networking.ResponseStatus,MasterServerToolkit.Networking.IIncomingMessage) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Mst/MstSecurity.cs:100)
+MasterServerToolkit.Networking.BasePeer:TriggerAck (int,MasterServerToolkit.Networking.ResponseStatus,MasterServerToolkit.Networking.IIncomingMessage) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/Networking/Scripts/BasePeer.cs:549)
+MasterServerToolkit.Networking.BasePeer:HandleDataReceived (byte[],int) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/Networking/Scripts/BasePeer.cs:588)
+MasterServerToolkit.Networking.BasePeer:HandleReceivedData (byte[]) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/Networking/Scripts/BasePeer.cs:569)
+MasterServerToolkit.Networking.WsClientSocket:DoUpdate () (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/Networking/Scripts/Transports/WebSocketsSharp/WsClientSocket.cs:224)
+MasterServerToolkit.Networking.MstUpdateRunner:Update () (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/Networking/Scripts/MstUpdateRunner.cs:29)
+
+(Filename: D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Logger/Logger.cs Line: 70)
+
+[Info | RoomNetworkManager] Online Scene: CoreIngame
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at C:/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:37)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+MasterServerToolkit.Logging.LogAppenders:UnityConsoleAppender (MasterServerToolkit.Logging.Logger,MasterServerToolkit.Logging.LogLevel,object) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Logger/LogAppenders.cs:13)
+MasterServerToolkit.Logging.Logger:Log (MasterServerToolkit.Logging.LogLevel,object) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Logger/Logger.cs:134)
+MasterServerToolkit.Logging.Logger:Info (object) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Logger/Logger.cs:70)
+MasterServerToolkit.Bridges.FishNetworking.RoomNetworkManager:StartRoomServer () (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/Bridges/FishNet/BasicRoomsAndLobbies/Scripts/Room/RoomNetworkManager.cs:79)
+UnityEngine.Events.InvokableCall:Invoke () (at C:/build/output/unity/unity/Runtime/Export/UnityEvent/UnityEvent.cs:178)
+UnityEngine.Events.UnityEvent`1<MasterServerToolkit.MasterServer.RoomOptions>:Invoke (MasterServerToolkit.MasterServer.RoomOptions) (at C:/build/output/unity/unity/artifacts/generated/UnityEvent/UnityEvent_1.cs:62)
+MasterServerToolkit.MasterServer.RoomServerManager:OnConnectedToMasterEventHandler (MasterServerToolkit.Networking.IClientSocket) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Modules/Rooms/RoomServerManager.cs:194)
+MasterServerToolkit.Networking.WsClientSocket/<>c__DisplayClass61_0:<SetStatus>b__0 (bool,string) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/Networking/Scripts/Transports/WebSocketsSharp/WsClientSocket.cs:260)
+MasterServerToolkit.MasterServer.MstSecurity/<>c__DisplayClass23_0:<DefaultAuthenticator>b__0 (MasterServerToolkit.Networking.ResponseStatus,MasterServerToolkit.Networking.IIncomingMessage) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Mst/MstSecurity.cs:100)
+MasterServerToolkit.Networking.BasePeer:TriggerAck (int,MasterServerToolkit.Networking.ResponseStatus,MasterServerToolkit.Networking.IIncomingMessage) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/Networking/Scripts/BasePeer.cs:549)
+MasterServerToolkit.Networking.BasePeer:HandleDataReceived (byte[],int) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/Networking/Scripts/BasePeer.cs:588)
+MasterServerToolkit.Networking.BasePeer:HandleReceivedData (byte[]) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/Networking/Scripts/BasePeer.cs:569)
+MasterServerToolkit.Networking.WsClientSocket:DoUpdate () (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/Networking/Scripts/Transports/WebSocketsSharp/WsClientSocket.cs:224)
+MasterServerToolkit.Networking.MstUpdateRunner:Update () (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/Networking/Scripts/MstUpdateRunner.cs:29)
+
+(Filename: D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Logger/Logger.cs Line: 70)
+
+[Info | ClientToMasterConnector]  Client To Master Connector connected to server at: 127.0.0.1:5000. Connection time is: 0.4013915s.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at C:/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:37)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+MasterServerToolkit.Logging.LogAppenders:UnityConsoleAppender (MasterServerToolkit.Logging.Logger,MasterServerToolkit.Logging.LogLevel,object) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Logger/LogAppenders.cs:13)
+MasterServerToolkit.Logging.Logger:Log (MasterServerToolkit.Logging.LogLevel,object) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Logger/Logger.cs:134)
+MasterServerToolkit.Logging.Logger:Info (object) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Logger/Logger.cs:70)
+MasterServerToolkit.MasterServer.ConnectionHelper`1<MasterServerToolkit.MasterServer.ClientToMasterConnector>:OnConnectedEventHandler (MasterServerToolkit.Networking.IClientSocket) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Client/ConnectionHelper.cs:243)
+MasterServerToolkit.Networking.WsClientSocket/<>c__DisplayClass61_0:<SetStatus>b__0 (bool,string) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/Networking/Scripts/Transports/WebSocketsSharp/WsClientSocket.cs:260)
+MasterServerToolkit.MasterServer.MstSecurity/<>c__DisplayClass23_0:<DefaultAuthenticator>b__0 (MasterServerToolkit.Networking.ResponseStatus,MasterServerToolkit.Networking.IIncomingMessage) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Mst/MstSecurity.cs:100)
+MasterServerToolkit.Networking.BasePeer:TriggerAck (int,MasterServerToolkit.Networking.ResponseStatus,MasterServerToolkit.Networking.IIncomingMessage) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/Networking/Scripts/BasePeer.cs:549)
+MasterServerToolkit.Networking.BasePeer:HandleDataReceived (byte[],int) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/Networking/Scripts/BasePeer.cs:588)
+MasterServerToolkit.Networking.BasePeer:HandleReceivedData (byte[]) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/Networking/Scripts/BasePeer.cs:569)
+MasterServerToolkit.Networking.WsClientSocket:DoUpdate () (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/Networking/Scripts/Transports/WebSocketsSharp/WsClientSocket.cs:224)
+MasterServerToolkit.Networking.MstUpdateRunner:Update () (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/Networking/Scripts/MstUpdateRunner.cs:29)
+
+(Filename: D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Logger/Logger.cs Line: 70)
+
+[Info | RoomNetworkManager] Room Server started
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at C:/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:37)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+MasterServerToolkit.Logging.LogAppenders:UnityConsoleAppender (MasterServerToolkit.Logging.Logger,MasterServerToolkit.Logging.LogLevel,object) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Logger/LogAppenders.cs:13)
+MasterServerToolkit.Logging.Logger:Log (MasterServerToolkit.Logging.LogLevel,object) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Logger/Logger.cs:134)
+MasterServerToolkit.Logging.Logger:Info (object) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Logger/Logger.cs:70)
+MasterServerToolkit.Bridges.FishNetworking.RoomNetworkManager:ServerManager_OnServerConnectionState (FishNet.Transporting.ServerConnectionStateArgs) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/Bridges/FishNet/BasicRoomsAndLobbies/Scripts/Room/RoomNetworkManager.cs:96)
+FishNet.Managing.Server.ServerManager:Transport_OnServerConnectionState (FishNet.Transporting.ServerConnectionStateArgs) (at D:/Unity/Repo/Tether/Assets/FishNet/Runtime/Managing/Server/ServerManager.cs:522)
+FishNet.Transporting.Tugboat.Tugboat:HandleServerConnectionState (FishNet.Transporting.ServerConnectionStateArgs) (at D:/Unity/Repo/Tether/Assets/FishNet/Runtime/Transporting/Transports/Tugboat/Tugboat.cs:179)
+FishNet.Transporting.Tugboat.CommonSocket:SetConnectionState (FishNet.Transporting.LocalConnectionState,bool) (at D:/Unity/Repo/Tether/Assets/FishNet/Runtime/Transporting/Transports/Tugboat/Core/CommonSocket.cs:38)
+FishNet.Transporting.Tugboat.Server.ServerSocket:IterateIncoming () (at D:/Unity/Repo/Tether/Assets/FishNet/Runtime/Transporting/Transports/Tugboat/Core/ServerSocket.cs:483)
+FishNet.Transporting.Tugboat.Tugboat:IterateIncoming (bool) (at D:/Unity/Repo/Tether/Assets/FishNet/Runtime/Transporting/Transports/Tugboat/Tugboat.cs:209)
+FishNet.Managing.Transporting.TransportManager:IterateIncoming (bool) (at D:/Unity/Repo/Tether/Assets/FishNet/Runtime/Managing/Transporting/TransportManager.cs:705)
+FishNet.Managing.Timing.TimeManager:TryIterateData (bool) (at D:/Unity/Repo/Tether/Assets/FishNet/Runtime/Managing/Timing/TimeManager.cs:1042)
+FishNet.Managing.Timing.TimeManager:IncreaseTick () (at D:/Unity/Repo/Tether/Assets/FishNet/Runtime/Managing/Timing/TimeManager.cs:708)
+FishNet.Managing.Timing.TimeManager:<TickUpdate>g__MethodLogic|99_0 () (at D:/Unity/Repo/Tether/Assets/FishNet/Runtime/Managing/Timing/TimeManager.cs:376)
+FishNet.Managing.Timing.TimeManager:TickUpdate () (at D:/Unity/Repo/Tether/Assets/FishNet/Runtime/Managing/Timing/TimeManager.cs:366)
+FishNet.Transporting.NetworkReaderLoop:Update () (at D:/Unity/Repo/Tether/Assets/FishNet/Runtime/Transporting/NetworkReaderLoop.cs:28)
+
+(Filename: D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Logger/Logger.cs Line: 70)
+
+[Info | RoomNetworkManager] Room Server listening to: :7777 
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at C:/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:37)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+MasterServerToolkit.Logging.LogAppenders:UnityConsoleAppender (MasterServerToolkit.Logging.Logger,MasterServerToolkit.Logging.LogLevel,object) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Logger/LogAppenders.cs:13)
+MasterServerToolkit.Logging.Logger:Log (MasterServerToolkit.Logging.LogLevel,object) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Logger/Logger.cs:134)
+MasterServerToolkit.Logging.Logger:Info (object) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Logger/Logger.cs:70)
+MasterServerToolkit.Bridges.FishNetworking.RoomNetworkManager:ServerManager_OnServerConnectionState (FishNet.Transporting.ServerConnectionStateArgs) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/Bridges/FishNet/BasicRoomsAndLobbies/Scripts/Room/RoomNetworkManager.cs:100)
+FishNet.Managing.Server.ServerManager:Transport_OnServerConnectionState (FishNet.Transporting.ServerConnectionStateArgs) (at D:/Unity/Repo/Tether/Assets/FishNet/Runtime/Managing/Server/ServerManager.cs:522)
+FishNet.Transporting.Tugboat.Tugboat:HandleServerConnectionState (FishNet.Transporting.ServerConnectionStateArgs) (at D:/Unity/Repo/Tether/Assets/FishNet/Runtime/Transporting/Transports/Tugboat/Tugboat.cs:179)
+FishNet.Transporting.Tugboat.CommonSocket:SetConnectionState (FishNet.Transporting.LocalConnectionState,bool) (at D:/Unity/Repo/Tether/Assets/FishNet/Runtime/Transporting/Transports/Tugboat/Core/CommonSocket.cs:38)
+FishNet.Transporting.Tugboat.Server.ServerSocket:IterateIncoming () (at D:/Unity/Repo/Tether/Assets/FishNet/Runtime/Transporting/Transports/Tugboat/Core/ServerSocket.cs:483)
+FishNet.Transporting.Tugboat.Tugboat:IterateIncoming (bool) (at D:/Unity/Repo/Tether/Assets/FishNet/Runtime/Transporting/Transports/Tugboat/Tugboat.cs:209)
+FishNet.Managing.Transporting.TransportManager:IterateIncoming (bool) (at D:/Unity/Repo/Tether/Assets/FishNet/Runtime/Managing/Transporting/TransportManager.cs:705)
+FishNet.Managing.Timing.TimeManager:TryIterateData (bool) (at D:/Unity/Repo/Tether/Assets/FishNet/Runtime/Managing/Timing/TimeManager.cs:1042)
+FishNet.Managing.Timing.TimeManager:IncreaseTick () (at D:/Unity/Repo/Tether/Assets/FishNet/Runtime/Managing/Timing/TimeManager.cs:708)
+FishNet.Managing.Timing.TimeManager:<TickUpdate>g__MethodLogic|99_0 () (at D:/Unity/Repo/Tether/Assets/FishNet/Runtime/Managing/Timing/TimeManager.cs:376)
+FishNet.Managing.Timing.TimeManager:TickUpdate () (at D:/Unity/Repo/Tether/Assets/FishNet/Runtime/Managing/Timing/TimeManager.cs:366)
+FishNet.Transporting.NetworkReaderLoop:Update () (at D:/Unity/Repo/Tether/Assets/FishNet/Runtime/Transporting/NetworkReaderLoop.cs:28)
+
+(Filename: D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Logger/Logger.cs Line: 70)
+
+[Info | RoomServerManager] Registering room Room-d4b2-3d46-3522 to list...
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at C:/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:37)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+MasterServerToolkit.Logging.LogAppenders:UnityConsoleAppender (MasterServerToolkit.Logging.Logger,MasterServerToolkit.Logging.LogLevel,object) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Logger/LogAppenders.cs:13)
+MasterServerToolkit.Logging.Logger:Log (MasterServerToolkit.Logging.LogLevel,object) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Logger/Logger.cs:134)
+MasterServerToolkit.Logging.Logger:Info (object) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Logger/Logger.cs:70)
+MasterServerToolkit.MasterServer.RoomServerManager:RegisterRoom () (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Modules/Rooms/RoomServerManager.cs:442)
+MasterServerToolkit.MasterServer.RoomServerManager:OnServerStarted () (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Modules/Rooms/RoomServerManager.cs:221)
+MasterServerToolkit.Bridges.FishNetworking.RoomNetworkManager:ServerManager_OnServerConnectionState (FishNet.Transporting.ServerConnectionStateArgs) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/Bridges/FishNet/BasicRoomsAndLobbies/Scripts/Room/RoomNetworkManager.cs:101)
+FishNet.Managing.Server.ServerManager:Transport_OnServerConnectionState (FishNet.Transporting.ServerConnectionStateArgs) (at D:/Unity/Repo/Tether/Assets/FishNet/Runtime/Managing/Server/ServerManager.cs:522)
+FishNet.Transporting.Tugboat.Tugboat:HandleServerConnectionState (FishNet.Transporting.ServerConnectionStateArgs) (at D:/Unity/Repo/Tether/Assets/FishNet/Runtime/Transporting/Transports/Tugboat/Tugboat.cs:179)
+FishNet.Transporting.Tugboat.CommonSocket:SetConnectionState (FishNet.Transporting.LocalConnectionState,bool) (at D:/Unity/Repo/Tether/Assets/FishNet/Runtime/Transporting/Transports/Tugboat/Core/CommonSocket.cs:38)
+FishNet.Transporting.Tugboat.Server.ServerSocket:IterateIncoming () (at D:/Unity/Repo/Tether/Assets/FishNet/Runtime/Transporting/Transports/Tugboat/Core/ServerSocket.cs:483)
+FishNet.Transporting.Tugboat.Tugboat:IterateIncoming (bool) (at D:/Unity/Repo/Tether/Assets/FishNet/Runtime/Transporting/Transports/Tugboat/Tugboat.cs:209)
+FishNet.Managing.Transporting.TransportManager:IterateIncoming (bool) (at D:/Unity/Repo/Tether/Assets/FishNet/Runtime/Managing/Transporting/TransportManager.cs:705)
+FishNet.Managing.Timing.TimeManager:TryIterateData (bool) (at D:/Unity/Repo/Tether/Assets/FishNet/Runtime/Managing/Timing/TimeManager.cs:1042)
+FishNet.Managing.Timing.TimeManager:IncreaseTick () (at D:/Unity/Repo/Tether/Assets/FishNet/Runtime/Managing/Timing/TimeManager.cs:708)
+FishNet.Managing.Timing.TimeManager:<TickUpdate>g__MethodLogic|99_0 () (at D:/Unity/Repo/Tether/Assets/FishNet/Runtime/Managing/Timing/TimeManager.cs:376)
+FishNet.Managing.Timing.TimeManager:TickUpdate () (at D:/Unity/Repo/Tether/Assets/FishNet/Runtime/Managing/Timing/TimeManager.cs:366)
+FishNet.Transporting.NetworkReaderLoop:Update () (at D:/Unity/Repo/Tether/Assets/FishNet/Runtime/Transporting/NetworkReaderLoop.cs:28)
+
+(Filename: D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Logger/Logger.cs Line: 70)
+
+[Info | RoomServerManager] Room registered successfully. Room ID: 9, Use Password:False;-mstRoomBotNumber:-1;Region:International;RoomName:Room-d4b2-3d46-3522;MaxConnections:10;RoomPort:7777;IsPublic:True;RoomIp:127.0.0.1;AccessTimeoutPeriod:10 sec.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at C:/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:37)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+MasterServerToolkit.Logging.LogAppenders:UnityConsoleAppender (MasterServerToolkit.Logging.Logger,MasterServerToolkit.Logging.LogLevel,object) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Logger/LogAppenders.cs:13)
+MasterServerToolkit.Logging.Logger:Log (MasterServerToolkit.Logging.LogLevel,object) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Logger/Logger.cs:134)
+MasterServerToolkit.Logging.Logger:Info (object) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Logger/Logger.cs:70)
+MasterServerToolkit.MasterServer.RoomServerManager:<RegisterRoom>b__53_0 (MasterServerToolkit.MasterServer.RoomController,string) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Modules/Rooms/RoomServerManager.cs:461)
+MasterServerToolkit.MasterServer.MstRoomsServer/<>c__DisplayClass14_0:<RegisterRoom>b__0 (MasterServerToolkit.Networking.ResponseStatus,MasterServerToolkit.Networking.IIncomingMessage) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Modules/Rooms/MstRoomsServer.cs:82)
+MasterServerToolkit.Networking.BasePeer:TriggerAck (int,MasterServerToolkit.Networking.ResponseStatus,MasterServerToolkit.Networking.IIncomingMessage) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/Networking/Scripts/BasePeer.cs:549)
+MasterServerToolkit.Networking.BasePeer:HandleDataReceived (byte[],int) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/Networking/Scripts/BasePeer.cs:588)
+MasterServerToolkit.Networking.BasePeer:HandleReceivedData (byte[]) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/Networking/Scripts/BasePeer.cs:569)
+MasterServerToolkit.Networking.WsClientSocket:DoUpdate () (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/Networking/Scripts/Transports/WebSocketsSharp/WsClientSocket.cs:224)
+MasterServerToolkit.Networking.MstUpdateRunner:Update () (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/Networking/Scripts/MstUpdateRunner.cs:29)
+
+(Filename: D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Logger/Logger.cs Line: 70)
+
+[Info | ClientToMasterConnector]  Client To Master Connector disconnected from server
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at C:/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:37)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+MasterServerToolkit.Logging.LogAppenders:UnityConsoleAppender (MasterServerToolkit.Logging.Logger,MasterServerToolkit.Logging.LogLevel,object) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Logger/LogAppenders.cs:13)
+MasterServerToolkit.Logging.Logger:Log (MasterServerToolkit.Logging.LogLevel,object) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Logger/Logger.cs:134)
+MasterServerToolkit.Logging.Logger:Info (object) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Logger/Logger.cs:70)
+MasterServerToolkit.MasterServer.ConnectionHelper`1<MasterServerToolkit.MasterServer.ClientToMasterConnector>:OnDisconnectedEventHandler (MasterServerToolkit.Networking.IClientSocket) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Client/ConnectionHelper.cs:236)
+MasterServerToolkit.Networking.WsClientSocket:SetStatus (MasterServerToolkit.Networking.ConnectionStatus,bool) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/Networking/Scripts/Transports/WebSocketsSharp/WsClientSocket.cs:274)
+MasterServerToolkit.Networking.WsClientSocket:Close (uint16,string,bool) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/Networking/Scripts/Transports/WebSocketsSharp/WsClientSocket.cs:341)
+MasterServerToolkit.Networking.WsClientSocket:Close (uint16,bool) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/Networking/Scripts/Transports/WebSocketsSharp/WsClientSocket.cs:325)
+MasterServerToolkit.Networking.WsClientSocket:Close (bool) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/Networking/Scripts/Transports/WebSocketsSharp/WsClientSocket.cs:320)
+MasterServerToolkit.MasterServer.RoomServerManager:OnDestroy () (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Modules/Rooms/RoomServerManager.cs:156)
+
+(Filename: D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Logger/Logger.cs Line: 70)
+
+[Info | ClientToMasterConnector] Starting  Client To Master Connector...
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at C:/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:37)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+MasterServerToolkit.Logging.LogAppenders:UnityConsoleAppender (MasterServerToolkit.Logging.Logger,MasterServerToolkit.Logging.LogLevel,object) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Logger/LogAppenders.cs:13)
+MasterServerToolkit.Logging.Logger:Log (MasterServerToolkit.Logging.LogLevel,object) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Logger/Logger.cs:134)
+MasterServerToolkit.Logging.Logger:Info (object) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Logger/Logger.cs:70)
+MasterServerToolkit.MasterServer.ConnectionHelper`1<MasterServerToolkit.MasterServer.ClientToMasterConnector>:StartConnectionProcess (string,int,int) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Client/ConnectionHelper.cs:203)
+MasterServerToolkit.MasterServer.ConnectionHelper`1<MasterServerToolkit.MasterServer.ClientToMasterConnector>:StartConnection (string,int,int) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Client/ConnectionHelper.cs:190)
+MasterServerToolkit.MasterServer.ConnectionHelper`1<MasterServerToolkit.MasterServer.ClientToMasterConnector>:StartConnection (int) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Client/ConnectionHelper.cs:176)
+UnityEngine.Events.InvokableCall`1<int>:Invoke (int) (at C:/build/output/unity/unity/Runtime/Export/UnityEvent/UnityEvent.cs:219)
+UnityEngine.Events.CachedInvokableCall`1<int>:Invoke (object[]) (at C:/build/output/unity/unity/Runtime/Export/UnityEvent/UnityEvent.cs:357)
+UnityEngine.Events.UnityEvent:Invoke () (at C:/build/output/unity/unity/artifacts/generated/UnityEvent/UnityEvent_0.cs:69)
+MasterServerToolkit.MasterServer.ConnectionHelper`1<MasterServerToolkit.MasterServer.ClientToMasterConnector>:OnDisconnectedEventHandler (MasterServerToolkit.Networking.IClientSocket) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Client/ConnectionHelper.cs:237)
+MasterServerToolkit.Networking.WsClientSocket:SetStatus (MasterServerToolkit.Networking.ConnectionStatus,bool) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/Networking/Scripts/Transports/WebSocketsSharp/WsClientSocket.cs:274)
+MasterServerToolkit.Networking.WsClientSocket:Close (uint16,string,bool) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/Networking/Scripts/Transports/WebSocketsSharp/WsClientSocket.cs:341)
+MasterServerToolkit.Networking.WsClientSocket:Close (uint16,bool) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/Networking/Scripts/Transports/WebSocketsSharp/WsClientSocket.cs:325)
+MasterServerToolkit.Networking.WsClientSocket:Close (bool) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/Networking/Scripts/Transports/WebSocketsSharp/WsClientSocket.cs:320)
+MasterServerToolkit.MasterServer.RoomServerManager:OnDestroy () (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Modules/Rooms/RoomServerManager.cs:156)
+
+(Filename: D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Logger/Logger.cs Line: 70)
+
+[Info | ClientToMasterConnector]  Client To Master Connector is connecting to server at: 127.0.0.1:5000
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at C:/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:37)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+MasterServerToolkit.Logging.LogAppenders:UnityConsoleAppender (MasterServerToolkit.Logging.Logger,MasterServerToolkit.Logging.LogLevel,object) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Logger/LogAppenders.cs:13)
+MasterServerToolkit.Logging.Logger:Log (MasterServerToolkit.Logging.LogLevel,object) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Logger/Logger.cs:134)
+MasterServerToolkit.Logging.Logger:Info (object) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Logger/Logger.cs:70)
+MasterServerToolkit.MasterServer.ConnectionHelper`1<MasterServerToolkit.MasterServer.ClientToMasterConnector>:StartConnectionProcess (string,int,int) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Client/ConnectionHelper.cs:204)
+MasterServerToolkit.MasterServer.ConnectionHelper`1<MasterServerToolkit.MasterServer.ClientToMasterConnector>:StartConnection (string,int,int) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Client/ConnectionHelper.cs:190)
+MasterServerToolkit.MasterServer.ConnectionHelper`1<MasterServerToolkit.MasterServer.ClientToMasterConnector>:StartConnection (int) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Client/ConnectionHelper.cs:176)
+UnityEngine.Events.InvokableCall`1<int>:Invoke (int) (at C:/build/output/unity/unity/Runtime/Export/UnityEvent/UnityEvent.cs:219)
+UnityEngine.Events.CachedInvokableCall`1<int>:Invoke (object[]) (at C:/build/output/unity/unity/Runtime/Export/UnityEvent/UnityEvent.cs:357)
+UnityEngine.Events.UnityEvent:Invoke () (at C:/build/output/unity/unity/artifacts/generated/UnityEvent/UnityEvent_0.cs:69)
+MasterServerToolkit.MasterServer.ConnectionHelper`1<MasterServerToolkit.MasterServer.ClientToMasterConnector>:OnDisconnectedEventHandler (MasterServerToolkit.Networking.IClientSocket) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Client/ConnectionHelper.cs:237)
+MasterServerToolkit.Networking.WsClientSocket:SetStatus (MasterServerToolkit.Networking.ConnectionStatus,bool) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/Networking/Scripts/Transports/WebSocketsSharp/WsClientSocket.cs:274)
+MasterServerToolkit.Networking.WsClientSocket:Close (uint16,string,bool) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/Networking/Scripts/Transports/WebSocketsSharp/WsClientSocket.cs:341)
+MasterServerToolkit.Networking.WsClientSocket:Close (uint16,bool) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/Networking/Scripts/Transports/WebSocketsSharp/WsClientSocket.cs:325)
+MasterServerToolkit.Networking.WsClientSocket:Close (bool) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/Networking/Scripts/Transports/WebSocketsSharp/WsClientSocket.cs:320)
+MasterServerToolkit.MasterServer.RoomServerManager:OnDestroy () (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Modules/Rooms/RoomServerManager.cs:156)
+
+(Filename: D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Logger/Logger.cs Line: 70)
+
+[Debug | WebSocket] WebSocket closed connection with code [1000:Normal]. Reason: []
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at C:/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:37)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+MasterServerToolkit.Logging.LogAppenders:UnityConsoleAppender (MasterServerToolkit.Logging.Logger,MasterServerToolkit.Logging.LogLevel,object) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Logger/LogAppenders.cs:13)
+MasterServerToolkit.Logging.Logger:Log (MasterServerToolkit.Logging.LogLevel,object) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Logger/Logger.cs:134)
+MasterServerToolkit.Logging.Logger:Debug (object) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Logger/Logger.cs:57)
+MasterServerToolkit.Networking.WebSocket:<Connect>b__23_3 (object,WebSocketSharp.CloseEventArgs) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/Networking/Plugins/WebSocketSharp/WebSocket.cs:220)
+WebSocketSharp.Ext:Emit<WebSocketSharp.CloseEventArgs> (System.EventHandler`1<WebSocketSharp.CloseEventArgs>,object,WebSocketSharp.CloseEventArgs)
+WebSocketSharp.WebSocket:close (WebSocketSharp.PayloadData,bool,bool)
+System.Runtime.Remoting.Messaging.AsyncResult:System.Threading.IThreadPoolWorkItem.ExecuteWorkItem ()
+System.Threading.ThreadPoolWorkQueue:Dispatch ()
+System.Threading._ThreadPoolWaitCallback:PerformWaitCallback ()
+
+(Filename: D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Logger/Logger.cs Line: 57)
+
+[Debug | WebSocket] WebSocket opened connection
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at C:/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:37)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+MasterServerToolkit.Logging.LogAppenders:UnityConsoleAppender (MasterServerToolkit.Logging.Logger,MasterServerToolkit.Logging.LogLevel,object) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Logger/LogAppenders.cs:13)
+MasterServerToolkit.Logging.Logger:Log (MasterServerToolkit.Logging.LogLevel,object) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Logger/Logger.cs:134)
+MasterServerToolkit.Logging.Logger:Debug (object) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Logger/Logger.cs:57)
+MasterServerToolkit.Networking.WebSocket:<Connect>b__23_1 (object,System.EventArgs) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/Networking/Plugins/WebSocketSharp/WebSocket.cs:205)
+WebSocketSharp.Ext:Emit (System.EventHandler,object,System.EventArgs)
+WebSocketSharp.WebSocket:open ()
+WebSocketSharp.WebSocket/<>c__DisplayClass187_0:<ConnectAsync>b__0 (System.IAsyncResult)
+System.Runtime.Remoting.Messaging.AsyncResult:System.Threading.IThreadPoolWorkItem.ExecuteWorkItem ()
+System.Threading.ThreadPoolWorkQueue:Dispatch ()
+System.Threading._ThreadPoolWaitCallback:PerformWaitCallback ()
+
+(Filename: D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Logger/Logger.cs Line: 57)
+
+[Debug | WebSocket] WebSocket closed connection with code [1000:Normal]. Reason: []
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at C:/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:37)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+MasterServerToolkit.Logging.LogAppenders:UnityConsoleAppender (MasterServerToolkit.Logging.Logger,MasterServerToolkit.Logging.LogLevel,object) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Logger/LogAppenders.cs:13)
+MasterServerToolkit.Logging.Logger:Log (MasterServerToolkit.Logging.LogLevel,object) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Logger/Logger.cs:134)
+MasterServerToolkit.Logging.Logger:Debug (object) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Logger/Logger.cs:57)
+MasterServerToolkit.Networking.WebSocket:<Connect>b__23_3 (object,WebSocketSharp.CloseEventArgs) (at D:/Unity/Repo/Tether/Assets/MasterServerToolkit/Networking/Plugins/WebSocketSharp/WebSocket.cs:220)
+WebSocketSharp.Ext:Emit<WebSocketSharp.CloseEventArgs> (System.EventHandler`1<WebSocketSharp.CloseEventArgs>,object,WebSocketSharp.CloseEventArgs)
+WebSocketSharp.WebSocket:close (WebSocketSharp.PayloadData,bool,bool)
+System.Runtime.Remoting.Messaging.AsyncResult:System.Threading.IThreadPoolWorkItem.ExecuteWorkItem ()
+System.Threading.ThreadPoolWorkQueue:Dispatch ()
+System.Threading._ThreadPoolWaitCallback:PerformWaitCallback ()
+
+(Filename: D:/Unity/Repo/Tether/Assets/MasterServerToolkit/MasterServer/Scripts/Logger/Logger.cs Line: 57)
+
+debugger-agent: Unable to listen on 928
+PlayerConnection::Cleanup##utp:{"type":"MemoryLeaks","version":2,"phase":"Immediate","time":1726198081641,"processId":17512,"allocatedMemory":56661,"memoryLabels":[{"Default":136},{"Thread":1536},{"Manager":10667},{"GfxDevice":72},{"GfxThread":4608},{"Serialization":416},{"JobScheduler":32768},{"String":394},{"HashMap":3584},{"PoolAlloc":480},{"VR":1784},{"Subsystems":96},{"CoreBusinessMetrics":120}]}

@@ -3,24 +3,26 @@ using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using Framework;
 using Sirenix.OdinInspector;
+using System;
 using UnityEngine;
 
 public class Link : NetworkBehaviour
 {
-    [SerializeField]private LightningBoltScript electric;
+    public Player Player { get; private set; }
+    [SerializeField] private LightningBoltScript electric;
     public Ward wardStart;
     public Ward wardEnd;
-    public float interval;
-    private float curTime;
-    public float duration;
-    public Color color;
+    public float Interval { get; private set; }
+    public float CurTime { get; private set; }
+    public float Duration { get; private set; }
+    public Color Color;
     [ShowInInspector] readonly public SyncVar<bool> isEletrocute = new(false);
-    public event Callback OnExecute;
+    public event Action OnExecute;
     public BoxCollider boxCollider;
     [SerializeField] SpriteRenderer spriteRenderer;
     private void Awake()
     {
-        curTime = 0;
+        CurTime = 0;
     }
     public override void OnStartServer()
     {
@@ -33,18 +35,17 @@ public class Link : NetworkBehaviour
     public override void OnStartClient()
     {
         base.OnStartClient();
-        spriteRenderer.size = new Vector2(0.5f, transform.localScale.z * 4);
-        spriteRenderer.gameObject.transform.SetScaleY(1f/ transform.localScale.z / 4);
+
         LineRenderer lineRenderer = electric.GetComponent<LineRenderer>();
         if (IsOwner)
         {
-            color = Color.green;
+            Color = Color.green;
             lineRenderer.startColor = Color.green;
             lineRenderer.endColor = Color.blue;
         }
         else
         {
-            color = Color.red;
+            Color = Color.red;
             lineRenderer.startColor = Color.red;
             lineRenderer.endColor = Color.yellow;
         }
@@ -69,7 +70,7 @@ public class Link : NetworkBehaviour
                 boxCollider.enabled = true;
                 if (wardStart != null && wardEnd != null)
                 {
-                    SetPositionElectric(wardStart.transform.position, wardEnd.transform.position);
+                    InitObserver(wardStart.transform.position, wardEnd.transform.position);
                 }
                 OnExecute?.Invoke();
             }
@@ -98,20 +99,20 @@ public class Link : NetworkBehaviour
         }
         if (IsServerInitialized)
         {
-            curTime += Time.deltaTime;
+            CurTime += Time.deltaTime;
             if (isEletrocute.Value)
             {
-                if (curTime >= duration)
+                if (CurTime >= Duration)
                 {
-                    curTime -= duration;
+                    CurTime -= Duration;
                     isEletrocute.Value = false;
                 }
             }
             else
             {
-                if (curTime >= interval)
+                if (CurTime >= Interval)
                 {
-                    curTime -= interval;
+                    CurTime -= Interval;
                     isEletrocute.Value = true;
                 }
             }
@@ -119,8 +120,11 @@ public class Link : NetworkBehaviour
 
     }
     [Server(Logging = FishNet.Managing.Logging.LoggingType.Off)]
-    public void SetPosition(Ward wardStart, Ward wardEnd)
+    public void Init(Ward wardStart, Ward wardEnd, Player player, float interval, float duration)
     {
+        this.Player = player;
+        Interval = interval;
+        Duration = duration;
         Vector3 start = wardStart.transform.position;
         Vector3 end = wardEnd.transform.position;
         transform.position = (start + end) / 2;
@@ -129,14 +133,19 @@ public class Link : NetworkBehaviour
         transform.SetScaleZ(dir.magnitude);
         this.wardStart = wardStart;
         this.wardEnd = wardEnd;
-        SetPositionElectric(start, end);
-        
+        InitObserver(start, end, dir.magnitude);
     }
     [ObserversRpc(BufferLast = true)]
-    public void SetPositionElectric(Vector3 wardStart, Vector3 wardEnd)
+    public void InitObserver(Vector3 wardStart, Vector3 wardEnd, float? size = null)
     {
+        if (!size.HasValue)
+        {
+            size = transform.localScale.z;
+        }
         electric.StartObject.transform.position = wardStart + new Vector3(0, 1.5f, 0);
         electric.EndObject.transform.position = wardEnd + new Vector3(0, 1.5f, 0);
+        spriteRenderer.size = new Vector2(0.5f, size.Value * 4);
+        spriteRenderer.gameObject.transform.SetScaleY(0.25f / size.Value);
     }
 
     [Server(Logging = FishNet.Managing.Logging.LoggingType.Off)]
@@ -145,9 +154,9 @@ public class Link : NetworkBehaviour
         if (string.Equals(other.tag, "Player", System.StringComparison.Ordinal))
         {
             Player otherPlayer = other.GetComponent<Player>();
-            if (Owner != otherPlayer.Owner)
+            if (Player != otherPlayer)
             {
-                Owner.FirstObject.GetComponent<Player>().Electrocute(otherPlayer);
+                Player.Electrocute(otherPlayer);
             }
         }
     }

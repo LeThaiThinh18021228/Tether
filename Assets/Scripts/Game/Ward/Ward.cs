@@ -1,9 +1,6 @@
-using DigitalRuby.LightningBolt;
 using FishNet.Object;
-using FishNet.Object.Synchronizing;
 using Framework;
 using Framework.FishNet;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,6 +8,7 @@ public class Ward : NetworkBehaviour
 {
     public Dictionary<Ward, Link> Links = new Dictionary<Ward, Link>();
     [SerializeField] MeshRenderer mesh;
+    public Player Player { get; private set; }
     public override void OnStartClient()
     {
         base.OnStartClient();
@@ -25,14 +23,11 @@ public class Ward : NetworkBehaviour
     }
 
     [Server(Logging = FishNet.Managing.Logging.LoggingType.Off)]
-    public Link CreateLink(Ward ward)
+    public Link CreateLink(Ward ward, Player player)
     {
-        Link link = VFXFactory.Electric.InstantiateNetworked<Link>(Owner, WardRoot.Instance.transform);
-        link.interval = 5;
-        link.duration = 3;
-        link.SetPosition(this, ward);
-        this.transform.parent = WardRoot.Instance.transform;
-        ward.transform.parent = WardRoot.Instance.transform;
+        this.Player = player;
+        Link link = VFXFactory.Electric.InstantiateNetworked<Link>(Owner, GameManager.Instance.WardRoot.transform);
+        link.Init(this, ward, player, 5, 3);
         return link;
     }
 }

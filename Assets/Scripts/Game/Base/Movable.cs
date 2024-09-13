@@ -1,7 +1,6 @@
 using FishNet.Managing.Logging;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
-using Framework;
 using UnityEngine;
 public class Movable : NetworkBehaviour
 {
@@ -148,7 +147,6 @@ public class Movable : NetworkBehaviour
             transform.position = Vector3.MoveTowards(transform.position, Des.Value.Value, speed * Time.deltaTime);
             if (transform.position == Des.Value)
             {
-                PDebug.Log("Arrived");
                 OnArrived?.Invoke();
                 SetDes(null);
             }

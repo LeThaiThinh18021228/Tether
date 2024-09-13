@@ -1,3 +1,4 @@
+using FishNet.Object;
 using Framework;
 using MasterServerToolkit.Bridges.FishNetworking.Character;
 using Unity.Cinemachine;
@@ -11,7 +12,7 @@ public partial class Player : PlayerCharacter
     GameObject ward1;
     GameObject ward2;
     CinemachineCamera cineCam;
-    Camera cam;
+    public Camera Cam { get; private set; }
     #region Networkbehavior
     public override void OnStartClient()
     {
@@ -26,10 +27,10 @@ public partial class Player : PlayerCharacter
 
         skin.materials[0].color = Data.Color.Value;
         //attach camera
-        if (IsOwner & LocalConnection.FirstObject == NetworkObject)
+        if (IsOwner)
         {
-            cam = Camera.main;
-            cineCam = cam.GetComponent<CinemachineCamera>();
+            Cam = Camera.main;
+            cineCam = Cam.GetComponent<CinemachineCamera>();
             if (cineCam)
             {
                 cineCam.LookAt = transform;
@@ -64,8 +65,8 @@ public partial class Player : PlayerCharacter
     #region Event
     protected virtual void StateInput_OnChangeClient(PlayerInputState prev, PlayerInputState next, bool asServer)
     {
-        if (asServer) return;
-        InputStateMachine.CurrentState = next;
+        if (IsOwner)
+            InputStateMachine.CurrentState = next;
     }
     protected virtual void Dir_OnChangeClient(Vector3 prev, Vector3 next, bool asServer)
     {
@@ -73,21 +74,25 @@ public partial class Player : PlayerCharacter
     }
     protected virtual void Ward2Pos_OnChangeClient(Vector3 prev, Vector3 next, bool asServer)
     {
-        if (asServer) return;
-        if (!ward2.activeSelf)
+        if (IsOwner)
         {
-            ward2.SetActive(true);
+            if (!ward2.activeSelf)
+            {
+                ward2.SetActive(true);
+            }
+            ward2.transform.position = next;
         }
-        ward2.transform.position = next;
     }
     protected virtual void Ward1Pos_OnChangeClient(Vector3 prev, Vector3 next, bool asServer)
     {
-        if (asServer) return;
-        if (!ward1.activeSelf)
+        if (IsOwner)
         {
-            ward1.SetActive(true);
+            if (!ward1.activeSelf)
+            {
+                ward1.SetActive(true);
+            }
+            ward1.transform.position = next;
         }
-        ward1.transform.position = next;
     }
     #endregion
     #region StateMachine
@@ -97,7 +102,7 @@ public partial class Player : PlayerCharacter
         {
             if (Input.GetKeyDown(KeyCode.Space) && Data.Currency.Value > 0) PlaceWardRPC();
             Movable.SetDirRPC(Movable.DirInput());
-            Movable.SetDesRPC(Movable.MouseInput(cam, LayerMask.NameToLayer("Ground")));
+            Movable.SetDesRPC(Movable.MouseInput(Cam, LayerMask.NameToLayer("Ground")));
         }
     }
     protected virtual void Player_WARDING_Start_Client()
@@ -130,16 +135,20 @@ public partial class Player : PlayerCharacter
     }
     protected virtual void Player_WARDING_End_Client()
     {
-
+        if (IsOwner)
+        {
+            wardingRadius.SetActive(false);
+            ward1.SetActive(false);
+            ward2.SetActive(false);
+        }
     }
 
     #endregion
     #region private
+    [ObserversRpc]
     protected void UnplaceWardObserver()
     {
-        wardingRadius.SetActive(false);
-        ward1.SetActive(false);
-        ward2.SetActive(false);
+
     }
     #endregion
 }

@@ -1,12 +1,11 @@
-using Bot;
 using FishNet;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using Framework;
 using Framework.FishNet;
 using MasterServerToolkit.Bridges.FishNetworking.Character;
-using MasterServerToolkit.MasterServer;
 using Sirenix.OdinInspector;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 public enum PlayerInputState
@@ -29,7 +28,7 @@ public partial class Player : PlayerCharacter
 
     public PlayerData Data;
 
-    [ShowInInspector] public readonly SyncVar<PlayerInputState> StateInput = new(PlayerInputState.NONE); [ServerRpc(RunLocally = true)] private void SetStateInput(PlayerInputState value) => StateInput.Value = value;
+    [ShowInInspector] public readonly SyncVar<PlayerInputState> StateInput = new(PlayerInputState.NONE);
     public StateMachine<PlayerInputState> InputStateMachine = new();
     readonly SyncVar<Vector3> ward1Pos = new();
     readonly SyncVar<Vector3> ward2Pos = new();
@@ -39,6 +38,9 @@ public partial class Player : PlayerCharacter
     public Movable Movable { get; private set; }
     [SerializeField] Animator animator;
     public List<Link> Links = new();
+
+    public event Action<Player> OnElectrocute;
+    public event Action<int> OnCollectCurrency;
     #region Networkbehavior
     public override void OnStartNetwork()
     {
@@ -77,7 +79,6 @@ public partial class Player : PlayerCharacter
     {
         base.Awake();
         Movable = GetComponent<Movable>();
-        StateInput.UpdateSettings(NetworkConfig.SyncTypeSettingsClientAuthorized);
     }
     protected void Start()
     {
@@ -152,41 +153,61 @@ public partial class Player : PlayerCharacter
     public void Electrocute(Player player)
     {
         player.Data.AddCurrrency(-100);
+        OnElectrocute(player);
+    }
+
+    public void CollectCurrency(int value)
+    {
+        Data.AddCurrrency(value);
+        OnCollectCurrency?.Invoke(value);
     }
     #endregion
     #region Private
-    [ServerRpc(RequireOwnership = true)]
+    [ServerRpc(RunLocally = true)]
+    [Server]
     public void PlaceWardRPC()
+    {
+        PlaceWard();
+    }
+    [ServerRpc(RunLocally = true)]
+    public void UnplaceWardRPC()
+    {
+        UnplaceWard();
+    }
+    [Server]
+    public void UnplaceWard()
+    {
+        StateInput.Value = PlayerInputState.NONE;
+        UnplaceWardObserver();
+    }
+    [Server]
+    public void PlaceWard()
     {
         if (StateInput.Value == PlayerInputState.NONE)
         {
-            SetStateInput(PlayerInputState.WARDING);
+            StateInput.Value = PlayerInputState.WARDING;
             ward1Pos.Value = transform.position;
         }
         else if (StateInput.Value == PlayerInputState.WARDING)
         {
             CreateWardLink();
-            SetStateInput(PlayerInputState.NONE);
+            StateInput.Value = PlayerInputState.NONE;
         }
     }
-    [ServerRpc(RunLocally = true, RequireOwnership = true)]
-    public void UnplaceWardRPC()
-    {
-        SetStateInput(PlayerInputState.NONE);
-        UnplaceWardObserver();
-    }
-    [ServerRpc(RequireOwnership = true)]
+    [Server]
     protected void CreateWardLink()
     {
-        Vector3 dis = transform.position - ward1Pos.Value;
+        if (HasAuthority)
+        {
+            Vector3 dis = transform.position - ward1Pos.Value;
 
-        Ward nob1 = PrefabFactory.Ward.InstantiateNetworked<Ward>(Owner);
-        nob1.transform.position = ward1Pos.Value;
-        Ward nob2 = PrefabFactory.Ward.InstantiateNetworked<Ward>(Owner);
-        nob2.transform.position = ward1Pos.Value + dis.normalized * CurrencyAwait.Value / distanceToCurrency;
-        Links.Add(nob1.CreateLink(nob2));
-        Data.AddCurrrency(-CurrencyAwait.Value);
-        CurrencyAwait.Value = 0;
+            Ward nob1 = PrefabFactory.Ward.InstantiateNetworked<Ward>(Owner, GameManager.Instance.WardRoot.transform, ward1Pos.Value);
+            Ward nob2 = PrefabFactory.Ward.InstantiateNetworked<Ward>(Owner, GameManager.Instance.WardRoot.transform, ward1Pos.Value + dis.normalized * CurrencyAwait.Value / distanceToCurrency);
+            Links.Add(nob1.CreateLink(nob2, this));
+            Data.AddCurrrency(-CurrencyAwait.Value);
+            CurrencyAwait.Value = 0;
+        }
     }
+
     #endregion
 }

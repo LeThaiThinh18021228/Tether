@@ -9,17 +9,17 @@ public class CurrencyGenerator : NetworkBehaviour
 {
     [SerializeField] GameObject currencyPrefab;
     [SerializeField] int maxCurrency = 4;
-    public ObservableList<Currency> currencyList = new(new List<Currency>());
+    public ObservableList<Currency> currencies = new(new List<Currency>());
 
     public override void OnStartServer()
     {
         base.OnStartServer();
-        currencyList = new(new List<Currency>());
+        currencies = new(new List<Currency>());
         for (int i = 0; i < maxCurrency; i++)
         {
             SpawnCurrency();
         }
-        currencyList.OnChanged += CurrencyList_OnChanged;
+        currencies.OnChanged += CurrencyList_OnChanged;
     }
 
     private void CurrencyList_OnChanged(Currency currency, int index, Operation op)
@@ -27,12 +27,12 @@ public class CurrencyGenerator : NetworkBehaviour
         switch (op)
         {
             case Operation.Add:
-                currencyList.Add(currency);
+                currencies.Add(currency);
                 break;
             case Operation.Modify:
                 break;
             case Operation.Remove:
-                if (currencyList.Value.Count < maxCurrency)
+                if (currencies.Value.Count < maxCurrency)
                 {
                     DOVirtual.DelayedCall(0.5f, () => SpawnCurrency());
                 }
@@ -47,13 +47,12 @@ public class CurrencyGenerator : NetworkBehaviour
     public override void OnStopServer()
     {
         base.OnStopServer();
-        currencyList.OnChanged -= CurrencyList_OnChanged;
+        currencies.OnChanged -= CurrencyList_OnChanged;
     }
 
     [Server]
     public void SpawnCurrency()
     {
-        Currency currency = currencyPrefab.InstantiateNetworked<Currency>(null, transform, MapManager.RandomPositionInsideMap(), Quaternion.identity);
-        currency.generator = this;
+        currencyPrefab.InstantiateNetworked<Currency>(null, transform, MapManager.RandomPositionInsideMap());
     }
 }
