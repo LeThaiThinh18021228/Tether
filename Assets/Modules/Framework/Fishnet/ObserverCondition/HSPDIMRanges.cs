@@ -90,17 +90,7 @@ namespace HSPDIMAlgo
 
         public void UpdateBound()
         {
-            try
-            {
-                boundValue = range.oldPos[dimId] + isUpper * range.range[alterDim] / 2 + HSPDIM.mapSizeEstimate / 2;
-            }
-            catch (Exception e)
-            {
-                Debug.LogError($"{range} + {e}");
-
-                throw;
-            }
-
+            boundValue = range.oldPos[dimId] + isUpper * range.range[alterDim] / 2 + HSPDIM.mapSizeEstimate / 2;
             this.index = HSPDIM.IndexCal(boundValue, range.depthLevel[dimId]);
         }
     }
@@ -109,7 +99,7 @@ namespace HSPDIMAlgo
         public Vector3 range;
         public Vector3 oldPos;
         public Vector3Int depthLevel;
-        public Vector3Bool modified = Vector3Bool.@true;
+        public Vector3Bool modified = new(true, true, false);
         public HSPDIMEntity entity;
         public Bound[,] Bounds = new Bound[HSPDIM.dimension, 3];
         public HashSet<Range>[] overlapSets = Enumerable.Range(0, HSPDIM.dimension).Select(_ => new HashSet<Range>()).ToArray();

@@ -139,7 +139,7 @@ PrefabInstance:
     - target: {fileID: 1830955666484094318, guid: 61f80dfedc08f8040b81b1045b36d915,
         type: 3}
       propertyPath: maxCurrency
-      value: 6
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 1830955666484094318, guid: 61f80dfedc08f8040b81b1045b36d915,
         type: 3}

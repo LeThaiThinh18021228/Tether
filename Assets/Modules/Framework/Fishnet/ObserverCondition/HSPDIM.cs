@@ -107,7 +107,7 @@ namespace HSPDIMAlgo
                     stringBuilder.Append($"Intersect with: ");
                     range.intersection.ForEach(i => stringBuilder.Append($"{i.entity.name}_{i.oldPos} + "));
                     stringBuilder.Append("\n");
-                    Debug.Log(stringBuilder.ToString());
+                    //Debug.Log(stringBuilder.ToString());
                     stringBuilder.Clear();
                     if (range.modified != Vector3Bool.@false)
                     {
@@ -493,7 +493,7 @@ namespace HSPDIMAlgo
             }
             catch (System.Exception)
             {
-                PDebug.Log($"add {bound.range} an {bound} is {(inside ? "" : "not")} of {bound.dimId}_[{bound.range.depthLevel[bound.dimId]},{bound.index}] at {index} in list count {count} [{string.Join(", ", container.Select(c => $"{c}_{c.range.GetHashCode()}"))}]");
+                PDebug.Log($"add {bound.range} an {bound} is {(inside ? "" : "not")} inside of {bound.dimId}_[{bound.range.depthLevel[bound.dimId]},{bound.index}] at {index} in list count {count} [{string.Join(", ", container.Select(c => $"{c}_{c.range.GetHashCode()}"))}]");
                 PDebug.Log("IsSorted: " + IsSorted(container));
                 Time.timeScale = 0;
                 throw;
@@ -502,8 +502,7 @@ namespace HSPDIMAlgo
             {
                 if (!IsSorted(container))
                 {
-                    PDebug.Log($"add {bound.range} an {bound} is {(inside ? "" : "not")} of {bound.dimId}_[{bound.range.depthLevel[bound.dimId]},{bound.index}] at {index} in list count {count} [{string.Join(", ", container.Select(c => $"{c}_{c.range.GetHashCode()}"))}]");
-                    PDebug.Log("IsSorted: " + IsSorted(container));
+                    PDebug.Log($"add {bound.range} an {bound} is {(inside ? "" : "not")} inside of {bound.dimId}_[{bound.range.depthLevel[bound.dimId]},{bound.index}] at {index} in list count {count} [{string.Join(", ", container.Select(c => $"{c}_{c.range.GetHashCode()}"))}]");
                     Time.timeScale = 0;
                 }
             }
@@ -550,13 +549,18 @@ namespace HSPDIMAlgo
             }
             catch (System.Exception)
             {
+                PDebug.Log($"remove {bound.range} an {bound} is {(inside ? "" : "not")} inside of {bound.dimId}_[{bound.range.depthLevel[bound.dimId]},{bound.index}] at {index} in list count {count} [{string.Join(", ", container.Select(c => $"{c}_{c.range.GetHashCode()}"))}]");
+                PDebug.Log("IsSorted: " + IsSorted(container));
                 Time.timeScale = 0;
                 throw;
             }
             finally
             {
-                PDebug.Log($"remove {bound.range} an {bound} is {(inside ? "" : "not")} inside of {bound.dimId}_[{bound.range.depthLevel[bound.dimId]},{bound.index}] at {index} in list count {count} [{string.Join(", ", container.Select(c => $"{c}_{c.range.GetHashCode()}"))}]");
-                PDebug.Log("IsSorted: " + IsSorted(container));
+                if (!IsSorted(container))
+                {
+                    PDebug.Log($"remove {bound.range} an {bound} is {(inside ? "" : "not")} inside of {bound.dimId}_[{bound.range.depthLevel[bound.dimId]},{bound.index}] at {index} in list count {count} [{string.Join(", ", container.Select(c => $"{c}_{c.range.GetHashCode()}"))}]");
+                    Time.timeScale = 0;
+                }
             }
 
             bound.index = -1;
