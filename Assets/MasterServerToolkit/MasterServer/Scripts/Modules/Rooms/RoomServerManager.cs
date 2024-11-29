@@ -156,7 +156,6 @@ namespace MasterServerToolkit.MasterServer
             Connection?.Close();
         }
 
-
         protected override void OnInitialize()
         {
             base.OnInitialize();

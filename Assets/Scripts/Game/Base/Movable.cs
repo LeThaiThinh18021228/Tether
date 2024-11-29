@@ -8,7 +8,7 @@ public class Movable : NetworkBehaviour
     /// Movement direction, Vector3.zero if not moving.
     /// </summary>
     public readonly SyncVar<Vector3> Dir = new(Vector3.zero);
-    public readonly SyncVar<Vector3?> Des = new(Vector3.zero);
+    public readonly SyncVar<Vector3?> Des = new(null);
     public float speed;
     public float steer = Mathf.Infinity;
     float toAngle;

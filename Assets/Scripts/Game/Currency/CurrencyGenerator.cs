@@ -2,13 +2,14 @@ using DG.Tweening;
 using FishNet.Object;
 using Framework;
 using Framework.FishNet;
+using HSPDIMAlgo;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class CurrencyGenerator : NetworkBehaviour
 {
     [SerializeField] GameObject currencyPrefab;
-    [SerializeField] int maxCurrency = 4;
+    [SerializeField] int maxCurrency = 6;
     public ObservableList<Currency> currencies = new(new List<Currency>());
 
     public override void OnStartServer()
@@ -27,7 +28,9 @@ public class CurrencyGenerator : NetworkBehaviour
         switch (op)
         {
             case Operation.Add:
-                currencies.Add(currency);
+                Debug.Log($"Add Uprange + {currency.HSPDIMEntity.name}_{currency.HSPDIMEntity.UpRange.GetHashCode()} {HSPDIM.Instance.upRanges.Contains(currency.HSPDIMEntity.UpRange)} ");
+                HSPDIM.Instance.upRanges.Add(currency.HSPDIMEntity.UpRange);
+                currency.HSPDIMEntity.UpRange.modified = new(true, true, false);
                 break;
             case Operation.Modify:
                 break;
@@ -53,6 +56,6 @@ public class CurrencyGenerator : NetworkBehaviour
     [Server]
     public void SpawnCurrency()
     {
-        currencyPrefab.InstantiateNetworked<Currency>(null, transform, MapManager.RandomPositionInsideMap());
+        currencyPrefab.InstantiateNetworked<Currency>(null, transform, MapManager.RandomPositionInsideMap() / 2);
     }
 }
