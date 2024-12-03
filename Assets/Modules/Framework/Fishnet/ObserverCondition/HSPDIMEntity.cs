@@ -7,6 +7,7 @@ namespace HSPDIMAlgo
 {
     public class HSPDIMEntity : NetworkBehaviour
     {
+        public Vector3Bool Modified = new(true, true, false);
         [SerializeField] Vector3 subRange;
         [SerializeField] Vector3 upRange;
         public Range SubRange;
@@ -77,11 +78,16 @@ namespace HSPDIMAlgo
 
         protected virtual void Update()
         {
-            if (IsServerInitialized && subRange != Vector3.zero && HSPDIM.UpdateInterval() && HSPDIM.Instance.isRunning)
+            if (IsServerInitialized && HSPDIM.UpdateInterval() && HSPDIM.Instance.isRunning)
             {
                 for (int i = 0; i < HSPDIM.dimension; i++)
                 {
-                    SubRange.overlapSets[i].Clear();
+                    UpRange.overlapSets[i].Clear();
+                    if (subRange != Vector3.zero)
+                    {
+                        SubRange.overlapSets[i].Clear();
+
+                    }
                 }
                 PDebug.Log("overlapset clear");
             }

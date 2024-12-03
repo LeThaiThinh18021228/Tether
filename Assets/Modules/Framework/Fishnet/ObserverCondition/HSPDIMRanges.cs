@@ -81,11 +81,11 @@ namespace HSPDIMAlgo
         {
             if (boundValue > other.boundValue) return 1;
             else if (boundValue < other.boundValue) return -1;
-            else return 0;
+            else return range.GetHashCode().CompareTo(other.range.GetHashCode());
         }
         public override string ToString()
         {
-            return $"{boundValue.ToString()}({isUpper})";
+            return $"{boundValue}({isUpper})";
         }
 
         public void UpdateBound()
@@ -99,7 +99,6 @@ namespace HSPDIMAlgo
         public Vector3 range;
         public Vector3 oldPos;
         public Vector3Int depthLevel;
-        public Vector3Bool modified = new(true, true, false);
         public HSPDIMEntity entity;
         public Bound[,] Bounds = new Bound[HSPDIM.dimension, 3];
         public HashSet<Range>[] overlapSets = Enumerable.Range(0, HSPDIM.dimension).Select(_ => new HashSet<Range>()).ToArray();
@@ -132,7 +131,7 @@ namespace HSPDIMAlgo
         {
             for (short i = 0; i < HSPDIM.dimension; i++)
             {
-                if (modified[i])
+                if (entity.Modified[i])
                 {
                     short dimId = i;
                     if (HSPDIM.dimension == 2 && i == 1)
@@ -165,7 +164,7 @@ namespace HSPDIMAlgo
         }
         public override string ToString()
         {
-            return $"{entity.name}_{GetHashCode()}_{range}_{oldPos}_{depthLevel}_{modified}_({Bounds[0, 0].index},{Bounds[0, 1].index},{Bounds[1, 0].index},{Bounds[1, 1].index})";
+            return $"{entity.name}_{GetHashCode()}_{range}_{oldPos}_{depthLevel}_{entity.Modified}_({Bounds[0, 0].index},{Bounds[0, 1].index},{Bounds[1, 0].index},{Bounds[1, 1].index})";
         }
     }
     public struct Vector3Bool

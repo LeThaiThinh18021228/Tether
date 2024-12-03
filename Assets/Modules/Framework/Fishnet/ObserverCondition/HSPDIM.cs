@@ -54,7 +54,7 @@ namespace HSPDIMAlgo
                 node.Data.upperBound = (node.index + 1) / Mathf.Pow(2, node.depth) * mapSizeEstimate;
             }));
         }
-        public static bool UpdateInterval(float ratio = 2f)
+        public static bool UpdateInterval(float ratio = 1f)
         {
             float time = Time.time * ratio;
             return Mathf.FloorToInt(time - Time.deltaTime * ratio) < Mathf.FloorToInt(time);
@@ -64,70 +64,11 @@ namespace HSPDIMAlgo
             if (!IsServerInitialized) return;
             if (UpdateInterval() && isRunning)
             {
-                StringBuilder stringBuilder = new StringBuilder();
                 MappingRangeDynamic(upRanges, upTree);
                 MappingRangeDynamic(subRanges, subTree);
-                foreach (var range in subRanges)
-                {
-                    for (int i = 0; i < dimension; i++)
-                    {
-                        if (range.modified[i])
-                        {
-                            range.overlapSets[i].Clear();
-                        }
-                    }
-                }
-
-                foreach (var range in upRanges)
-                {
-                    for (int i = 0; i < dimension; i++)
-                    {
-                        if (range.modified[i])
-                        {
-                            //foreach (var range2 in range.overlapSets[i])
-                            //{
-                            //    range2.overlapSets[i].Clear();
-                            //}
-                            range.overlapSets[i].Clear();
-                        }
-                    }
-                }
                 DynamicMatching();
-                foreach (var range in subRanges)
-                {
-                    stringBuilder.Append($"Range {range.entity.name}_{range.oldPos} intersection\n");
-                    for (int i = 0; i < dimension; i++)
-                    {
-                        stringBuilder.Append($"{i}");
-                        stringBuilder.Append("\n");
-                        range.overlapSets[i].ForEach(i => stringBuilder.Append($"{i.entity.name}_{i.oldPos} "));
-                        stringBuilder.Append("\n");
-                    }
-                    range.UpdateIntersection();
-                    stringBuilder.Append($"Intersect with: ");
-                    range.intersection.ForEach(i => stringBuilder.Append($"{i.entity.name}_{i.oldPos} + "));
-                    stringBuilder.Append("\n");
-                    //Debug.Log(stringBuilder.ToString());
-                    stringBuilder.Clear();
-                    if (range.modified != Vector3Bool.@false)
-                    {
-                        Debug.Log("Not process modified all");
-                    }
-                }
-                upRanges.Clear();
-                subRanges.Clear();
-                stringBuilder.Append("Tree:\n");
-                for (int i = 0; i < dimension; i++)
-                {
-                    foreach (var node in upTree[i])
-                    {
-                        if (!node.Data.IsEmpty())
-                        {
-                            stringBuilder.AppendFormat("{0} [{1},{2},{3}]\n", node.Data.ToString(), i, node.depth, node.index);
-                        }
-                    }
-                }
-                Debug.Log(stringBuilder.ToString());
+                LogTree(upTree);
+                LogTree(subTree);
             }
         }
         public void GameState_OnChange(GameState prev, GameState next, bool asServer)
@@ -244,12 +185,16 @@ namespace HSPDIMAlgo
                                     node.Data.upperIt++;
                                     boundInTree = node.Data.uppers[node.Data.upperIt];
                                 }
-                                boundInSortedList.range.overlapSets[i].AddRange(node.Data.uppers.GetRange(node.Data.upperIt, node.Data.uppers.Count - node.Data.upperIt).Select(b => b.range));
+                                IEnumerable<Range> overlapRange = node.Data.uppers.GetRange(node.Data.upperIt, node.Data.uppers.Count - node.Data.upperIt).Select(b => b.range);
+                                boundInSortedList.range.overlapSets[i].AddRange(overlapRange);
+                                overlapRange.ForEach(r => r.overlapSets[i].Add(boundInSortedList.range));
                                 sb.Append($"add Overlap Upper from{node.Data.upperIt} to {node.Data.uppers.Count}");
                             }
                             if (node.Data.covers.Count > 0)
                             {
-                                boundInSortedList.range.overlapSets[i].AddRange(node.Data.covers.Select(b => b.range));
+                                IEnumerable<Range> overlapRange = node.Data.covers.Select(b => b.range).ToList();
+                                boundInSortedList.range.overlapSets[i].AddRange(overlapRange);
+                                overlapRange.ForEach(r => r.overlapSets[i].Add(boundInSortedList.range));
                                 sb.Append($"add Overlap {node.Data.covers.Count} Cover,");
                             }
 
@@ -271,7 +216,11 @@ namespace HSPDIMAlgo
                                 }
                                 int count = Mathf.Clamp(node.Data.lowerIt - 1, 0, node.Data.lowers.Count);
                                 if (count > 0)
-                                    boundInSortedList.range.overlapSets[i].AddRange(node.Data.lowers.GetRange(0, count).Select(b => b.range));
+                                {
+                                    IEnumerable<Range> overlapRange = node.Data.lowers.GetRange(0, count).Select(b => b.range);
+                                    boundInSortedList.range.overlapSets[i].AddRange(overlapRange);
+                                    overlapRange.ForEach(r => r.overlapSets[i].Add(boundInSortedList.range));
+                                }
                                 sb.Append($"add Overlap Lower from {0} to {count}");
                             }
                             if (l == tree.depth)
@@ -325,7 +274,9 @@ namespace HSPDIMAlgo
                             sb.Append($"node:[{l},{k}]");
                             if (tree[l, k].Data.lowers.Count > 0)
                             {
-                                newIns[p].overlapSets[i].AddRange(tree[l, k].Data.lowers.Select(b => b.range));
+                                IEnumerable<Range> overlapRange = tree[l, k].Data.lowers.Select(b => b.range);
+                                newIns[p].overlapSets[i].AddRange(overlapRange);
+                                overlapRange.ForEach(r => r.overlapSets[i].Add(newIns[p]));
                                 sb.Append($"add Overlap {tree[l, k].Data.lowers.Count} Lower,");
                             }
                             sb.Append($"\n");
@@ -338,43 +289,49 @@ namespace HSPDIMAlgo
                 //Debug.Log(sb);
                 sb.Clear();
             }
-            sortedBounds.ForEach(b => b.range.modified[b.dimId] = false);
         }
         private void DynamicMatching()
         {
             PDebug.Log("DynamicMatching");
+            MatchingTreeToTree(upTree, subTree);
+            MatchingTreeToTree(subTree, upTree);
+            foreach (var range in subRanges)
+            {
+                range.UpdateIntersection();
+            }
+            upRanges.ForEach(r =>
+            {
+                r.entity.Modified = Vector3Bool.@false;
+            });
+            subRanges.ForEach(r =>
+            {
+                r.entity.Modified = Vector3Bool.@false;
+            });
+            upRanges.Clear();
+            subRanges.Clear();
+        }
+        private void MatchingTreeToTree(BinaryTree<HSPDIMRanges>[] tree1, BinaryTree<HSPDIMRanges>[] tree2)
+        {
             for (int i = 0; i < dimension; i++)
             {
-                upTree[i].PreOrderEnumerator(upTree[i].Root).ForEach(node =>
+                tree1[i].PreOrderEnumerator(tree1[i].Root).ForEach(node =>
                 {
-                    if (node.depth == upTree[i].depth && node.Data.insides.Count > 0)
+                    if (node.depth == tree1[i].depth && node.Data.insides.Count > 0)
                     {
-                        Matching(node.Data.insides.Where(b => b.range.modified[i]).ToList(), subTree[i], i);
+                        Matching(node.Data.insides.Where(b => b.range.entity.Modified[i]).ToList(), tree2[i], i);
                     }
-                    List<Bound> crossNodeRanges = node.Data.lowers.Where(b => b.range.modified[i]).ToList();
-                    var upper1 = upTree[i][node.depth, node.index + 1].Data.uppers.Where(n => n.range.modified[i] && crossNodeRanges.Any(x => x.range == n.range));
-                    var upper2 = upTree[i][node.depth, node.index + 2].Data.uppers.Where(n =>
-                      n.range.modified[i] && crossNodeRanges.Any(x => x.range == n.range));
+                    List<Bound> crossNodeRanges = node.Data.lowers.Where(b => b.range.entity.Modified[i]).ToList();
+                    var upper1 = tree1[i][node.depth, node.index + 1].Data.uppers.Where(n => n.range.entity.Modified[i] && crossNodeRanges.Any(x => x.range == n.range));
+                    var upper2 = tree1[i][node.depth, node.index + 2].Data.uppers.Where(n =>
+                      n.range.entity.Modified[i] && crossNodeRanges.Any(x => x.range == n.range));
                     crossNodeRanges.AddRange(upper1);
                     crossNodeRanges.AddRange(upper2);
-                    if (crossNodeRanges.Count > 0)
-                        Matching(crossNodeRanges, subTree[i], i);
-                });
-
-                subTree[i].PreOrderEnumerator(subTree[i].Root).ForEach(node =>
-                {
-                    if (node.depth == subTree[i].depth && node.Data.insides.Count > 0)
+                    if (!IsSorted(crossNodeRanges))
                     {
-                        Matching(node.Data.insides.Where(b => b.range.modified[i]).ToList(), upTree[i], i);
+                        PDebug.Log("Not Sort");
                     }
-                    List<Bound> crossNodeRanges = node.Data.lowers.Where(b => b.range.modified[i]).ToList();
-                    var upper1 = subTree[i][node.depth, node.index + 1].Data.uppers.Where(n => n.range.modified[i] && crossNodeRanges.Any(x => x.range == n.range));
-                    var upper2 = subTree[i][node.depth, node.index + 2].Data.uppers.Where(n =>
-                      n.range.modified[i] && crossNodeRanges.Any(x => x.range == n.range));
-                    crossNodeRanges.AddRange(upper1);
-                    crossNodeRanges.AddRange(upper2);
                     if (crossNodeRanges.Count > 0)
-                        Matching(crossNodeRanges, upTree[i], i);
+                        Matching(crossNodeRanges, tree2[i], i);
                 });
             }
         }
@@ -452,8 +409,8 @@ namespace HSPDIMAlgo
         {
             HSPDIMRanges node = tree[bound.range.depthLevel[bound.dimId], bound.index].Data;
             List<Bound> container = null;
-            int index = 0;
-            int count = -1;
+            int index = -100;
+            int count = -100;
             try
             {
                 if (inside)
@@ -500,9 +457,9 @@ namespace HSPDIMAlgo
             }
             finally
             {
-                if (!IsSorted(container))
+                if (!IsSorted(container) || !container.Contains(bound))
                 {
-                    PDebug.Log($"add {bound.range} an {bound} is {(inside ? "" : "not")} inside of {bound.dimId}_[{bound.range.depthLevel[bound.dimId]},{bound.index}] at {index} in list count {count} [{string.Join(", ", container.Select(c => $"{c}_{c.range.GetHashCode()}"))}]");
+                    PDebug.LogError($"add {bound.range} an {bound} is {(inside ? "" : "not")} inside of {bound.dimId}_[{bound.range.depthLevel[bound.dimId]},{bound.index}] at {index} in list count {count} [{string.Join(", ", container.Select(c => $"{c}_{c.range.GetHashCode()}"))}]");
                     Time.timeScale = 0;
                 }
             }
@@ -511,8 +468,8 @@ namespace HSPDIMAlgo
         {
             HSPDIMRanges node = tree[bound.range.depthLevel[bound.dimId], bound.index].Data;
             List<Bound> container = null;
-            int index = 0;
-            int count = -1;
+            int index = -100;
+            int count = -100;
             try
             {
                 if (inside)
@@ -558,7 +515,7 @@ namespace HSPDIMAlgo
             {
                 if (!IsSorted(container))
                 {
-                    PDebug.Log($"remove {bound.range} an {bound} is {(inside ? "" : "not")} inside of {bound.dimId}_[{bound.range.depthLevel[bound.dimId]},{bound.index}] at {index} in list count {count} [{string.Join(", ", container.Select(c => $"{c}_{c.range.GetHashCode()}"))}]");
+                    PDebug.LogError($"remove {bound.range} an {bound} is {(inside ? "" : "not")} inside of {bound.dimId}_[{bound.range.depthLevel[bound.dimId]},{bound.index}] at {index} in list count {count} [{string.Join(", ", container.Select(c => $"{c}_{c.range.GetHashCode()}"))}]");
                     Time.timeScale = 0;
                 }
             }
@@ -575,8 +532,8 @@ namespace HSPDIMAlgo
                 }
                 else
                 {
-                    if (range.modified == Vector3Bool.@false) Debug.LogWarning($"{range} not modified??");
-                    if (range.modified[i])
+                    if (range.entity.Modified == Vector3Bool.@false) Debug.LogWarning($"{range} not modified??");
+                    if (range.entity.Modified[i])
                     {
                         if (range.Bounds[i, 1].index - range.Bounds[i, 0].index == 0 && range.depthLevel[i] == tree[i].depth)
                         {
@@ -598,8 +555,8 @@ namespace HSPDIMAlgo
         {
             for (short i = 0; i < dimension; i++)
             {
-                if (range.modified == Vector3Bool.@false) Debug.LogWarning($"{range} not modified??");
-                if (range.modified[i])
+                if (range.entity.Modified == Vector3Bool.@false) Debug.LogWarning($"{range} not modified??");
+                if (range.entity.Modified[i])
                 {
                     Bound lowerBound = range.Bounds[i, 0];
                     Bound upperBound = range.Bounds[i, 1];
@@ -635,6 +592,22 @@ namespace HSPDIMAlgo
             }
 
             return true; // All elements are in ascending order.
+        }
+        private static void LogTree(BinaryTree<HSPDIMRanges>[] tree)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.Append("Tree:\n");
+            for (int i = 0; i < dimension; i++)
+            {
+                foreach (var node in tree[i])
+                {
+                    if (!node.Data.IsEmpty())
+                    {
+                        stringBuilder.AppendFormat("{0} [{1},{2},{3}]\n", node.Data.ToString(), i, node.depth, node.index);
+                    }
+                }
+            }
+            Debug.Log(stringBuilder.ToString());
         }
     }
 }

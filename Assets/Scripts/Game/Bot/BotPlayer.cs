@@ -30,7 +30,7 @@ namespace Bot
             {
                 if (next == Vector3.zero)
                 {
-                    Vector3 des = MapManager.RandomPositionInsideMap() / 2;
+                    Vector3 des = MapManager.RandomPositionInsideMap();
                     Movable.SetDes(des);
                 }
             }
