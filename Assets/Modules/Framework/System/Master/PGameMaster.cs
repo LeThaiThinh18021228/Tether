@@ -19,10 +19,7 @@ namespace Framework
         {
             GameObject obj = new GameObject(typeof(PGameMaster).ToString());
             obj.AddComponent<PGameMaster>();
-
-#if UNITY_EDITOR
             obj.AddComponent<PQuickAction>();
-#endif
             InitVibration();
         }
 #endif

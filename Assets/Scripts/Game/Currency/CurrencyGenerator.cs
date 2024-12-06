@@ -39,8 +39,8 @@ public class CurrencyGenerator : NetworkBehaviour
                 {
                     DOVirtual.DelayedCall(0.5f, () => SpawnCurrency());
                 }
-                HSPDIM.RemoveRangeFromTree(currency.HSPDIMEntity.UpRange, HSPDIM.Instance.upTree);
                 currency.HSPDIMEntity.Modified = new(true, true, false);
+                HSPDIM.RemoveRangeFromTree(currency.HSPDIMEntity.UpRange, HSPDIM.Instance.upTree);
                 break;
             case Operation.Clear:
                 break;

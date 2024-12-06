@@ -108,7 +108,7 @@ namespace HSPDIMAlgo
                 stringBuilder.Append("SortedBounds:");
                 for (int i = 0; i < dimension; i++)
                 {
-                    sortedBounds[i].ForEach(b => stringBuilder.Append($"{b.boundValue},"));
+                    sortedBounds[i].ForEach(b => stringBuilder.Append($"{b},"));
                     stringBuilder.Append("\n");
                 }
                 Debug.Log(stringBuilder.ToString());
@@ -163,10 +163,12 @@ namespace HSPDIMAlgo
             Bound boundInTree = null;
 
             sb.Append($"sortedListCount:{sortedBounds.Count},leftLeaf:{leftLeaf},rightLeaf:{rightLeaf}\n");
+            Debug.Log(sb);
+            sb.Clear();
             while (j < sortedBounds.Count() && m <= rightLeaf)
             {
                 boundInSortedList = sortedBounds[j];
-                sb.Append($"bound {j} In SortedList:{boundInSortedList.boundValue}_upper_({boundInSortedList.isUpper}),indexLeaf:{m},boundInListIndex:{IndexCal(boundInSortedList.boundValue, tree.depth)}\n");
+                sb.Append($"bound in SortedList:{boundInSortedList.boundValue},indexLeaf:{m},boundInListIndex:{IndexCal(boundInSortedList.boundValue, tree.depth)}\n");
                 if (IndexCal(boundInSortedList.boundValue, tree.depth) == m)
                 {
                     sb.Append("go at leaf node:");
@@ -177,7 +179,7 @@ namespace HSPDIMAlgo
                         node = tree[l, k];
                         if (boundInSortedList.isUpper == -1)
                         {
-                            if (node.Data.uppers.Count > 0)
+                            if (node.Data.uppers.Count > 0 && node.Data.upperIt < node.Data.uppers.Count)
                             {
                                 boundInTree = node.Data.uppers[node.Data.upperIt];
                                 while (boundInTree.boundValue <= boundInSortedList.boundValue && node.Data.upperIt < node.Data.uppers.Count - 1)
@@ -187,26 +189,26 @@ namespace HSPDIMAlgo
                                 }
                                 IEnumerable<Range> overlapRange = node.Data.uppers.GetRange(node.Data.upperIt, node.Data.uppers.Count - node.Data.upperIt).Select(b => b.range);
                                 boundInSortedList.range.overlapSets[i].AddRange(overlapRange);
-                                overlapRange.ForEach(r => r.overlapSets[i].Add(boundInSortedList.range));
-                                sb.Append($"add Overlap Upper from{node.Data.upperIt} to {node.Data.uppers.Count}");
+                                //overlapRange.ForEach(r => r.overlapSets[i].Add(boundInSortedList.range));
+                                sb.Append($"add Overlap Upper from{node.Data.upperIt} to {node.Data.uppers.Count}: {string.Join(",", overlapRange.Select(r => r.ToString()))};\n ");
                             }
                             if (node.Data.covers.Count > 0)
                             {
                                 IEnumerable<Range> overlapRange = node.Data.covers.Select(b => b.range).ToList();
                                 boundInSortedList.range.overlapSets[i].AddRange(overlapRange);
-                                overlapRange.ForEach(r => r.overlapSets[i].Add(boundInSortedList.range));
-                                sb.Append($"add Overlap {node.Data.covers.Count} Cover,");
+                                //overlapRange.ForEach(r => r.overlapSets[i].Add(boundInSortedList.range));
+                                sb.Append($"add {node.Data.covers.Count} Overlap Cover: {string.Join(",", overlapRange.Select(r => r.ToString()))}; \n");
                             }
 
                             if (l == tree.depth)
                             {
                                 newIns.Add(boundInSortedList.range);
-                                sb.Append($"add {sortedBounds.IndexOf(boundInTree)} to newIns,");
+                                sb.Append($"add {boundInSortedList.range} to newIns; \n");
                             }
                         }
                         else if (boundInSortedList.isUpper == 1)
                         {
-                            if (node.Data.lowers.Count > 0)
+                            if (node.Data.lowers.Count > 0 && node.Data.lowerIt < node.Data.lowers.Count)
                             {
                                 boundInTree = node.Data.lowers[node.Data.lowerIt];
                                 while (boundInTree.boundValue < boundInSortedList.boundValue && node.Data.lowerIt < node.Data.lowers.Count - 1)
@@ -214,42 +216,48 @@ namespace HSPDIMAlgo
                                     node.Data.lowerIt++;
                                     boundInTree = node.Data.lowers[node.Data.lowerIt];
                                 }
-                                int count = Mathf.Clamp(node.Data.lowerIt - 1, 0, node.Data.lowers.Count);
+                                int count = Mathf.Clamp(node.Data.lowerIt, 0, node.Data.lowers.Count);
                                 if (count > 0)
                                 {
                                     IEnumerable<Range> overlapRange = node.Data.lowers.GetRange(0, count).Select(b => b.range);
                                     boundInSortedList.range.overlapSets[i].AddRange(overlapRange);
-                                    overlapRange.ForEach(r => r.overlapSets[i].Add(boundInSortedList.range));
+                                    //overlapRange.ForEach(r => r.overlapSets[i].Add(boundInSortedList.range));
+                                    sb.Append($"add Overlap Lower from {0} to {count}: {string.Join(",", overlapRange.Select(r => r.ToString()))}; \n");
                                 }
-                                sb.Append($"add Overlap Lower from {0} to {count}");
+
                             }
                             if (l == tree.depth)
                             {
                                 newIns.Remove(boundInSortedList.range);
-                                sb.Append($"remove {sortedBounds.IndexOf(boundInTree)} from newIns,");
+                                sb.Append($"remove {boundInSortedList.range} from newIns; \n");
                             }
                         }
                         sb.Append($"\n");
                     }
-                    sb.Append($"\n matching inside range at leaf {m}");
+                    sb.Append($"matching inside range at leaf {m}\n");
                     // matching inside range
                     {
                         node = tree[tree.depth, m];
-                        while (node.Data.insideIt < node.Data.insides.Count - 1)
+                        if (node.Data.insides.Count > 0 && node.Data.insideIt < node.Data.insides.Count)
                         {
                             boundInTree = node.Data.insides[node.Data.insideIt];
-                            sb.Append($"matching inside range at leaf {boundInTree}");
-                            if (boundInTree.isUpper == -1)
+                            while (node.Data.insideIt < node.Data.insides.Count && boundInTree.boundValue <= boundInSortedList.boundValue)
                             {
-                                subset.Add(boundInTree);
+                                boundInTree = node.Data.insides[node.Data.insideIt];
+                                if (boundInTree.isUpper == -1)
+                                {
+                                    subset.Add(boundInTree);
+                                }
+                                else if (boundInTree.isUpper == 1)
+                                {
+                                    subset.Remove(boundInTree);
+                                    upset.ForEach(r => r.range.overlapSets[i].Add(boundInTree.range));
+                                    sb.Append($"matching inside range at leaf {boundInTree} to : {string.Join(",", upset.Select(r => r.ToString()))} \n");
+                                }
+                                node.Data.insideIt++;
                             }
-                            else if (boundInSortedList.isUpper == 1)
-                            {
-                                subset.Remove(boundInTree);
-                                upset.ForEach(r => r.range.overlapSets[i].Add(boundInTree.range));
-                            }
-                            node.Data.insideIt++;
                         }
+
                         if (boundInSortedList.isUpper == -1)
                         {
                             upset.Add(boundInSortedList);
@@ -258,7 +266,7 @@ namespace HSPDIMAlgo
                         {
                             upset.Remove(boundInSortedList);
                             boundInSortedList.range.overlapSets[i].AddRange(subset.Select(b => b.range));
-                            sb.Append($", add Overlap {subset.Count} Inside");
+                            sb.Append($"add {subset.Count} Overlap {boundInSortedList}: {string.Join(",", subset.Select(r => r.ToString()))} \n");
                         }
                     }
                     //
@@ -266,27 +274,26 @@ namespace HSPDIMAlgo
                 }
                 else
                 {
-                    sb.Append("leave leaf node");
+                    sb.Append("leave leaf\n");
                     for (int p = 0; p < newIns.Count; p++)
                     {
                         for ((short l, int k) = (tree.depth, m); l >= 0; l--)
                         {
-                            sb.Append($"node:[{l},{k}]");
+                            sb.Append($"node:[{i},{l},{k}]");
                             if (tree[l, k].Data.lowers.Count > 0)
                             {
                                 IEnumerable<Range> overlapRange = tree[l, k].Data.lowers.Select(b => b.range);
                                 newIns[p].overlapSets[i].AddRange(overlapRange);
-                                overlapRange.ForEach(r => r.overlapSets[i].Add(newIns[p]));
-                                sb.Append($"add Overlap {tree[l, k].Data.lowers.Count} Lower,");
+                                //overlapRange.ForEach(r => r.overlapSets[i].Add(newIns[p]));
+                                sb.Append($"add {overlapRange.Count()} Overlap Lower to {newIns[p]}:  {string.Join(",", overlapRange.Select(r => r.ToString()))} \n");
                             }
-                            sb.Append($"\n");
                             if ((k + 1) % 2 == 0) k = k / 2;
                             else break;
                         }
                     }
                     m++;
                 }
-                //Debug.Log(sb);
+                Debug.Log(sb);
                 sb.Clear();
             }
         }
@@ -312,6 +319,7 @@ namespace HSPDIMAlgo
         }
         private void MatchingTreeToTree(BinaryTree<HSPDIMRanges>[] tree1, BinaryTree<HSPDIMRanges>[] tree2)
         {
+            StringBuilder s = new StringBuilder();
             for (int i = 0; i < dimension; i++)
             {
                 tree1[i].PreOrderEnumerator(tree1[i].Root).ForEach(node =>
@@ -321,61 +329,45 @@ namespace HSPDIMAlgo
                         Matching(node.Data.insides.Where(b => b.range.entity.Modified[i]).ToList(), tree2[i], i);
                     }
                     List<Bound> crossNodeRanges = node.Data.lowers.Where(b => b.range.entity.Modified[i]).ToList();
-                    var upper1 = tree1[i][node.depth, node.index + 1].Data.uppers.Where(n => n.range.entity.Modified[i] && crossNodeRanges.Any(x => x.range == n.range));
-                    var upper2 = tree1[i][node.depth, node.index + 2].Data.uppers.Where(n =>
-                      n.range.entity.Modified[i] && crossNodeRanges.Any(x => x.range == n.range));
-                    crossNodeRanges.AddRange(upper1);
-                    crossNodeRanges.AddRange(upper2);
-                    if (!IsSorted(crossNodeRanges))
-                    {
-                        PDebug.Log("Not Sort");
-                    }
                     if (crossNodeRanges.Count > 0)
+                    {
+                        var upper1 = tree1[i][node.depth, node.index + 1].Data.uppers.Where(n => n.range.entity.Modified[i] && crossNodeRanges.Any(x => x.range == n.range));
+                        var upper2 = tree1[i][node.depth, node.index + 2].Data.uppers.Where(n =>
+                          n.range.entity.Modified[i] && crossNodeRanges.Any(x => x.range == n.range));
+                        //s.Append($"[{i},{node.depth},{node.index}] {crossNodeRanges.Count}({string.Join(",", crossNodeRanges.Select(r => r.ToString()))}) = {(upper1?.Count() ?? 0)}({string.Join(",", upper1?.Select(r => r.ToString()) ?? Array.Empty<string>())}) + {(upper2?.Count() ?? 0)}({string.Join(",", upper2?.Select(r => r.ToString()) ?? Array.Empty<string>())})\n");
+                        crossNodeRanges.AddRange(upper1);
+                        crossNodeRanges.AddRange(upper2);
+                        if (!IsSorted(crossNodeRanges)) PDebug.LogWarning("NOT SORTED");
                         Matching(crossNodeRanges, tree2[i], i);
+                    }
+
                 });
             }
+            //Debug.Log(s);
         }
         public static void MappingRanges(IEnumerable<Range> ranges, BinaryTree<HSPDIMRanges>[] tree, List<Bound>[] bounds = null)
         {
             PDebug.Log("MappingRanges");
             foreach (Range r in ranges)
             {
-                for (short i = 0; i < dimension; i++)
+                AddRangeToTree(r, tree, bounds);
+                r.UpdateRange(tree[0].depth);
+            }
+            if (bounds != null)
+            {
+                foreach (Range r in ranges)
                 {
-                    if (r == null)
+                    for (short i = 0; i < dimension; i++)
                     {
-                        Debug.Log("Null range");
-                    }
-                    Bound lowerBound = new(i, -1, r);
-                    Bound upperBound = new(i, 1, r);
-                    Bound coverBound = new(i, 0, r);
-                    r.Bounds[i, 0] = lowerBound;
-                    r.Bounds[i, 1] = upperBound;
-                    r.Bounds[i, 2] = coverBound;
-                    if (bounds != null)
-                    {
-                        bounds[i].Add(lowerBound);
-                        bounds[i].Add(upperBound);
-                    }
-                    if (upperBound.index - lowerBound.index == 0 && r.depthLevel[i] == tree[i].depth)
-                    {
-                        //Debug.Log($"Add {lowerBound} to tree[{i}][{curDepth}, {lrid}]");
-                        tree[i][r.depthLevel[i], lowerBound.index].Data.insides.Add(lowerBound);
-                        tree[i][r.depthLevel[i], upperBound.index].Data.insides.Add(upperBound);
-                    }
-                    else
-                    {
-                        //Debug.Log($"Add {lowerBound} to tree[{i}][{curDepth}, {lrid}]");
-                        tree[i][r.depthLevel[i], lowerBound.index].Data.lowers.Add(lowerBound);
-                        tree[i][r.depthLevel[i], upperBound.index].Data.uppers.Add(upperBound);
-                        if (upperBound.index - lowerBound.index == 2)
+                        if (r.entity.Modified[i])
                         {
-                            tree[i][r.depthLevel[i], lowerBound.index + 1].Data.covers.Add(coverBound);
+                            bounds[i].Add(r.Bounds[i, 0]);
+                            bounds[i].Add(r.Bounds[i, 1]);
                         }
                     }
                 }
+                bounds?.ForEach(bs => bs.Sort());
             }
-            bounds?.ForEach(bs => bs.Sort());
             for (short i = 0; i < dimension; i++)
             {
                 Debug.Log(tree[i].depth);
@@ -383,7 +375,6 @@ namespace HSPDIMAlgo
                 {
                     if (node.Data.uppers.Count > 0) node.Data.uppers.Sort();
                     if (node.Data.lowers.Count > 0) node.Data.lowers.Sort();
-                    //if (node.Data.covers.Count > 0) node.Data.covers.Sort();
                     if (node.depth == tree[i].depth && node.Data.insides.Count > 0) node.Data.insides.Sort();
                 });
             }
@@ -395,12 +386,14 @@ namespace HSPDIMAlgo
             foreach (Range r in ranges)
             {
                 sb.Append($"old bound {r} \n ");
+                if (r.entity.Modified == Vector3Bool.@false) Debug.LogWarning($"{r} not modified??");
                 RemoveRangeFromTree(r, tree);
             }
             foreach (Range r in ranges)
             {
                 r.UpdateRange(tree[0].depth);
                 sb.Append($"new bound {r} \n");
+                if (r.entity.Modified == Vector3Bool.@false) Debug.LogWarning($"{r} not modified??");
                 AddRangeToTree(r, tree);
             }
             PDebug.Log(sb.ToString());
@@ -532,7 +525,6 @@ namespace HSPDIMAlgo
                 }
                 else
                 {
-                    if (range.entity.Modified == Vector3Bool.@false) Debug.LogWarning($"{range} not modified??");
                     if (range.entity.Modified[i])
                     {
                         if (range.Bounds[i, 1].index - range.Bounds[i, 0].index == 0 && range.depthLevel[i] == tree[i].depth)
@@ -551,20 +543,18 @@ namespace HSPDIMAlgo
 
             }
         }
-        public static void AddRangeToTree(Range range, BinaryTree<HSPDIMRanges>[] tree)
+        public static void AddRangeToTree(Range range, BinaryTree<HSPDIMRanges>[] tree, List<Bound>[] bounds = null)
         {
             for (short i = 0; i < dimension; i++)
             {
-                if (range.entity.Modified == Vector3Bool.@false) Debug.LogWarning($"{range} not modified??");
                 if (range.entity.Modified[i])
                 {
+                    range.Bounds[i, 0] = range.Bounds[i, 0] ?? new Bound(i, -1, range);
+                    range.Bounds[i, 1] = range.Bounds[i, 1] ?? new Bound(i, 1, range);
+                    range.Bounds[i, 2] = range.Bounds[i, 2] ?? new Bound(i, 0, range);
                     Bound lowerBound = range.Bounds[i, 0];
                     Bound upperBound = range.Bounds[i, 1];
                     Bound coverBound = range.Bounds[i, 2];
-                    lowerBound = range.Bounds[i, 0] ?? new Bound(i, -1, range);
-                    upperBound = range.Bounds[i, 1] ?? new Bound(i, 1, range);
-                    coverBound = range.Bounds[i, 2] ?? new Bound(i, 0, range);
-
                     if (upperBound.index - lowerBound.index == 0 && range.depthLevel[i] == tree[i].depth)
                     {
                         AddBoundToTree(lowerBound, tree[i], true);

@@ -1,7 +1,4 @@
-﻿#if UNITY_EDITOR
-
-using UnityEditor;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Framework
 {
@@ -11,15 +8,17 @@ namespace Framework
         {
             if (Input.GetKeyDown(KeyCode.R))
             {
+                Time.timeScale = 1 - Time.timeScale;
+                PDebug.Log("Press R");
             }
         }
-
-        [MenuItem("PFramework/Clear Data")]
+#if UNITY_EDITOR
+        [UnityEditor.MenuItem("PFramework/Clear Data")]
         public static void ClearData()
         {
             PGameMaster.ClearData();
         }
+#endif
     }
 }
 
-#endif

@@ -164,7 +164,7 @@ namespace HSPDIMAlgo
         }
         public override string ToString()
         {
-            return $"{entity.name}_{GetHashCode()}_{range}_{oldPos}_{depthLevel}_{entity.Modified}_({Bounds[0, 0].index},{Bounds[0, 1].index},{Bounds[1, 0].index},{Bounds[1, 1].index})";
+            return $"{entity.name}_{GetHashCode()}_{range}_{oldPos}_{depthLevel}_{entity.Modified}_({Bounds[0, 0].boundValue}_{Bounds[0, 0].index},{Bounds[0, 1].boundValue}_{Bounds[0, 1].index},{Bounds[1, 0].boundValue}_{Bounds[1, 0].index},{Bounds[1, 1].boundValue}_{Bounds[1, 1].index})";
         }
     }
     public struct Vector3Bool
