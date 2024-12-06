@@ -266,7 +266,7 @@ namespace HSPDIMAlgo
                         {
                             upset.Remove(boundInSortedList);
                             boundInSortedList.range.overlapSets[i].AddRange(subset.Select(b => b.range));
-                            sb.Append($"add {subset.Count} Overlap {boundInSortedList}: {string.Join(",", subset.Select(r => r.ToString()))} \n");
+                            sb.Append($"add {subset.Count} Overlap inside {boundInSortedList}: {string.Join(",", subset.Select(r => r.ToString()))} \n");
                         }
                     }
                     //
