@@ -1,5 +1,6 @@
 using FishNet.Object;
 using Framework;
+using Sirenix.Utilities;
 using System.Linq;
 using TMPro;
 using UnityEngine;
@@ -85,8 +86,7 @@ namespace HSPDIMAlgo
             if (miss.Count() > 0 || redundant.Count() > 0)
             {
                 PDebug.Log($"{SubRange}\nRange miss:{string.Join(",", miss.Select(r => r))}\nRange redundant:{string.Join(",", redundant.Select(r => r))} \n");
-                if (miss.Count() > 0)
-                    Time.timeScale = 0;
+                Time.timeScale = 0;
             }
         }
 

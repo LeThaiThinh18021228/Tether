@@ -158,7 +158,7 @@ namespace HSPDIMAlgo
             int leftLeaf = IndexCal(sortedBounds.First().boundValue, tree.depth);
             int rightLeaf = IndexCal(sortedBounds.Last().boundValue, tree.depth);
             int j = 0;
-            int m = leftLeaf;
+            int m2 = leftLeaf, m = leftLeaf;
             Bound boundInSortedList;
             Bound boundInTree = null;
 
@@ -171,7 +171,7 @@ namespace HSPDIMAlgo
                 sb.Append($"bound in SortedList:{boundInSortedList.boundValue},indexLeaf:{m},boundInListIndex:{IndexCal(boundInSortedList.boundValue, tree.depth)}\n");
                 if (IndexCal(boundInSortedList.boundValue, tree.depth) == m)
                 {
-                    sb.Append("go at leaf node:");
+                    sb.Append("go at leaf");
                     TreeNode<HSPDIMRanges> node;
                     for ((short l, int k) = (tree.depth, m); l >= 0; l--, k = k / 2)
                     {
@@ -179,22 +179,33 @@ namespace HSPDIMAlgo
                         node = tree[l, k];
                         if (boundInSortedList.isUpper == -1)
                         {
+                            sb.Append($"node.Data.upperIt : {node.Data.upperIt}   ");
                             if (node.Data.uppers.Count > 0 && node.Data.upperIt < node.Data.uppers.Count)
                             {
                                 boundInTree = node.Data.uppers[node.Data.upperIt];
-                                while (boundInTree.boundValue <= boundInSortedList.boundValue && node.Data.upperIt < node.Data.uppers.Count - 1)
+                                while (boundInTree.boundValue <= boundInSortedList.boundValue)
                                 {
                                     node.Data.upperIt++;
-                                    boundInTree = node.Data.uppers[node.Data.upperIt];
+                                    sb.Append($"node.Data.upperIt : {node.Data.upperIt}   ");
+                                    if (node.Data.upperIt < node.Data.uppers.Count)
+                                    {
+                                        boundInTree = node.Data.uppers[node.Data.upperIt];
+                                    }
+                                    else
+                                    {
+                                        sb.Append($"\n");
+                                        break;
+                                    }
                                 }
-                                IEnumerable<Range> overlapRange = node.Data.uppers.GetRange(node.Data.upperIt, node.Data.uppers.Count - node.Data.upperIt).Select(b => b.range);
-                                boundInSortedList.range.overlapSets[i].AddRange(overlapRange);
-                                //overlapRange.ForEach(r => r.overlapSets[i].Add(boundInSortedList.range));
-                                sb.Append($"add Overlap Upper from{node.Data.upperIt} to {node.Data.uppers.Count}: {string.Join(",", overlapRange.Select(r => r.ToString()))};\n ");
                             }
+
+                            IEnumerable<Range> overlapRange = node.Data.uppers.GetRange(node.Data.upperIt, node.Data.uppers.Count - node.Data.upperIt).Select(b => b.range);
+                            boundInSortedList.range.overlapSets[i].AddRange(overlapRange);
+                            //overlapRange.ForEach(r => r.overlapSets[i].Add(boundInSortedList.range));
+                            sb.Append($"add Overlap Upper from{node.Data.upperIt} to {node.Data.uppers.Count}: {string.Join(",", overlapRange.Select(r => r.ToString()))};\n ");
                             if (node.Data.covers.Count > 0)
                             {
-                                IEnumerable<Range> overlapRange = node.Data.covers.Select(b => b.range).ToList();
+                                overlapRange = node.Data.covers.Select(b => b.range).ToList();
                                 boundInSortedList.range.overlapSets[i].AddRange(overlapRange);
                                 //overlapRange.ForEach(r => r.overlapSets[i].Add(boundInSortedList.range));
                                 sb.Append($"add {node.Data.covers.Count} Overlap Cover: {string.Join(",", overlapRange.Select(r => r.ToString()))}; \n");
@@ -208,24 +219,31 @@ namespace HSPDIMAlgo
                         }
                         else if (boundInSortedList.isUpper == 1)
                         {
+                            sb.Append($"node.Data.lowerIt : {node.Data.lowerIt}   ");
                             if (node.Data.lowers.Count > 0 && node.Data.lowerIt < node.Data.lowers.Count)
                             {
                                 boundInTree = node.Data.lowers[node.Data.lowerIt];
-                                while (boundInTree.boundValue < boundInSortedList.boundValue && node.Data.lowerIt < node.Data.lowers.Count - 1)
+                                while (boundInTree.boundValue < boundInSortedList.boundValue)
                                 {
                                     node.Data.lowerIt++;
-                                    boundInTree = node.Data.lowers[node.Data.lowerIt];
+                                    sb.Append($"node.Data.lowerIt : {node.Data.lowerIt}   ");
+                                    if (node.Data.lowerIt < node.Data.lowers.Count)
+                                    {
+                                        boundInTree = node.Data.lowers[node.Data.lowerIt];
+                                    }
+                                    else
+                                    {
+                                        sb.Append($"\n");
+                                        break;
+                                    }
                                 }
-                                int count = Mathf.Clamp(node.Data.lowerIt, 0, node.Data.lowers.Count);
-                                if (count > 0)
-                                {
-                                    IEnumerable<Range> overlapRange = node.Data.lowers.GetRange(0, count).Select(b => b.range);
-                                    boundInSortedList.range.overlapSets[i].AddRange(overlapRange);
-                                    //overlapRange.ForEach(r => r.overlapSets[i].Add(boundInSortedList.range));
-                                    sb.Append($"add Overlap Lower from {0} to {count}: {string.Join(",", overlapRange.Select(r => r.ToString()))}; \n");
-                                }
-
                             }
+                            int count = Mathf.Clamp(node.Data.lowerIt, 0, node.Data.lowers.Count);
+                            IEnumerable<Range> overlapRange = node.Data.lowers.GetRange(0, count).Select(b => b.range);
+                            boundInSortedList.range.overlapSets[i].AddRange(overlapRange);
+                            //overlapRange.ForEach(r => r.overlapSets[i].Add(boundInSortedList.range));
+                            sb.Append($"add Overlap Lower from {0} to {count}: {string.Join(",", overlapRange.Select(r => r.ToString()))}; \n");
+
                             if (l == tree.depth)
                             {
                                 newIns.Remove(boundInSortedList.range);
@@ -234,47 +252,15 @@ namespace HSPDIMAlgo
                         }
                         sb.Append($"\n");
                     }
-                    sb.Append($"matching inside range at leaf {m}\n");
-                    // matching inside range
-                    {
-                        node = tree[tree.depth, m];
-                        if (node.Data.insides.Count > 0 && node.Data.insideIt < node.Data.insides.Count)
-                        {
-                            boundInTree = node.Data.insides[node.Data.insideIt];
-                            while (node.Data.insideIt < node.Data.insides.Count && boundInTree.boundValue <= boundInSortedList.boundValue)
-                            {
-                                boundInTree = node.Data.insides[node.Data.insideIt];
-                                if (boundInTree.isUpper == -1)
-                                {
-                                    subset.Add(boundInTree);
-                                }
-                                else if (boundInTree.isUpper == 1)
-                                {
-                                    subset.Remove(boundInTree);
-                                    upset.ForEach(r => r.range.overlapSets[i].Add(boundInTree.range));
-                                    sb.Append($"matching inside range at leaf {boundInTree} to : {string.Join(",", upset.Select(r => r.ToString()))} \n");
-                                }
-                                node.Data.insideIt++;
-                            }
-                        }
-
-                        if (boundInSortedList.isUpper == -1)
-                        {
-                            upset.Add(boundInSortedList);
-                        }
-                        else if (boundInSortedList.isUpper == 1)
-                        {
-                            upset.Remove(boundInSortedList);
-                            boundInSortedList.range.overlapSets[i].AddRange(subset.Select(b => b.range));
-                            sb.Append($"add {subset.Count} Overlap inside {boundInSortedList}: {string.Join(",", subset.Select(r => r.ToString()))} \n");
-                        }
-                    }
-                    //
+                    SortMatchInside(boundInTree, boundInSortedList, tree, i, m, subset, upset, sb);
                     j++;
+                    m2 = m;
                 }
                 else
                 {
                     sb.Append("leave leaf\n");
+                    if (newIns.Count > 0)
+                        sb.Append($"add Overlap Lower to  {string.Join(",", newIns.Select(r => r.ToString()))} \n");
                     for (int p = 0; p < newIns.Count; p++)
                     {
                         for ((short l, int k) = (tree.depth, m); l >= 0; l--)
@@ -285,7 +271,22 @@ namespace HSPDIMAlgo
                                 IEnumerable<Range> overlapRange = tree[l, k].Data.lowers.Select(b => b.range);
                                 newIns[p].overlapSets[i].AddRange(overlapRange);
                                 //overlapRange.ForEach(r => r.overlapSets[i].Add(newIns[p]));
-                                sb.Append($"add {overlapRange.Count()} Overlap Lower to {newIns[p]}:  {string.Join(",", overlapRange.Select(r => r.ToString()))} \n");
+                                sb.Append($"\t: {string.Join(",", overlapRange.Select(r => r.ToString()))}");
+                            }
+                            sb.Append($"\n");
+                            if (l == tree.depth)
+                            {
+                                if (m > m2)
+                                {
+                                    IEnumerable<Range> overlapRange = tree[l, k].Data.insides.Select(b => b.range);
+                                    newIns[p].overlapSets[i].AddRange(overlapRange);
+                                    //overlapRange.ForEach(r => r.overlapSets[i].Add(newIns[p]));
+                                    sb.Append($"\t: {string.Join(",", overlapRange.Select(r => r.ToString()))}");
+                                }
+                                else
+                                {
+                                    SortMatchInside(newIns[p].Bounds[i, 0], boundInSortedList, tree, i, m, subset, upset, sb);
+                                }
                             }
                             if ((k + 1) % 2 == 0) k = k / 2;
                             else break;
@@ -295,6 +296,48 @@ namespace HSPDIMAlgo
                 }
                 Debug.Log(sb);
                 sb.Clear();
+            }
+        }
+        private void SortMatchInside(Bound boundInTree, Bound boundInSortedList, BinaryTree<HSPDIMRanges> tree, int i, int m, List<Bound> subset, List<Bound> upset, StringBuilder sb)
+        {
+            sb.Append($"matching inside range at leaf {m}\n");
+            TreeNode<HSPDIMRanges> node = tree[tree.depth, m];
+            if (node.Data.insides.Count > 0 && node.Data.insideIt < node.Data.insides.Count)
+            {
+                boundInTree = node.Data.insides[node.Data.insideIt];
+                while (boundInTree.boundValue <= boundInSortedList.boundValue)
+                {
+                    if (boundInTree.isUpper == -1)
+                    {
+                        subset.Add(boundInTree);
+                    }
+                    else if (boundInTree.isUpper == 1)
+                    {
+                        subset.Remove(boundInTree);
+                        upset.ForEach(r => r.range.overlapSets[i].Add(boundInTree.range));
+                        sb.Append($"matching inside range at leaf {boundInTree} to : {string.Join(",", upset.Select(r => r.ToString()))} \n");
+                    }
+                    node.Data.insideIt++;
+                    if (node.Data.insideIt < node.Data.insides.Count)
+                    {
+                        boundInTree = node.Data.insides[node.Data.insideIt];
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+            }
+
+            if (boundInSortedList.isUpper == -1)
+            {
+                upset.Add(boundInSortedList);
+            }
+            else if (boundInSortedList.isUpper == 1)
+            {
+                upset.Remove(boundInSortedList);
+                boundInSortedList.range.overlapSets[i].AddRange(subset.Select(b => b.range));
+                sb.Append($"add {subset.Count} Overlap inside {boundInSortedList}: {string.Join(",", subset.Select(r => r.ToString()))} \n");
             }
         }
         private void DynamicMatching()
