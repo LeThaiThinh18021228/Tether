@@ -12,17 +12,16 @@ public class HSPDIMPlayer : HSPDIMEntity
         }
     }
 
-    protected override void Update()
+    protected void Update()
     {
-        base.Update();
         if (!IsServerInitialized) return;
         Modified.X = Modified.X || (player.Movable.Dir.Value.x != 0);
         Modified.Y = Modified.Y || (player.Movable.Dir.Value.z != 0);
         Modified.Z = Modified.Z || (player.Movable.Dir.Value.y != 0);
         if (Modified != Vector3Bool.@false && HSPDIM.UpdateInterval() && HSPDIM.Instance.isRunning)
         {
-            HSPDIM.Instance.subRanges.Add(SubRange);
-            HSPDIM.Instance.upRanges.Add(UpRange);
+            HSPDIM.Instance.modifiedSubRanges.Add(SubRange);
+            HSPDIM.Instance.modifiedUpRanges.Add(UpRange);
         }
     }
 

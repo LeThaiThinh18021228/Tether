@@ -28,9 +28,11 @@ public class CurrencyGenerator : NetworkBehaviour
         switch (op)
         {
             case Operation.Add:
-                Debug.Log($"Add Uprange + {currency.HSPDIMEntity.name}_{currency.HSPDIMEntity.UpRange.GetHashCode()} {HSPDIM.Instance.upRanges.Contains(currency.HSPDIMEntity.UpRange)} ");
-                HSPDIM.Instance.upRanges.Add(currency.HSPDIMEntity.UpRange);
+                Debug.Log($"Add Uprange + {currency.HSPDIMEntity.name}_{currency.HSPDIMEntity.UpRange.GetHashCode()} {HSPDIM.Instance.modifiedUpRanges.Contains(currency.HSPDIMEntity.UpRange)} ");
                 currency.HSPDIMEntity.Modified = new(true, true, false);
+                HSPDIM.RemoveRangeFromTree(currency.HSPDIMEntity.UpRange, HSPDIM.Instance.upTree);
+                currency.HSPDIMEntity.UpRange.UpdateRange(HSPDIM.Instance.upTree[0].depth);
+                HSPDIM.AddRangeToTree(currency.HSPDIMEntity.UpRange, HSPDIM.Instance.upTree);
                 break;
             case Operation.Modify:
                 break;
@@ -58,6 +60,6 @@ public class CurrencyGenerator : NetworkBehaviour
     [Server]
     public void SpawnCurrency()
     {
-        currencyPrefab.InstantiateNetworked<Currency>(null, transform, MapManager.RandomPositionInsideMap());
+        currencyPrefab.InstantiateNetworked<Currency>(null, transform, MapManager.RandomPositionInsideMap() / 2);
     }
 }

@@ -42,10 +42,12 @@ namespace HSPDIMAlgo
                 if (UpRange == null)
                 {
                     UpRange = new(upRange, this, HSPDIM.upTreeDepth);
+                    HSPDIM.Instance.upRanges.Add(UpRange);
                     Debug.Log($"Create UpRange {name}_{UpRange.GetHashCode()}");
                     if (subRange != Vector3.zero)
                     {
                         SubRange = new(subRange, this, HSPDIM.subTreeDepth);
+                        HSPDIM.Instance.subRanges.Add(SubRange);
                         Debug.Log($"Create SupRange {name}_{SubRange.GetHashCode()}");
                         SubRange.OnUpdateIntersection += OnUpdateIntersection;
                     }
@@ -53,11 +55,11 @@ namespace HSPDIMAlgo
                 if (!HSPDIM.Instance.isRunning)
                 {
                     Debug.Log("Add UpRange" + name);
-                    HSPDIM.Instance.upRanges.Add(UpRange);
+                    HSPDIM.Instance.modifiedUpRanges.Add(UpRange);
                     if (subRange != Vector3.zero)
                     {
                         Debug.Log("Add SupRange" + name);
-                        HSPDIM.Instance.subRanges.Add(SubRange);
+                        HSPDIM.Instance.modifiedSubRanges.Add(SubRange);
                     }
                 }
             }
@@ -80,44 +82,15 @@ namespace HSPDIMAlgo
         }
         private void OnUpdateIntersection()
         {
-            intersectText.text = $"{SubBoxCol.Count() - 1}:{(SubRange.intersection.DefaultIfEmpty().Count() - 1)}";
-            var miss = SubBoxCol.Select(c => c.GetComponentInParent<HSPDIMEntity>().UpRange).Where(r => !SubRange.intersection.Contains(r));
+            SubBoxCol = Physics.OverlapBox(transform.position, subRange / 2, Quaternion.identity, LayerMask.GetMask("HSPDIMUp"));
+            //intersectText.text = $"{(SubRange.intersection.DefaultIfEmpty().Count() - 1)}";
+            intersectText.text = $"{SubBoxCol?.Count() - 1}:{(SubRange.intersection.DefaultIfEmpty().Count() - 1)}";
+            var miss = SubBoxCol?.Select(c => c.GetComponentInParent<HSPDIMEntity>().UpRange).Where(r => !SubRange.intersection.Contains(r));
             var redundant = SubRange.intersection.Where(r => !SubBoxCol.Select(c => c.GetComponentInParent<HSPDIMEntity>().UpRange).Contains(r));
             if (miss.Count() > 0 || redundant.Count() > 0)
             {
                 PDebug.Log($"{SubRange}\nRange miss:{string.Join(",", miss.Select(r => r))}\nRange redundant:{string.Join(",", redundant.Select(r => r))} \n");
                 Time.timeScale = 0;
-            }
-        }
-
-        protected virtual void Update()
-        {
-            if (IsServerInitialized && HSPDIM.UpdateInterval() && HSPDIM.Instance.isRunning)
-            {
-                Modified = new(true, true, false);
-                HSPDIM.Instance.upRanges.Add(UpRange);
-                if (subRange != Vector3.zero)
-                {
-                    HSPDIM.Instance.subRanges.Add(SubRange);
-                }
-                for (int i = 0; i < HSPDIM.dimension; i++)
-                {
-                    UpRange.overlapSets[i].Clear();
-                    SubRange?.overlapSets[i].Clear();
-                }
-                PDebug.Log("overlapset clear");
-
-                ////unity physic
-                SubBoxCol = Physics.OverlapBox(transform.position, subRange / 2, Quaternion.identity, LayerMask.GetMask("HSPDIMUp"));
-
-            }
-        }
-
-        protected void LateUpdate()
-        {
-            if (IsServerInitialized && HSPDIM.UpdateInterval() && HSPDIM.Instance.isRunning)
-            {
-                //SubRange?.UpdateIntersection();
             }
         }
     }

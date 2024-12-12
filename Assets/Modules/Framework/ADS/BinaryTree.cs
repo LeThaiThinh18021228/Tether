@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Framework.ADS
 {
-    public class TreeNode<T> where T : IComparable, new()
+    public class TreeNode<T> where T : new()
     {
         public T Data;
         public short depth;
@@ -30,7 +30,7 @@ namespace Framework.ADS
 
     }
 
-    public class BinaryTree<T> : IEnumerable<TreeNode<T>> where T : IComparable, new()
+    public class BinaryTree<T> : IEnumerable<TreeNode<T>> where T : new()
     {
         public short depth;
         public TreeNode<T> Root;
@@ -79,28 +79,6 @@ namespace Framework.ADS
                 return curNode;
             }
         }
-
-        public void Insert(T data)
-        {
-            Root = InsertRec(Root, data);
-        }
-
-        private TreeNode<T> InsertRec(TreeNode<T> root, T data)
-        {
-            if (root == null)
-            {
-                root = new TreeNode<T>(data);
-                return root;
-            }
-
-            if (data.CompareTo(root.Data) < 0)
-                root.Left = InsertRec(root.Left, data);
-            else if (data.CompareTo(root.Data) > 0)
-                root.Right = InsertRec(root.Right, data);
-
-            return root;
-        }
-
 
         // In-order traversal of the tree
         public void InOrderTraversal(TreeNode<T> node, Action<TreeNode<T>> action)

@@ -1,3 +1,4 @@
+using Framework;
 using Framework.SimpleJSON;
 using System;
 using System.Collections.Generic;
@@ -6,13 +7,10 @@ using UnityEngine;
 
 namespace HSPDIMAlgo
 {
-    public class HSPDIMRanges : IComparable
+    public class HSPDIMNodeData
     {
         public float lowerBound;
         public float upperBound;
-        public int lowerIt;
-        public int upperIt;
-        public int insideIt;
         public List<Bound> lowers = new();
         public List<Bound> uppers = new();
         public List<Bound> covers = new();
@@ -55,6 +53,14 @@ namespace HSPDIMAlgo
         {
             return lowers.Count == 0 && uppers.Count == 0 && covers.Count == 0 && insides.Count == 0;
         }
+
+        public NativeHSPDIMNodeData ToNativeNodeData()
+        {
+            return new NativeHSPDIMNodeData()
+            {
+
+            };
+        }
     }
     public class Bound : IComparable<Bound>
     {
@@ -91,7 +97,12 @@ namespace HSPDIMAlgo
         public void UpdateBound()
         {
             boundValue = range.oldPos[dimId] + isUpper * range.range[alterDim] / 2 + HSPDIM.mapSizeEstimate / 2;
-            this.index = HSPDIM.IndexCal(boundValue, range.depthLevel[dimId]);
+            this.index = range.entity.enabled ? HSPDIM.IndexCal(boundValue, range.depthLevel[dimId]) : -1;
+        }
+
+        public NativeBound ToNativeBound(int x)
+        {
+            return new NativeBound(dimId, alterDim, isUpper, boundValue, index, x, new(dimId, range.depthLevel[dimId], index, isUpper, false, x, 1));
         }
     }
     public class Range
@@ -167,6 +178,7 @@ namespace HSPDIMAlgo
             return $"{entity.name}_{GetHashCode()}_{range}_{oldPos}_{depthLevel}_{entity.Modified}_({Bounds[0, 0].boundValue}_{Bounds[0, 0].index},{Bounds[0, 1].boundValue}_{Bounds[0, 1].index},{Bounds[1, 0].boundValue}_{Bounds[1, 0].index},{Bounds[1, 1].boundValue}_{Bounds[1, 1].index})";
         }
     }
+
     public struct Vector3Bool
     {
         public bool X;

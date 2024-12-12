@@ -167,6 +167,7 @@ namespace MasterServerToolkit.MasterServer
                 Connection.AddConnectionOpenListener(OnConnectedToMasterEventHandler);
                 Connection.AddConnectionCloseListener(OnDisconnectedFromMasterEventHandler, false);
             }
+
         }
 
         private void OnConnectedToMasterEventHandler(IClientSocket client)
