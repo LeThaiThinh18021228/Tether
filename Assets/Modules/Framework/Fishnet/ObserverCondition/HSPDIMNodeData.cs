@@ -97,12 +97,16 @@ namespace HSPDIMAlgo
         public void UpdateBound()
         {
             boundValue = range.oldPos[dimId] + isUpper * range.range[alterDim] / 2 + HSPDIM.mapSizeEstimate / 2;
-            this.index = range.entity.enabled ? HSPDIM.IndexCal(boundValue, range.depthLevel[dimId]) : -1;
+            index = (range.entity.IsServerInitialized || range.entity.enabled) ? HSPDIM.IndexCal(boundValue, range.depthLevel[dimId]) : -1;
+            if (!range.entity.IsServerInitialized || !range.entity.enabled)
+            {
+                PDebug.LogError($"enabled {range.entity.enabled} IsServerInitialized {range.entity.IsServerInitialized}");
+            }
         }
 
-        public NativeBound ToNativeBound(int x)
+        public NativeBound ToNativeBound(int indexInContainer, bool isInside, int lowerIndex = -1, int lowerIndexInContainer = -1)
         {
-            return new NativeBound(dimId, alterDim, isUpper, boundValue, index, x, new(dimId, range.depthLevel[dimId], index, isUpper, false, x, 1));
+            return new NativeBound(boundValue, lowerIndex, indexInContainer, new(dimId, range.depthLevel[dimId], index, isUpper, isInside, indexInContainer, 1, lowerIndexInContainer));
         }
     }
     public class Range
@@ -119,49 +123,40 @@ namespace HSPDIMAlgo
         {
             this.range = range;
             this.entity = entity;
-            oldPos = new Vector3(entity.transform.position.x, entity.transform.position.z);
             intersection = new HashSet<Range>();
-            for (short i = 0; i < HSPDIM.dimension; i++)
+            for (short j = 0; j < HSPDIM.dimension; j++)
             {
-                short dimId = i;
-                if (HSPDIM.dimension == 2 && i == 1)
-                {
-                    dimId = 2;
-                }
-                if (range[dimId] < HSPDIM.mapSizeEstimate / Mathf.Pow(2, treeDepth))
-                {
-                    depthLevel[i] = treeDepth;
-                }
-                else
-                {
-                    depthLevel[i] = HSPDIM.DepthCal(this.range[dimId]);
-                }
+                Bounds[j, 0] = Bounds[j, 0] ?? new Bound(j, -1, this);
+                Bounds[j, 1] = Bounds[j, 1] ?? new Bound(j, 1, this);
+                Bounds[j, 2] = Bounds[j, 2] ?? new Bound(j, 0, this);
             }
+            UpdateRange(treeDepth);
+        }
+        public void UpdateRange(short i, int treeDepth)
+        {
+            short dimId = i;
+            if (HSPDIM.dimension == 2 && i == 1)
+            {
+                dimId = 2;
+            }
+            if (range[dimId] < HSPDIM.mapSizeEstimate / Mathf.Pow(2, treeDepth))
+            {
+                depthLevel[i] = treeDepth;
+            }
+            else
+            {
+                depthLevel[i] = HSPDIM.DepthCal(range[dimId]);
+            }
+            Bounds[i, 0].UpdateBound();
+            Bounds[i, 1].UpdateBound();
+            Bounds[i, 2].UpdateBound();
         }
         public void UpdateRange(int treeDepth)
         {
+            oldPos = new Vector3(entity.transform.position.x, entity.transform.position.z);
             for (short i = 0; i < HSPDIM.dimension; i++)
             {
-                if (entity.Modified[i])
-                {
-                    short dimId = i;
-                    if (HSPDIM.dimension == 2 && i == 1)
-                    {
-                        dimId = 2;
-                    }
-                    if (range[dimId] < HSPDIM.mapSizeEstimate / Mathf.Pow(2, treeDepth))
-                    {
-                        depthLevel[i] = treeDepth;
-                    }
-                    else
-                    {
-                        depthLevel[i] = HSPDIM.DepthCal(range[dimId]);
-                    }
-                    oldPos = new Vector3(entity.transform.position.x, entity.transform.position.z);
-                    Bounds[i, 0].UpdateBound();
-                    Bounds[i, 1].UpdateBound();
-                    Bounds[i, 2].UpdateBound();
-                }
+                UpdateRange(i, treeDepth);
             }
         }
         public void UpdateIntersection()
@@ -175,7 +170,7 @@ namespace HSPDIMAlgo
         }
         public override string ToString()
         {
-            return $"{entity.name}_{GetHashCode()}_{range}_{oldPos}_{depthLevel}_{entity.Modified}_({Bounds[0, 0].boundValue}_{Bounds[0, 0].index},{Bounds[0, 1].boundValue}_{Bounds[0, 1].index},{Bounds[1, 0].boundValue}_{Bounds[1, 0].index},{Bounds[1, 1].boundValue}_{Bounds[1, 1].index})";
+            return $"{entity.name}_{GetHashCode()}_{range}_{oldPos}_({Bounds[0, 0].boundValue}_{Bounds[0, 0].index},{Bounds[0, 1].boundValue}_{Bounds[0, 1].index},{Bounds[1, 0].boundValue}_{Bounds[1, 0].index},{Bounds[1, 1].boundValue}_{Bounds[1, 1].index})";
         }
     }
 

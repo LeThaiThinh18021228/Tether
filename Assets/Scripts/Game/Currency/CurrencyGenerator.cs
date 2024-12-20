@@ -29,10 +29,6 @@ public class CurrencyGenerator : NetworkBehaviour
         {
             case Operation.Add:
                 Debug.Log($"Add Uprange + {currency.HSPDIMEntity.name}_{currency.HSPDIMEntity.UpRange.GetHashCode()} {HSPDIM.Instance.modifiedUpRanges.Contains(currency.HSPDIMEntity.UpRange)} ");
-                currency.HSPDIMEntity.Modified = new(true, true, false);
-                HSPDIM.RemoveRangeFromTree(currency.HSPDIMEntity.UpRange, HSPDIM.Instance.upTree);
-                currency.HSPDIMEntity.UpRange.UpdateRange(HSPDIM.Instance.upTree[0].depth);
-                HSPDIM.AddRangeToTree(currency.HSPDIMEntity.UpRange, HSPDIM.Instance.upTree);
                 break;
             case Operation.Modify:
                 break;
@@ -41,8 +37,6 @@ public class CurrencyGenerator : NetworkBehaviour
                 {
                     DOVirtual.DelayedCall(0.5f, () => SpawnCurrency());
                 }
-                currency.HSPDIMEntity.Modified = new(true, true, false);
-                HSPDIM.RemoveRangeFromTree(currency.HSPDIMEntity.UpRange, HSPDIM.Instance.upTree);
                 break;
             case Operation.Clear:
                 break;

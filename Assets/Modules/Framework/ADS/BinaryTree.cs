@@ -28,6 +28,11 @@ namespace Framework.ADS
             Right = null;
         }
 
+        public override string ToString()
+        {
+            return Data.ToString();
+        }
+
     }
 
     public class BinaryTree<T> : IEnumerable<TreeNode<T>> where T : new()
@@ -124,7 +129,7 @@ namespace Framework.ADS
             for (short j = 0; j <= depth; j++)
             {
                 float maxIndex = Mathf.Pow(2, j);
-                for (int k = 0; k <= maxIndex; k++)
+                for (int k = 0; k < maxIndex; k++)
                 {
                     yield return this[j, k];
                 }
@@ -156,10 +161,6 @@ namespace Framework.ADS
                     yield return rightNode;
                 }
             }
-        }
-        public IEnumerable<TreeNode<T>> PreOrderYield(TreeNode<T> node)
-        {
-            yield return node;
         }
         IEnumerator IEnumerable.GetEnumerator()
         {

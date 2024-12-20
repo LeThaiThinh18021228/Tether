@@ -42,40 +42,46 @@ namespace HSPDIMAlgo
                 if (UpRange == null)
                 {
                     UpRange = new(upRange, this, HSPDIM.upTreeDepth);
+                    UpRange.UpdateRange(HSPDIM.upTreeDepth);
                     HSPDIM.Instance.upRanges.Add(UpRange);
                     Debug.Log($"Create UpRange {name}_{UpRange.GetHashCode()}");
                     if (subRange != Vector3.zero)
                     {
                         SubRange = new(subRange, this, HSPDIM.subTreeDepth);
+                        SubRange.UpdateRange(HSPDIM.subTreeDepth);
                         HSPDIM.Instance.subRanges.Add(SubRange);
                         Debug.Log($"Create SupRange {name}_{SubRange.GetHashCode()}");
                         SubRange.OnUpdateIntersection += OnUpdateIntersection;
                     }
                 }
-                if (!HSPDIM.Instance.isRunning)
+                Modified = new(true, true, false);
+                HSPDIM.Instance.modifiedUpRanges.Add(UpRange);
+                Debug.Log(HSPDIM.Instance.modifiedUpRanges.Count + "Add UpRange" + name);
+                if (subRange != Vector3.zero)
                 {
-                    Debug.Log("Add UpRange" + name);
-                    HSPDIM.Instance.modifiedUpRanges.Add(UpRange);
-                    if (subRange != Vector3.zero)
-                    {
-                        Debug.Log("Add SupRange" + name);
-                        HSPDIM.Instance.modifiedSubRanges.Add(SubRange);
-                    }
+                    Debug.Log("Add SupRange" + name);
+                    HSPDIM.Instance.modifiedSubRanges.Add(SubRange);
                 }
             }
         }
         public override void OnStopNetwork()
         {
             base.OnStopNetwork();
-            if (IsServerInitialized && HSPDIM.Instance.isRunning && false)
+            if (IsServerInitialized && HSPDIM.Instance.isRunning)
             {
-                Debug.Log("Destroy" + name);
-                if (UpRange == null)
+                if (UpRange != null)
                 {
-                    HSPDIM.RemoveRangeFromTree(UpRange, HSPDIM.Instance.upTree);
+                    Debug.Log("Destroy " + UpRange);
+                    for (short i = 0; i < HSPDIM.dimension; i++)
+                    {
+                        HSPDIM.RemoveRangeFromTree(i, UpRange, HSPDIM.Instance.upTree);
+                    }
                     if (subRange != Vector3.zero)
                     {
-                        HSPDIM.RemoveRangeFromTree(SubRange, HSPDIM.Instance.subTree);
+                        for (short i = 0; i < HSPDIM.dimension; i++)
+                        {
+                            HSPDIM.RemoveRangeFromTree(i, SubRange, HSPDIM.Instance.subTree);
+                        }
                     }
                 }
             }

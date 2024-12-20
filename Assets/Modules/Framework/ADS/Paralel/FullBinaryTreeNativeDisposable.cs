@@ -34,41 +34,12 @@ namespace Framework.ADS.Paralel
                 Nodes[i] = new TreeNodeNative<T>(default, nodeDepth, i);
             }
         }
-
-        public TreeNodeNative<T> GetLeftChild(int index)
-        {
-            int leftIndex = 2 * index + 1;
-            if (leftIndex < Nodes.Length)
-            {
-                return Nodes[leftIndex];
-            }
-            throw new System.IndexOutOfRangeException("No left child");
-        }
-
-        public TreeNodeNative<T> GetRightChild(int index)
-        {
-            int rightIndex = 2 * index + 2;
-            if (rightIndex < Nodes.Length)
-            {
-                return Nodes[rightIndex];
-            }
-            throw new System.IndexOutOfRangeException("No right child");
-        }
         public TreeNodeNative<T> this[int depth, int index]
         {
             get
             {
-                return Nodes[2 ^ depth + index - 1];
+                return Nodes[1 << depth + index - 1];
             }
-        }
-        public TreeNodeNative<T> GetNode(int index)
-        {
-            int rightIndex = 2 * index + 2;
-            if (rightIndex < Nodes.Length)
-            {
-                return Nodes[rightIndex];
-            }
-            throw new System.IndexOutOfRangeException("No right child");
         }
         public void Dispose()
         {
@@ -101,40 +72,16 @@ namespace Framework.ADS.Paralel
             }
         }
 
-        public TreeNodeNative<T> GetLeftChild(int index)
-        {
-            int leftIndex = 2 * index + 1;
-            if (leftIndex < Nodes.Length)
-            {
-                return Nodes[leftIndex];
-            }
-            throw new System.IndexOutOfRangeException("No left child");
-        }
-
-        public TreeNodeNative<T> GetRightChild(int index)
-        {
-            int rightIndex = 2 * index + 2;
-            if (rightIndex < Nodes.Length)
-            {
-                return Nodes[rightIndex];
-            }
-            throw new System.IndexOutOfRangeException("No right child");
-        }
         public TreeNodeNative<T> this[int depth, int index]
         {
             get
             {
-                return Nodes[2 ^ depth + index - 1];
+                return Nodes[(1 << depth) + index - 1];
             }
-        }
-        public TreeNodeNative<T> GetNode(int index)
-        {
-            int rightIndex = 2 * index + 2;
-            if (rightIndex < Nodes.Length)
+            set
             {
-                return Nodes[rightIndex];
+                Nodes[(1 << depth) + index - 1] = value;
             }
-            throw new System.IndexOutOfRangeException("No right child");
         }
         public void Dispose()
         {

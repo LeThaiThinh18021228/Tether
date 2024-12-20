@@ -165,13 +165,17 @@ public class Movable : NetworkBehaviour
     {
         if (Dir.Value != Vector3.zero)
         {
-            toAngle = Mathf.Atan2(Dir.Value.x, Dir.Value.z) * Mathf.Rad2Deg;
-            Vector3 fromAngle = steerTransform.eulerAngles;
-            if (toAngle < 0 && fromAngle.y > 180) { fromAngle.y -= 360; }
-            if (Mathf.Abs(fromAngle.y - toAngle) > 0.01f)
-            {
-                steerTransform.eulerAngles = Vector3.MoveTowards(fromAngle, new Vector3(0, toAngle, 0), steer * Time.deltaTime);
-            }
+            Quaternion fromRotation = Quaternion.Euler(steerTransform.eulerAngles);
+            Quaternion toRotation = Quaternion.Euler(0, toAngle, 0);
+            steerTransform.rotation = Quaternion.RotateTowards(fromRotation, toRotation, steer * Time.deltaTime);
+
+            //toAngle = Mathf.Atan2(Dir.Value.x, Dir.Value.z) * Mathf.Rad2Deg;
+            //Vector3 fromAngle = steerTransform.eulerAngles;
+            //if (toAngle < 0 && fromAngle.y > 180) { fromAngle.y -= 360; }
+            //if (Mathf.Abs(fromAngle.y - toAngle) > 0.01f)
+            //{
+            //    steerTransform.eulerAngles = Vector3.MoveTowards(fromAngle, new Vector3(0, toAngle, 0), steer * Time.deltaTime);
+            //}
         }
     }
     private void Des_OnChange(Vector3? prev, Vector3? next, bool asServer)
