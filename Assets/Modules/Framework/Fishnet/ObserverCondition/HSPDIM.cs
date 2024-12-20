@@ -471,6 +471,8 @@ namespace HSPDIMAlgo
                     stringBuilder.Append(string.Join(",", node.Data.lowers.Select(b => b.range.ToString())));
 
                 });
+                PDebug.Log(stringBuilder);
+                stringBuilder.Clear();
                 flattenedTree.Dispose();
             }
         }
