@@ -16,8 +16,8 @@ public class MapManager : SingletonNetwork<MapManager>
 
     public static Vector3 RandomPositionInsideMap()
     {
-        float x = Random.Range(-Width / 2, Width / 2);
-        float y = Random.Range(-Height / 2, Height / 2);
+        float x = Random.Range(-Width / 2f, Width / 2f);
+        float y = Random.Range(-Height / 2f, Height / 2f);
         return new Vector3(x, 0, y);
     }
 }

@@ -26,6 +26,6 @@ public class GameManager : GameManagerBase<GameManager>
     {
         base.OnStartServer();
         Instance.GameStartCondition += (x) => { return BotManager.isSpawnBotCompleted; };
-        GameManager.Instance.State.OnChange += HSPDIM.GameState_OnChange;
+        GameManager.Instance.State.OnChange += HSPDIM.InitMappingAndMatching;
     }
 }

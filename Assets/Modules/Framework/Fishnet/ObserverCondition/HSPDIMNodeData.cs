@@ -97,11 +97,7 @@ namespace HSPDIMAlgo
         public void UpdateBound()
         {
             boundValue = range.oldPos[dimId] + isUpper * range.range[alterDim] / 2 + HSPDIM.mapSizeEstimate / 2;
-            index = (range.entity.IsServerInitialized || range.entity.enabled) ? HSPDIM.IndexCal(boundValue, range.depthLevel[dimId]) : -1;
-            if (!range.entity.IsServerInitialized || !range.entity.enabled)
-            {
-                PDebug.LogError($"enabled {range.entity.enabled} IsServerInitialized {range.entity.IsServerInitialized}");
-            }
+            index = (range.entity.IsServerInitialized && range.entity.enabled) ? HSPDIM.IndexCal(boundValue, range.depthLevel[dimId]) : -1;
         }
 
         public NativeBound ToNativeBound(int indexInContainer, bool isInside, int lowerIndex = -1, int lowerIndexInContainer = -1)
@@ -124,6 +120,8 @@ namespace HSPDIMAlgo
             this.range = range;
             this.entity = entity;
             intersection = new HashSet<Range>();
+            oldPos = new Vector3(entity.transform.position.x, entity.transform.position.z);
+
             for (short j = 0; j < HSPDIM.dimension; j++)
             {
                 Bounds[j, 0] = Bounds[j, 0] ?? new Bound(j, -1, this);
@@ -156,7 +154,10 @@ namespace HSPDIMAlgo
             oldPos = new Vector3(entity.transform.position.x, entity.transform.position.z);
             for (short i = 0; i < HSPDIM.dimension; i++)
             {
-                UpdateRange(i, treeDepth);
+                if (entity.Modified[i])
+                {
+                    UpdateRange(i, treeDepth);
+                }
             }
         }
         public void UpdateIntersection()
@@ -170,7 +171,7 @@ namespace HSPDIMAlgo
         }
         public override string ToString()
         {
-            return $"{entity.name}_{GetHashCode()}_{range}_{oldPos}_({Bounds[0, 0].boundValue}_{Bounds[0, 0].index},{Bounds[0, 1].boundValue}_{Bounds[0, 1].index},{Bounds[1, 0].boundValue}_{Bounds[1, 0].index},{Bounds[1, 1].boundValue}_{Bounds[1, 1].index})";
+            return $"{entity.name}_{GetHashCode()}_{range}_{oldPos}_{entity.Modified}_({Bounds[0, 0].boundValue}_{Bounds[0, 0].index},{Bounds[0, 1].boundValue}_{Bounds[0, 1].index},{Bounds[1, 0].boundValue}_{Bounds[1, 0].index},{Bounds[1, 1].boundValue}_{Bounds[1, 1].index})";
         }
     }
 
@@ -187,7 +188,7 @@ namespace HSPDIMAlgo
             Z = z;
         }
         public static readonly Vector3Bool @false = new(false, false, false);
-        public static readonly Vector3Bool @true = new(false, false, false);
+        public static readonly Vector3Bool @true = new(true, true, true);
         public bool this[int index]
         {
             get
