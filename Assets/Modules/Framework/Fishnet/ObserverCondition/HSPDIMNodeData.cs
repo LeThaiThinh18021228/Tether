@@ -100,9 +100,13 @@ namespace HSPDIMAlgo
             index = (range.entity.IsServerInitialized && range.entity.enabled) ? HSPDIM.IndexCal(boundValue, range.depthLevel[dimId]) : -1;
         }
 
-        public NativeBound ToNativeBound(int indexInContainer, bool isInside, int lowerIndex = -1, int lowerIndexInContainer = -1)
+        public NativeBound ToNativeBound(int indexInContainer, bool isInside = false, int lowerIndex = -1, int lowerIndexInContainer = -1)
         {
-            return new NativeBound(boundValue, lowerIndex, indexInContainer, new(dimId, range.depthLevel[dimId], index, isUpper, isInside, indexInContainer, 1, lowerIndexInContainer));
+            return new NativeBound(boundValue, default, new(dimId, range.depthLevel[dimId], this.index, isUpper, isInside, indexInContainer, 1, lowerIndexInContainer));
+        }
+        public NativeBound ToNativeBound(int indexInContainer, int index = -1, int lowerIndexInContainer = -1)
+        {
+            return new NativeBound(boundValue, new(dimId, index, indexInContainer, lowerIndexInContainer), new(dimId, 0, this.index, isUpper, false, indexInContainer, 1, -1));
         }
     }
     public class Range

@@ -1,4 +1,5 @@
 using FishNet.Object;
+using Framework;
 using System.Linq;
 using TMPro;
 using UnityEngine;
@@ -87,23 +88,23 @@ namespace HSPDIMAlgo
             SubBoxCol = Physics.OverlapBox(transform.position, subRange / 2, Quaternion.identity, LayerMask.GetMask("HSPDIMUp"));
             //intersectText.text = $"{(SubRange.intersection.DefaultIfEmpty().Count() - 1)}";
             intersectText.text = $"{SubBoxCol?.Count() - 1}:{(SubRange.intersection.DefaultIfEmpty().Count() - 1)}";
-            //var miss = SubBoxCol?.Select(c => c.GetComponentInParent<HSPDIMEntity>().UpRange).Where(r => !SubRange.intersection.Contains(r) && r.entity.IsServerInitialized
-            //&& Mathf.Abs(r.Bounds[0, 0].boundValue - SubRange.Bounds[0, 1].boundValue) > 0.4f
-            //&& Mathf.Abs(r.Bounds[1, 0].boundValue - SubRange.Bounds[1, 1].boundValue) > 0.4f
-            //&& Mathf.Abs(r.Bounds[0, 1].boundValue - SubRange.Bounds[0, 0].boundValue) > 0.4f
-            //&& Mathf.Abs(r.Bounds[1, 1].boundValue - SubRange.Bounds[1, 0].boundValue) > 0.4f
-            //);
-            //var redundant = SubRange.intersection.Where(r => !SubBoxCol.Select(c => c.GetComponentInParent<HSPDIMEntity>().UpRange).Contains(r) && r.entity.IsServerInitialized
-            //&& Mathf.Abs(r.Bounds[0, 0].boundValue - SubRange.Bounds[0, 1].boundValue) > 0.4f
-            //&& Mathf.Abs(r.Bounds[1, 0].boundValue - SubRange.Bounds[1, 1].boundValue) > 0.4f
-            //&& Mathf.Abs(r.Bounds[0, 1].boundValue - SubRange.Bounds[0, 0].boundValue) > 0.4f
-            //&& Mathf.Abs(r.Bounds[1, 1].boundValue - SubRange.Bounds[1, 0].boundValue) > 0.4f
-            //);
-            //if (miss.Count() > 0 || redundant.Count() > 0)
-            //{
-            //    PDebug.Log($"{SubRange}\nRange miss:\n{string.Join(",", miss.Select(r => r))}\nRange redundant:\n{string.Join("\n", redundant.Select(r => r))} \n{string.Join("\n", SubRange.overlapSets.Select((rs, i) => $"Dimension {i}:\n" + string.Join("\n", rs.Select(r => r))))}");
-            //    Time.timeScale = 0;
-            //}
+            var miss = SubBoxCol?.Select(c => c.GetComponentInParent<HSPDIMEntity>().UpRange).Where(r => !SubRange.intersection.Contains(r) && r.entity.IsServerInitialized
+            && Mathf.Abs(r.Bounds[0, 0].boundValue - SubRange.Bounds[0, 1].boundValue) > 0.4f
+            && Mathf.Abs(r.Bounds[1, 0].boundValue - SubRange.Bounds[1, 1].boundValue) > 0.4f
+            && Mathf.Abs(r.Bounds[0, 1].boundValue - SubRange.Bounds[0, 0].boundValue) > 0.4f
+            && Mathf.Abs(r.Bounds[1, 1].boundValue - SubRange.Bounds[1, 0].boundValue) > 0.4f
+            );
+            var redundant = SubRange.intersection.Where(r => !SubBoxCol.Select(c => c.GetComponentInParent<HSPDIMEntity>().UpRange).Contains(r) && r.entity.IsServerInitialized
+            && Mathf.Abs(r.Bounds[0, 0].boundValue - SubRange.Bounds[0, 1].boundValue) > 0.4f
+            && Mathf.Abs(r.Bounds[1, 0].boundValue - SubRange.Bounds[1, 1].boundValue) > 0.4f
+            && Mathf.Abs(r.Bounds[0, 1].boundValue - SubRange.Bounds[0, 0].boundValue) > 0.4f
+            && Mathf.Abs(r.Bounds[1, 1].boundValue - SubRange.Bounds[1, 0].boundValue) > 0.4f
+            );
+            if (miss.Count() > 0 || redundant.Count() > 0)
+            {
+                PDebug.Log($"{SubRange}\nRange miss:\n{string.Join(",", miss.Select(r => r))}\nRange redundant:\n{string.Join("\n", redundant.Select(r => r))} \n{string.Join("\n", SubRange.overlapSets.Select((rs, i) => $"Dimension {i}:\n" + string.Join("\n", rs.Select(r => r))))}");
+                Time.timeScale = 0;
+            }
         }
     }
 }

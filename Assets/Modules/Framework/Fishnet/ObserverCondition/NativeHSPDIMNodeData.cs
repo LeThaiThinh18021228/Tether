@@ -19,33 +19,48 @@ namespace Framework
         public NativeArray<NativeNode> CoverNodes;
         public NativeArray<NativeNode> InsideNodes;
 
-
+        public NativeArray<NativeListElement> LowerDimensions;
+        public NativeArray<NativeListElement> UpperDimensions;
+        public NativeArray<NativeListElement> CoverDimensions;
+        public NativeArray<NativeListElement> InsideDimensions;
         public void Dispose()
         {
             if (Lowers.IsCreated) Lowers.Dispose();
             if (LowerNodes.IsCreated) LowerNodes.Dispose();
+            if (LowerDimensions.IsCreated) LowerDimensions.Dispose();
             if (Uppers.IsCreated) Uppers.Dispose();
             if (UpperNodes.IsCreated) UpperNodes.Dispose();
+            if (UpperDimensions.IsCreated) UpperDimensions.Dispose();
             if (Covers.IsCreated) Covers.Dispose();
             if (CoverNodes.IsCreated) CoverNodes.Dispose();
+            if (CoverDimensions.IsCreated) CoverDimensions.Dispose();
             if (Insides.IsCreated) Insides.Dispose();
             if (InsideNodes.IsCreated) InsideNodes.Dispose();
+            if (InsideDimensions.IsCreated) InsideDimensions.Dispose();
         }
+    }
+    public struct NativeHSPDIMListBound : System.IDisposable
+    {
+        public NativeArray<NativeBound> Bounds;
+        public NativeArray<NativeListElement> ElementList;
+        public NativeArray<NativeListElement> ElementDimensions;
 
-
+        public void Dispose()
+        {
+            if (Bounds.IsCreated) Bounds.Dispose();
+            if (ElementList.IsCreated) ElementList.Dispose();
+        }
     }
     public struct NativeBound : IComparable<NativeBound>
     {
         public float BoundValue;
-        public int LowerIndex;
-        public int RangeIdInList;
-        public RangeID RangeIdInTree;
+        public RangeIDInList RangeIdInList;
+        public RangeIDInTree RangeIdInTree;
 
-        public NativeBound(float boundValue, int lowerIndex, int rangeIdInList, RangeID rangeIdInTree)
+        public NativeBound(float boundValue, RangeIDInList rangeIDInList = default, RangeIDInTree rangeIdInTree = default)
         {
             BoundValue = boundValue;
-            LowerIndex = lowerIndex;
-            RangeIdInList = rangeIdInList;
+            RangeIdInList = rangeIDInList;
             RangeIdInTree = rangeIdInTree;
         }
 
@@ -54,6 +69,10 @@ namespace Framework
             if (BoundValue > other.BoundValue) return 1;
             if (BoundValue < other.BoundValue) return -1;
             return 0;
+        }
+        public override string ToString()
+        {
+            return BoundValue.ToString();
         }
     }
     public struct NativeNode
@@ -71,8 +90,18 @@ namespace Framework
             Count = count;
         }
     }
+    public struct NativeListElement
+    {
+        public int Start;
+        public int Count;
 
-    public struct RangeID
+        public NativeListElement(int start, int count)
+        {
+            Start = start;
+            Count = count;
+        }
+    }
+    public struct RangeIDInTree
     {
         public int Dim;
         public int Depth;
@@ -82,7 +111,7 @@ namespace Framework
         public int Start;
         public int Count;
         public int IndexContainer;
-        public RangeID(int dim, int depth, int index, int isUpper, bool isInside, int start, int count, int lowerId = -1)
+        public RangeIDInTree(int dim, int depth, int index, int isUpper, bool isInside, int start, int count, int lowerId = -1)
         {
             Dim = dim;
             Depth = depth;
@@ -99,21 +128,40 @@ namespace Framework
             return $"RangeID [{Dim},{Depth},{Index}] IsUpper = {IsUpper}, IsInside = {IsInside}, Start = {Start}, Count = {Count} LowerIndex = {IndexContainer}";
         }
     }
+    public struct RangeIDInList
+    {
+        public int Dim;
+        public int Index;
+        public int IndexContainer;
+        public int LowerIndexContainer;
 
+        public RangeIDInList(int dim, int index, int indexContainer, int lowerIndexContainer)
+        {
+            Dim = dim;
+            Index = index;
+            IndexContainer = indexContainer;
+            LowerIndexContainer = lowerIndexContainer;
+        }
+
+        public override string ToString()
+        {
+            return $"RangeID [{Dim},{Index}] IndexContainer = {IndexContainer}";
+        }
+    }
     public struct OverlapID
     {
-        public RangeID rangeIDInTree;
-        public int rangeIDInList;
+        public RangeIDInTree rangeIDInTree;
+        public RangeIDInList rangeIDInList;
         public int hint;
 
-        public OverlapID(RangeID rangeIDInTree, int rangeIDInList, int hint)
+        public OverlapID(RangeIDInTree rangeIDInTree, RangeIDInList rangeIDInList, int hint)
         {
             this.rangeIDInTree = rangeIDInTree;
             this.rangeIDInList = rangeIDInList;
             this.hint = hint;
         }
 
-        public IEnumerable<Range> MapRangeToTree(BinaryTree<HSPDIMNodeData> tree, List<Bound> sortbounds)
+        public IEnumerable<Range> MapRangeToTree(BinaryTree<HSPDIMNodeData> tree, int indexInList, List<Bound> sortbounds = null)
         {
             HSPDIMNodeData node = tree[rangeIDInTree.Depth, rangeIDInTree.Index].Data;
             List<Bound> container = node.lowers;
@@ -137,7 +185,7 @@ namespace Framework
                     default:
                         break;
                 }
-            //PDebug.Log($"{hint} _ {rangeIDInTree} _ rangeIDInList {sortbounds[rangeIDInList].range}  _ container {container.Count}");
+            PDebug.Log($"{hint} _ {rangeIDInTree} _ rangeIDInList {sortbounds[indexInList].range}  _ container {container.Count}");
             range = container.GetRange(rangeIDInTree.Start, rangeIDInTree.Count).Select(r => r.range);
             return range;
         }
