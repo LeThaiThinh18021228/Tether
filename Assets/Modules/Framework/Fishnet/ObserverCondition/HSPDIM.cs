@@ -863,7 +863,7 @@ namespace HSPDIMAlgo
 
                 NativeBound boundInSortedList = ListSortedBound.Bounds[j];
                 NativeBound boundInTree = new();
-                while (j < endBoundIndex && m <= rightLeaf)
+                while (j <= endBoundIndex && m <= rightLeaf)
                 {
                     boundInSortedList = ListSortedBound.Bounds[j];
                     NativeNode node = new();
