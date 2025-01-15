@@ -110,8 +110,9 @@ namespace Framework
         public bool IsInside;
         public int Start;
         public int Count;
-        public int IndexContainer;
-        public RangeIDInTree(int dim, int depth, int index, int isUpper, bool isInside, int start, int count, int lowerId = -1)
+        public int LowerIndex;
+        public int LowerIndexContainer;
+        public RangeIDInTree(int dim, int depth, int index, int isUpper, bool isInside, int start, int count, int lowerIndexContainer = -1, int lowerIndex = -1)
         {
             Dim = dim;
             Depth = depth;
@@ -120,12 +121,13 @@ namespace Framework
             IsInside = isInside;
             Start = start;
             Count = count;
-            IndexContainer = lowerId;
+            LowerIndex = lowerIndex;
+            LowerIndexContainer = lowerIndexContainer;
         }
 
         public override string ToString()
         {
-            return $"RangeID [{Dim},{Depth},{Index}] IsUpper = {IsUpper}, IsInside = {IsInside}, Start = {Start}, Count = {Count} LowerIndex = {IndexContainer}";
+            return $"RangeID [{Dim},{Depth},{Index}] IsUpper = {IsUpper}, IsInside = {IsInside}, Start = {Start}, Count = {Count} LowerIndexContainer = {LowerIndexContainer}";
         }
     }
     public struct RangeIDInList
@@ -185,7 +187,7 @@ namespace Framework
                     default:
                         break;
                 }
-            PDebug.Log($"{hint} _ {rangeIDInTree} _ rangeIDInList {sortbounds[indexInList].range}  _ container {container.Count}");
+            PDebug.Log($"{hint} _ {rangeIDInTree} _ rangeIDInList {((0 < indexInList && indexInList < sortbounds.Count) ? sortbounds[indexInList].range : indexInList)}  _ container {container.Count}");
             range = container.GetRange(rangeIDInTree.Start, rangeIDInTree.Count).Select(r => r.range);
             return range;
         }

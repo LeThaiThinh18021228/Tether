@@ -102,11 +102,16 @@ namespace HSPDIMAlgo
 
         public NativeBound ToNativeBound(int indexInContainer, bool isInside = false, int lowerIndex = -1, int lowerIndexInContainer = -1)
         {
-            return new NativeBound(boundValue, default, new(dimId, range.depthLevel[dimId], this.index, isUpper, isInside, indexInContainer, 1, lowerIndexInContainer));
+            if (lowerIndex == -1)
+            {
+                throw new ArgumentException();
+            }
+            return new NativeBound(boundValue, default,
+                new(dimId, range.depthLevel[dimId], this.index, isUpper, isInside, indexInContainer, 1, lowerIndexInContainer, lowerIndex));
         }
         public NativeBound ToNativeBound(int indexInContainer, int index = -1, int lowerIndexInContainer = -1)
         {
-            return new NativeBound(boundValue, new(dimId, index, indexInContainer, lowerIndexInContainer), new(dimId, 0, this.index, isUpper, false, indexInContainer, 1, -1));
+            return new NativeBound(boundValue, new(dimId, index, indexInContainer, lowerIndexInContainer), new(dimId, range.depthLevel[dimId], this.index, isUpper, false, indexInContainer, 1, -1, -1));
         }
     }
     public class Range
