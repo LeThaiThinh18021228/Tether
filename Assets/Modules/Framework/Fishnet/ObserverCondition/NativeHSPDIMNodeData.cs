@@ -187,7 +187,15 @@ namespace Framework
                     default:
                         break;
                 }
-            PDebug.Log($"{hint} _ {rangeIDInTree} _ rangeIDInList {((0 < indexInList && indexInList < sortbounds.Count) ? sortbounds[indexInList].range : indexInList)}  _ container {container.Count}");
+            if (0 <= indexInList && indexInList < sortbounds.Count)
+            {
+                //PDebug.Log($"{hint} _ {rangeIDInTree} _ rangeIDInList {sortbounds[indexInList].range} _ container {container.Count}");
+            }
+            else
+            {
+                PDebug.LogWarning($"{hint} _ {rangeIDInTree} _ rangeIDInList {indexInList} _ container {container.Count}");
+            }
+
             range = container.GetRange(rangeIDInTree.Start, rangeIDInTree.Count).Select(r => r.range);
             return range;
         }

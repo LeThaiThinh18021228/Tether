@@ -102,10 +102,6 @@ namespace HSPDIMAlgo
 
         public NativeBound ToNativeBound(int indexInContainer, bool isInside = false, int lowerIndex = -1, int lowerIndexInContainer = -1)
         {
-            if (lowerIndex == -1)
-            {
-                throw new ArgumentException();
-            }
             return new NativeBound(boundValue, default,
                 new(dimId, range.depthLevel[dimId], this.index, isUpper, isInside, indexInContainer, 1, lowerIndexInContainer, lowerIndex));
         }
