@@ -32,7 +32,7 @@ namespace Bot
 #if !UNITY_SERVER && UNITY_EDITOR
             if (IsServerInitialized)
             {
-                initBot = 3;
+                initBot = 5;
             }
 #endif
             for (int i = 0; i < initBot; i++)
