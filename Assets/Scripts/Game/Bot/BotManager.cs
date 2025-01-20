@@ -29,7 +29,7 @@ namespace Bot
         private void OnRoomRegistered(RoomController roomController)
         {
             initBot = GameManager.Instance.RoomServerManager.RoomController.Options.CustomOptions.AsInt(Mst.Args.Names.RoomBotNumner);
-#if !UNITY_SERVER && UNITY_EDITOR
+#if !UNITY_SERVER || UNITY_EDITOR
             if (IsServerInitialized)
             {
                 initBot = 5;

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Experimental.GlobalIllumination;
 
 namespace Framework.ADS
 {
@@ -142,9 +143,7 @@ namespace Framework.ADS
                 yield break;
             }
 
-            yield return node; // Visit the current node first
-
-            // Recursively traverse the left subtree
+            yield return node;
             if (node.Left != null)
             {
                 foreach (var leftNode in PreOrderEnumerator(node.Left))
@@ -152,8 +151,6 @@ namespace Framework.ADS
                     yield return leftNode;
                 }
             }
-
-            // Recursively traverse the right subtree
             if (node.Right != null)
             {
                 foreach (var rightNode in PreOrderEnumerator(node.Right))

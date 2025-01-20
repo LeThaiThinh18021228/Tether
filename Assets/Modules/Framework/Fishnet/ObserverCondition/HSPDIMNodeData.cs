@@ -81,6 +81,7 @@ namespace HSPDIMAlgo
                 alterDim = 2;
             }
             UpdateBound();
+            index = -1;
         }
 
         public int CompareTo(Bound other)
@@ -133,7 +134,7 @@ namespace HSPDIMAlgo
                 Bounds[j, 1] = Bounds[j, 1] ?? new Bound(j, 1, this);
                 Bounds[j, 2] = Bounds[j, 2] ?? new Bound(j, 0, this);
             }
-            UpdateRange(treeDepth);
+            //UpdateRange(treeDepth);
         }
         public void UpdateRange(short i, int treeDepth)
         {

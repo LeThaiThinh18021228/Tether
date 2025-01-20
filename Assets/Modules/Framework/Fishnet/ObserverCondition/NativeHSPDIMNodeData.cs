@@ -154,20 +154,17 @@ namespace Framework
     {
         public RangeIDInTree rangeIDInTree;
         public RangeIDInList rangeIDInList;
-        public int hint;
 
-        public OverlapID(RangeIDInTree rangeIDInTree, RangeIDInList rangeIDInList, int hint)
+        public OverlapID(RangeIDInTree rangeIDInTree, RangeIDInList rangeIDInList)
         {
             this.rangeIDInTree = rangeIDInTree;
             this.rangeIDInList = rangeIDInList;
-            this.hint = hint;
         }
 
-        public IEnumerable<Range> MapRangeToTree(BinaryTree<HSPDIMNodeData> tree, int indexInList, List<Bound> sortbounds = null)
+        public IEnumerable<Range> MapRangeToTree(BinaryTree<HSPDIMNodeData> tree)
         {
             HSPDIMNodeData node = tree[rangeIDInTree.Depth, rangeIDInTree.Index].Data;
             List<Bound> container = node.lowers;
-            IEnumerable<Range> range;
             if (rangeIDInTree.IsInside)
             {
                 container = node.insides;
@@ -187,16 +184,8 @@ namespace Framework
                     default:
                         break;
                 }
-            if (0 <= indexInList && indexInList < sortbounds.Count)
-            {
-                //PDebug.Log($"{hint} _ {rangeIDInTree} _ rangeIDInList {sortbounds[indexInList].range} _ container {container.Count}");
-            }
-            else
-            {
-                PDebug.LogWarning($"{hint} _ {rangeIDInTree} _ rangeIDInList {indexInList} _ container {container.Count}");
-            }
-
-            range = container.GetRange(rangeIDInTree.Start, rangeIDInTree.Count).Select(r => r.range);
+            //PDebug.LogWarning($"{hint} _ {rangeIDInTree} _ IndexContainer {rangeIDInList.IndexContainer} _ container {container.Count}");
+            IEnumerable<Range> range = container.GetRange(rangeIDInTree.Start, rangeIDInTree.Count).Select(r => r.range);
             return range;
         }
     }
