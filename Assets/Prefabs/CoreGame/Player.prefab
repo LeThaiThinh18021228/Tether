@@ -507,7 +507,7 @@ MonoBehaviour:
   - {fileID: 1923569040417011058}
   - {fileID: -1703091351039084370}
   - {fileID: 3727609874148114466}
-  - {fileID: 0}
+  - {fileID: 4412560454645737376}
   - {fileID: 2085763567451256952}
   <SerializedRootNetworkBehaviour>k__BackingField: {fileID: 0}
   <SerializedNestedNetworkObjects>k__BackingField: []
@@ -824,9 +824,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a092b5b2ec624145926c961cf21c037, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _componentIndexCache: 255
+  _componentIndexCache: 6
   _addedNetworkObject: {fileID: 3811835367428141371}
-  _networkObjectCache: {fileID: 0}
+  _networkObjectCache: {fileID: 3811835367428141371}
   subRange: {x: 10, y: 0, z: 10}
   upRange: {x: 3, y: 0, z: 3}
   intersectText: {fileID: 2139222715630039148}
@@ -1256,7 +1256,7 @@ SkinnedMeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2538763541132088083}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 0
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
@@ -2293,7 +2293,7 @@ SkinnedMeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5228811410617549699}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 0
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
@@ -3246,7 +3246,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 97350e0635479984da74b163402e2940, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -3558,7 +3558,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 97350e0635479984da74b163402e2940, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

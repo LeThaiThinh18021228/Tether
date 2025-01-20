@@ -49,6 +49,7 @@ namespace Framework
         {
             if (Bounds.IsCreated) Bounds.Dispose();
             if (ElementList.IsCreated) ElementList.Dispose();
+            if (ElementDimensions.IsCreated) ElementDimensions.Dispose();
         }
     }
     public struct NativeBound : IComparable<NativeBound>

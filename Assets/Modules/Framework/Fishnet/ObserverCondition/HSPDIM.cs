@@ -9,6 +9,7 @@ using System.Text;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Jobs;
+using Unity.Jobs.LowLevel.Unsafe;
 using Unity.Mathematics;
 using UnityEngine;
 namespace HSPDIMAlgo
@@ -71,6 +72,8 @@ namespace HSPDIMAlgo
             if (!IsServerInitialized) return;
             if (UpdateInterval() && isRunning)
             {
+                int workerCount = JobsUtility.JobWorkerCount;
+
                 var uplist = modifiedUpRanges.ToList();
                 var sublist = modifiedSubRanges.ToList();
                 MappingRangeDynamic(uplist, upTree);
@@ -82,6 +85,7 @@ namespace HSPDIMAlgo
                 sublist.Clear();
                 modifiedUpRanges.Clear();
                 modifiedSubRanges.Clear();
+                PDebug.Log($"Thread Count {workerCount}, Sub Mod Count {modifiedSubRanges.Count}, Up Mod Count {modifiedUpRanges.Count}  ");
                 //LogTree(upTree);
                 //LogTree(subTree);
             }
@@ -411,8 +415,8 @@ namespace HSPDIMAlgo
                 tree2[i].ForEach(node =>
                 {
                     int index = (1 << node.depth) + node.index - 1 + (int)Mathf.Pow(2, tree2[i].depth + i) - i;
-                        
-                    
+
+
                     if (node.Data.lowers.Count > 0)
                     {
                         lowerNodes.Add(new NativeNode(node.depth, node.index, startLower, node.Data.lowers.Count));
@@ -424,7 +428,7 @@ namespace HSPDIMAlgo
                         lowerNodes.Add(new NativeNode(node.depth, node.index, startLower, 0));
                     }
 
-                    
+
                     if (node.Data.uppers.Count > 0)
                     {
                         upperNodes.Add(new NativeNode(node.depth, node.index, startUpper, node.Data.uppers.Count));
@@ -436,7 +440,7 @@ namespace HSPDIMAlgo
                         upperNodes.Add(new NativeNode(node.depth, node.index, startUpper, 0));
                     }
 
-                    
+
                     if (node.Data.covers.Count > 0)
                     {
                         coverNodes.Add(new NativeNode(node.depth, node.index, startCover, node.Data.covers.Count));
@@ -448,7 +452,7 @@ namespace HSPDIMAlgo
                         coverNodes.Add(new NativeNode(node.depth, node.index, startCover, 0));
                     }
 
-                    
+
                     if (node.Data.insides.Count > 0)
                     {
                         insideNodes.Add(new NativeNode(node.depth, node.index, startInside, node.Data.insides.Count));
