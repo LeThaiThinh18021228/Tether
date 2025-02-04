@@ -1,9 +1,6 @@
 using Framework.ADS;
-using HSPDIMAlgo;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
 using Unity.Collections;
 namespace Framework.HSPDIMAlgo
 {
@@ -28,17 +25,17 @@ namespace Framework.HSPDIMAlgo
         {
             depth.Dispose();
             if (Lowers.IsCreated) Lowers.Dispose();
-            if (LowerNodes.IsCreated) LowerNodes.Dispose();
-            if (LowerDimensions.IsCreated) LowerDimensions.Dispose();
+            //if (LowerNodes.IsCreated) LowerNodes.Dispose();
+            //if (LowerDimensions.IsCreated) LowerDimensions.Dispose();
             if (Uppers.IsCreated) Uppers.Dispose();
-            if (UpperNodes.IsCreated) UpperNodes.Dispose();
-            if (UpperDimensions.IsCreated) UpperDimensions.Dispose();
+            //if (UpperNodes.IsCreated) UpperNodes.Dispose();
+            //if (UpperDimensions.IsCreated) UpperDimensions.Dispose();
             if (Covers.IsCreated) Covers.Dispose();
-            if (CoverNodes.IsCreated) CoverNodes.Dispose();
-            if (CoverDimensions.IsCreated) CoverDimensions.Dispose();
+            //if (CoverNodes.IsCreated) CoverNodes.Dispose();
+            //if (CoverDimensions.IsCreated) CoverDimensions.Dispose();
             if (Insides.IsCreated) Insides.Dispose();
-            if (InsideNodes.IsCreated) InsideNodes.Dispose();
-            if (InsideDimensions.IsCreated) InsideDimensions.Dispose();
+            //if (InsideNodes.IsCreated) InsideNodes.Dispose();
+            //if (InsideDimensions.IsCreated) InsideDimensions.Dispose();
         }
 
         public override string ToString()
@@ -116,8 +113,8 @@ namespace Framework.HSPDIMAlgo
         public void Dispose()
         {
             if (Bounds.IsCreated) Bounds.Dispose();
-            if (ElementList.IsCreated) ElementList.Dispose();
-            if (ElementDimensions.IsCreated) ElementDimensions.Dispose();
+            //if (ElementList.IsCreated) ElementList.Dispose();
+            //if (ElementDimensions.IsCreated) ElementDimensions.Dispose();
         }
         public override string ToString()
         {
@@ -202,6 +199,7 @@ namespace Framework.HSPDIMAlgo
     }
     public struct RangeIDInTree
     {
+        public int Id;
         public int Dim;
         public int Depth;
         public int Index;
@@ -210,8 +208,9 @@ namespace Framework.HSPDIMAlgo
         public int Start;
         public int Count;
         public int LowerIndexContainer;
-        public RangeIDInTree(int dim, int depth, int index, int isUpper, bool isInside, int start, int count, int lowerIndexContainer = -1)
+        public RangeIDInTree(int id, int dim, int depth, int index, int isUpper, bool isInside, int start, int count, int lowerIndexContainer = -1)
         {
+            Id = id;
             Dim = dim;
             Depth = depth;
             Index = index;
@@ -229,13 +228,15 @@ namespace Framework.HSPDIMAlgo
     }
     public struct RangeIDInList
     {
+        public int Id;
         public int Dim;
         public int Index;
         public int IndexContainer;
         public int LowerIndexContainer;
 
-        public RangeIDInList(int dim, int index, int indexContainer, int lowerIndexContainer)
+        public RangeIDInList(int id, int dim, int index, int indexContainer, int lowerIndexContainer)
         {
+            Id = id;
             Dim = dim;
             Index = index;
             IndexContainer = indexContainer;

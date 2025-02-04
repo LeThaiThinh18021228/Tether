@@ -31,7 +31,7 @@ namespace Framework.HSPDIMAlgo
         {
             if (boundValue > other.boundValue) return 1;
             else if (boundValue < other.boundValue) return -1;
-            else return range.GetHashCode().CompareTo(other.range.GetHashCode());
+            else return range.entity.ObjectId.CompareTo(other.range.entity.ObjectId);
         }
         public override string ToString()
         {
@@ -47,11 +47,11 @@ namespace Framework.HSPDIMAlgo
         public NativeBound ToNativeBound(int indexInContainer, bool isInside = false, int lowerIndexInContainer = -1)
         {
             return new NativeBound(boundValue, default,
-                new(dimId, range.depthLevel[dimId], this.index, isUpper, isInside, indexInContainer, 1, lowerIndexInContainer));
+                new(range.entity.ObjectId, dimId, range.depthLevel[dimId], this.index, isUpper, isInside, indexInContainer, 1, lowerIndexInContainer));
         }
         public NativeBound ToNativeBound(int indexInContainer, int index = -1, int lowerIndexInContainer = -1)
         {
-            return new NativeBound(boundValue, new(dimId, index, indexInContainer, lowerIndexInContainer), new(dimId, range.depthLevel[dimId], this.index, isUpper, false, indexInContainer, 1, -1));
+            return new NativeBound(boundValue, new(range.entity.ObjectId, dimId, index, indexInContainer, lowerIndexInContainer), new(range.entity.ObjectId, dimId, range.depthLevel[dimId], this.index, isUpper, false, indexInContainer, 1, -1));
         }
     }
     public class HSPDIMRange
@@ -111,10 +111,10 @@ namespace Framework.HSPDIMAlgo
         }
         public void UpdateIntersection()
         {
-            intersection = overlapSets[0];
+            HSPDIM.Instance.FinalMatchingResult[entity.ObjectId] = overlapSets[0];
             for (int i = 1; i < HSPDIM.dimension; i++)
             {
-                intersection = intersection.Intersect(overlapSets[i]);
+                HSPDIM.Instance.FinalMatchingResult[entity.ObjectId] = HSPDIM.Instance.FinalMatchingResult[entity.ObjectId].Intersect(overlapSets[i]);
             }
             OnUpdateIntersection?.Invoke();
         }
