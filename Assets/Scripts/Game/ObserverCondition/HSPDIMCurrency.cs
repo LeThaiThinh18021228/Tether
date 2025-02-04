@@ -1,3 +1,4 @@
+using Framework.HSPDIMAlgo;
 using HSPDIMAlgo;
 
 public class HSPDIMCurrency : HSPDIMEntity

@@ -15,6 +15,7 @@ namespace Bot
         int initBot;
         [SerializeField] GameObject botPrefab;
         public bool isSpawnBotCompleted = false;
+        public int initBotCount = 5;
         public override void OnStartNetwork()
         {
             base.OnStartNetwork();
@@ -32,7 +33,7 @@ namespace Bot
 #if !UNITY_SERVER || UNITY_EDITOR
             if (IsServerInitialized)
             {
-                initBot = 5;
+                initBot = initBotCount;
             }
 #endif
             for (int i = 0; i < initBot; i++)

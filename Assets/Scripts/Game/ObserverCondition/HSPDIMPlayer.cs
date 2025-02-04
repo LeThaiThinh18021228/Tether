@@ -1,7 +1,8 @@
+using Framework.HSPDIMAlgo;
 using HSPDIMAlgo;
 
 public class HSPDIMPlayer : HSPDIMEntity
-{
+{   
     Player player;
     public override void OnStartNetwork()
     {

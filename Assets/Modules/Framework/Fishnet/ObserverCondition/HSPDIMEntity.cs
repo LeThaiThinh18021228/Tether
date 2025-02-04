@@ -3,15 +3,15 @@ using Framework;
 using System.Linq;
 using TMPro;
 using UnityEngine;
-namespace HSPDIMAlgo
+namespace Framework.HSPDIMAlgo
 {
     public class HSPDIMEntity : NetworkBehaviour
     {
         public Vector3Bool Modified = Vector3Bool.@true;
         [SerializeField] Vector3 subRange;
         [SerializeField] Vector3 upRange;
-        public Range SubRange;
-        public Range UpRange;
+        public HSPDIMRange SubRange;
+        public HSPDIMRange UpRange;
         [SerializeField] TextMeshPro intersectText;
         [SerializeField] GameObject upIntersectRect;
         [SerializeField] GameObject subIntersectRect;
@@ -40,6 +40,7 @@ namespace HSPDIMAlgo
             {
                 if (UpRange == null)
                 {
+                    HSPDIM.Instance.HSPDIMEntities.Add(ObjectId, this);
                     Modified = Vector3Bool.@true;
                     UpRange = new(upRange, this, HSPDIM.upTreeDepth);
                     HSPDIM.Instance.upRanges.Add(UpRange);

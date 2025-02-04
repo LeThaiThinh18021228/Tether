@@ -136,10 +136,15 @@ PrefabInstance:
       propertyPath: <SceneId>k__BackingField
       value: 4293242075
       objectReference: {fileID: 0}
+    - target: {fileID: 404884919198887126, guid: 61f80dfedc08f8040b81b1045b36d915,
+        type: 3}
+      propertyPath: initBotCount
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 1830955666484094318, guid: 61f80dfedc08f8040b81b1045b36d915,
         type: 3}
       propertyPath: maxCurrency
-      value: 25
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 1830955666484094318, guid: 61f80dfedc08f8040b81b1045b36d915,
         type: 3}

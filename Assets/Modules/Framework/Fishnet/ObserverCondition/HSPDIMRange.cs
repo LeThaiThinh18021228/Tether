@@ -1,76 +1,19 @@
-using Framework;
-using Framework.SimpleJSON;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace HSPDIMAlgo
+namespace Framework.HSPDIMAlgo
 {
-    public class HSPDIMNodeData
-    {
-        public float lowerBound;
-        public float upperBound;
-        public List<Bound> lowers = new();
-        public List<Bound> uppers = new();
-        public List<Bound> covers = new();
-        public List<Bound> insides = new();
-        public int CompareTo(object obj)
-        {
-            throw new NotImplementedException();
-        }
-        public override string ToString()
-        {
-            JSONNode tree = new JSONClass();
-            tree.Add("node", $"[{lowerBound},{upperBound}]");
-            if (lowers.Count > 0)
-            {
-                JSONArray l = new JSONArray();
-                lowers.ForEach(x => l.Add(new JSONData(x.boundValue)));
-                tree.Add("l", l);
-            }
-            if (uppers.Count > 0)
-            {
-                JSONArray u = new JSONArray();
-                uppers.ForEach(x => u.Add(new JSONData(x.boundValue)));
-                tree.Add("u", u);
-            }
-            if (covers.Count > 0)
-            {
-                JSONArray c = new JSONArray();
-                covers.ForEach(x => c.Add(new JSONData(x.boundValue)));
-                tree.Add("c", c);
-            }
-            if (insides.Count > 0)
-            {
-                JSONArray i = new JSONArray();
-                insides.ForEach(x => i.Add(new JSONData(x.boundValue)));
-                tree.Add("i", i);
-            }
-            return tree.ToString();
-        }
-        public bool IsEmpty()
-        {
-            return lowers.Count == 0 && uppers.Count == 0 && covers.Count == 0 && insides.Count == 0;
-        }
-
-        public NativeHSPDIMNodeData ToNativeNodeData()
-        {
-            return new NativeHSPDIMNodeData()
-            {
-
-            };
-        }
-    }
-    public class Bound : IComparable<Bound>
+    public class HSPDIMBound : IComparable<HSPDIMBound>
     {
         public float boundValue;
         public short isUpper;
         public short dimId;
         public int index = -1;
         public short alterDim;
-        public Range range;
-        public Bound(short dimId, short isUpper, Range range)
+        public HSPDIMRange range;
+        public HSPDIMBound(short dimId, short isUpper, HSPDIMRange range)
         {
             this.dimId = dimId;
             this.isUpper = isUpper;
@@ -84,7 +27,7 @@ namespace HSPDIMAlgo
             index = -1;
         }
 
-        public int CompareTo(Bound other)
+        public int CompareTo(HSPDIMBound other)
         {
             if (boundValue > other.boundValue) return 1;
             else if (boundValue < other.boundValue) return -1;
@@ -101,38 +44,38 @@ namespace HSPDIMAlgo
             index = (range.entity.IsServerInitialized && range.entity.enabled) ? HSPDIM.IndexCal(boundValue, range.depthLevel[dimId]) : -1;
         }
 
-        public NativeBound ToNativeBound(int indexInContainer, bool isInside = false, int lowerIndex = -1, int lowerIndexInContainer = -1)
+        public NativeBound ToNativeBound(int indexInContainer, bool isInside = false, int lowerIndexInContainer = -1)
         {
             return new NativeBound(boundValue, default,
-                new(dimId, range.depthLevel[dimId], this.index, isUpper, isInside, indexInContainer, 1, lowerIndexInContainer, lowerIndex));
+                new(dimId, range.depthLevel[dimId], this.index, isUpper, isInside, indexInContainer, 1, lowerIndexInContainer));
         }
         public NativeBound ToNativeBound(int indexInContainer, int index = -1, int lowerIndexInContainer = -1)
         {
-            return new NativeBound(boundValue, new(dimId, index, indexInContainer, lowerIndexInContainer), new(dimId, range.depthLevel[dimId], this.index, isUpper, false, indexInContainer, 1, -1, -1));
+            return new NativeBound(boundValue, new(dimId, index, indexInContainer, lowerIndexInContainer), new(dimId, range.depthLevel[dimId], this.index, isUpper, false, indexInContainer, 1, -1));
         }
     }
-    public class Range
+    public class HSPDIMRange
     {
         public Vector3 range;
         public Vector3 oldPos;
         public Vector3Int depthLevel;
         public HSPDIMEntity entity;
-        public Bound[,] Bounds = new Bound[HSPDIM.dimension, 3];
-        public HashSet<Range>[] overlapSets = Enumerable.Range(0, HSPDIM.dimension).Select(_ => new HashSet<Range>()).ToArray();
-        public IEnumerable<Range> intersection;
+        public HSPDIMBound[,] Bounds = new HSPDIMBound[HSPDIM.dimension, 3];
+        public HashSet<int>[] overlapSets = Enumerable.Range(0, HSPDIM.dimension).Select(_ => new HashSet<int>()).ToArray();
+        public IEnumerable<int> intersection;
         public Action OnUpdateIntersection;
-        public Range(Vector3 range, HSPDIMEntity entity, short treeDepth)
+        public HSPDIMRange(Vector3 range, HSPDIMEntity entity, short treeDepth)
         {
             this.range = range;
             this.entity = entity;
-            intersection = new HashSet<Range>();
+            intersection = new HashSet<int>();
             oldPos = new Vector3(entity.transform.position.x, entity.transform.position.z);
 
             for (short j = 0; j < HSPDIM.dimension; j++)
             {
-                Bounds[j, 0] = Bounds[j, 0] ?? new Bound(j, -1, this);
-                Bounds[j, 1] = Bounds[j, 1] ?? new Bound(j, 1, this);
-                Bounds[j, 2] = Bounds[j, 2] ?? new Bound(j, 0, this);
+                Bounds[j, 0] = Bounds[j, 0] ?? new HSPDIMBound(j, -1, this);
+                Bounds[j, 1] = Bounds[j, 1] ?? new HSPDIMBound(j, 1, this);
+                Bounds[j, 2] = Bounds[j, 2] ?? new HSPDIMBound(j, 0, this);
             }
             //UpdateRange(treeDepth);
         }
@@ -245,8 +188,6 @@ namespace HSPDIMAlgo
         {
             return left.X == right.X && left.Y == right.Y && left.Z == right.Z;
         }
-
-        // Implement the != operator
         public static bool operator !=(Vector3Bool left, Vector3Bool right)
         {
             return !(left == right);
