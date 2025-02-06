@@ -2,8 +2,6 @@ using DG.Tweening;
 using FishNet.Object;
 using Framework;
 using Framework.FishNet;
-using Framework.HSPDIMAlgo;
-using HSPDIMAlgo;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -29,7 +27,6 @@ public class CurrencyGenerator : NetworkBehaviour
         switch (op)
         {
             case Operation.Add:
-                Debug.Log($"Add Uprange + {currency.HSPDIMEntity.name}_{currency.HSPDIMEntity.UpRange.GetHashCode()} {HSPDIM.Instance.modifiedUpRanges.Contains(currency.HSPDIMEntity.UpRange)} ");
                 break;
             case Operation.Modify:
                 break;

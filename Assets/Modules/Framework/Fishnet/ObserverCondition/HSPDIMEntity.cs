@@ -1,5 +1,4 @@
 using FishNet.Object;
-using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
@@ -40,8 +39,6 @@ namespace Framework.HSPDIMAlgo
             {
                 if (UpRange == null)
                 {
-                    HSPDIM.Instance.HSPDIMEntities.Add(ObjectId, this);
-                    HSPDIM.Instance.FinalMatchingResult.Add(ObjectId, new HashSet<int>());
                     Modified = Vector3Bool.@true;
                     UpRange = new(upRange, this, HSPDIM.upTreeDepth);
                     HSPDIM.Instance.upRanges.Add(UpRange);
@@ -57,6 +54,7 @@ namespace Framework.HSPDIMAlgo
         public override void OnStartServer()
         {
             base.OnStartServer();
+            HSPDIM.Instance.HSPDIMEntities.Add(ObjectId, this);
             Modified = Vector3Bool.@true;
             HSPDIM.Instance.modifiedUpRanges.Add(UpRange);
             if (subRange != Vector3.zero)
@@ -67,6 +65,7 @@ namespace Framework.HSPDIMAlgo
         public override void OnStopServer()
         {
             base.OnStopServer();
+            HSPDIM.Instance.HSPDIMEntities.Remove(ObjectId);
             if (HSPDIM.Instance.isRunning)
             {
                 Modified = Vector3Bool.@true;
@@ -82,14 +81,14 @@ namespace Framework.HSPDIMAlgo
             //SubBoxCol = Physics.OverlapBox(transform.position, subRange / 2, Quaternion.identity, LayerMask.GetMask("HSPDIMUp"));
             //intersectText.text = $"{(SubRange.intersection.DefaultIfEmpty().Count() - 1)}";
             //intersectText.text = $"{SubBoxCol?.Count() - 1}:{(HSPDIM.Instance.FinalMatchingResult[ObjectId].Count - 1)}";
-            intersectText.text = $"{SubBoxCol?.Count() - 1}:{(HSPDIM.Instance.FinalMatchingResult[ObjectId].Count() - 1)}";
-            //var miss = SubBoxCol?.Select(c => c.GetComponentInParent<HSPDIMEntity>().UpRange).Where(r => !SubRange.intersection.Contains(r) && r.entity.IsServerInitialized
+            intersectText.text = $"{SubBoxCol?.Count() - 1}:{(SubRange.intersection.Count() - 1)}";
+            //var miss = SubBoxCol?.Select(c => c.GetComponentInParent<HSPDIMEntity>().UpRange).Where(r => !SubRange.intersection.Contains(r.entity.ObjectId) && r.entity.IsServerInitialized
             //&& Mathf.Abs(r.Bounds[0, 0].boundValue - SubRange.Bounds[0, 1].boundValue) > 0.4f
             //&& Mathf.Abs(r.Bounds[1, 0].boundValue - SubRange.Bounds[1, 1].boundValue) > 0.4f
             //&& Mathf.Abs(r.Bounds[0, 1].boundValue - SubRange.Bounds[0, 0].boundValue) > 0.4f
             //&& Mathf.Abs(r.Bounds[1, 1].boundValue - SubRange.Bounds[1, 0].boundValue) > 0.4f
             //);
-            //var redundant = SubRange.intersection.Where(r => !SubBoxCol.Select(c => c.GetComponentInParent<HSPDIMEntity>().UpRange).Contains(r) && r.entity.IsServerInitialized
+            //var redundant = SubRange.intersection.Select(i => HSPDIM.Instance.HSPDIMEntities[i].UpRange).Where(r => !SubBoxCol.Select(c => c.GetComponentInParent<HSPDIMEntity>().UpRange).Contains(r) && r.entity.IsServerInitialized
             //&& Mathf.Abs(r.Bounds[0, 0].boundValue - SubRange.Bounds[0, 1].boundValue) > 0.4f
             //&& Mathf.Abs(r.Bounds[1, 0].boundValue - SubRange.Bounds[1, 1].boundValue) > 0.4f
             //&& Mathf.Abs(r.Bounds[0, 1].boundValue - SubRange.Bounds[0, 0].boundValue) > 0.4f
@@ -97,8 +96,8 @@ namespace Framework.HSPDIMAlgo
             //);
             //if (miss.Count() > 0 || redundant.Count() > 0)
             //{
-            //PDebug.Log($"{SubRange}\nRange miss:\n{string.Join(",", miss.Select(r => r))}\nRange redundant:\n{string.Join("\n", redundant.Select(r => r))} \n{string.Join("\n", SubRange.overlapSets.Select((rs, i) => $"Dimension {i}:\n" + string.Join("\n", rs.Select(r => r))))}");
-            //    Time.timeScale = 0;
+            //    //PDebug.Log($"{SubRange}\nRange miss:\n{string.Join(",", miss.Select(r => r))}\nRange redundant:\n{string.Join("\n", redundant.Select(r => r))} \n{string.Join("\n", SubRange.overlapSets.Select((rs, i) => $"Dimension {i}:\n" + string.Join("\n", rs.Select(r => r))))}");
+            //    //Time.timeScale = 0;
             //}
         }
     }

@@ -47,13 +47,15 @@ namespace Framework.HSPDIMAlgo
                 for (int j = LowerDimensions[i].Start; j < LowerDimensions[i].Count + LowerDimensions[i].Start; j++)
                 {
                     if (LowerNodes[j].Count > 0)
-                        s += $"node{j}[";
-                    for (int k = LowerNodes[j].Start; k < LowerNodes[j].Start + LowerNodes[j].Count; k++)
                     {
-                        s += $"{Lowers[k]}, ";
-                    }
-                    if (LowerNodes[j].Count > 0)
+                        s += $"node{j}[";
+                        for (int k = LowerNodes[j].Start; k < LowerNodes[j].Start + LowerNodes[j].Count; k++)
+                        {
+                            s += $"{Lowers[k]}, ";
+                        }
                         s += $"]\n";
+                    }
+
                 }
             }
             s += $"u:";
@@ -62,13 +64,15 @@ namespace Framework.HSPDIMAlgo
                 for (int j = UpperDimensions[i].Start; j < UpperDimensions[i].Count + UpperDimensions[i].Start; j++)
                 {
                     if (UpperNodes[j].Count > 0)
-                        s += $"node{j}[";
-                    for (int k = UpperNodes[j].Start; k < UpperNodes[j].Start + UpperNodes[j].Count; k++)
                     {
-                        s += $"{Uppers[k]}, ";
-                    }
-                    if (UpperNodes[j].Count > 0)
+                        s += $"node{j}[";
+                        for (int k = UpperNodes[j].Start; k < UpperNodes[j].Start + UpperNodes[j].Count; k++)
+                        {
+                            s += $"{Uppers[k]}, ";
+                        }
                         s += $"]\n";
+                    }
+
                 }
             }
             s += $"in:";
@@ -77,13 +81,15 @@ namespace Framework.HSPDIMAlgo
                 for (int j = InsideDimensions[i].Start; j < InsideDimensions[i].Count + InsideDimensions[i].Start; j++)
                 {
                     if (InsideNodes[j].Count > 0)
-                        s += $"node{j}[";
-                    for (int k = InsideNodes[j].Start; k < InsideNodes[j].Start + InsideNodes[j].Count; k++)
                     {
-                        s += $"{Insides[k]}, ";
-                    }
-                    if (InsideNodes[j].Count > 0)
+                        s += $"node{j}[";
+                        for (int k = InsideNodes[j].Start; k < InsideNodes[j].Start + InsideNodes[j].Count; k++)
+                        {
+                            s += $"{Insides[k]}, ";
+                        }
                         s += $"]\n";
+                    }
+
                 }
             }
             s += $"co:";
@@ -92,13 +98,15 @@ namespace Framework.HSPDIMAlgo
                 for (int j = CoverDimensions[i].Start; j < CoverDimensions[i].Count + CoverDimensions[i].Start; j++)
                 {
                     if (CoverNodes[j].Count > 0)
-                        s += $"node{j}[";
-                    for (int k = CoverNodes[j].Start; k < CoverNodes[j].Start + CoverNodes[j].Count; k++)
                     {
-                        s += $"{Covers[k]}, ";
-                    }
-                    if (CoverNodes[j].Count > 0)
+                        s += $"node{j}[";
+                        for (int k = CoverNodes[j].Start; k < CoverNodes[j].Start + CoverNodes[j].Count; k++)
+                        {
+                            s += $"{Covers[k]}, ";
+                        }
                         s += $"]\n";
+                    }
+
                 }
             }
             return s;
@@ -134,14 +142,12 @@ namespace Framework.HSPDIMAlgo
                         {
                             s += "in:";
                         }
-                    }
-                    for (int k = ElementList[j].Start; k < ElementList[j].Start + ElementList[j].Count; k++)
-                    {
-                        s += $"{Bounds[k]}, ";
-                    }
-                    if (ElementList[j].Count > 0)
+                        for (int k = ElementList[j].Start; k < ElementList[j].Start + ElementList[j].Count; k++)
+                        {
+                            s += $"{Bounds[k]}, ";
+                        }
                         s += $"]\n";
-
+                    }
                 }
             }
             return s;
@@ -230,14 +236,16 @@ namespace Framework.HSPDIMAlgo
     {
         public int Id;
         public int Dim;
+        public int Depth;
         public int Index;
         public int IndexContainer;
         public int LowerIndexContainer;
 
-        public RangeIDInList(int id, int dim, int index, int indexContainer, int lowerIndexContainer)
+        public RangeIDInList(int id, int dim, int depth, int index, int indexContainer, int lowerIndexContainer)
         {
             Id = id;
             Dim = dim;
+            Depth = depth;
             Index = index;
             IndexContainer = indexContainer;
             LowerIndexContainer = lowerIndexContainer;
