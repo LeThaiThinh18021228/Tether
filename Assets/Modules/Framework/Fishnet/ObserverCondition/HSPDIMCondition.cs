@@ -15,14 +15,6 @@ namespace HSPDIMAlgo
                 entity = NetworkObject.GetComponent<HSPDIMEntity>();
             }
             bool isMet = true;
-            for (int i = 0; i < HSPDIM.dimension; i++)
-            {
-                if (!HSPDIM.Instance.matchingResultUpToSub[i].ContainsKey(entity.ObjectId))
-                {
-                    isMet = false;
-                    break;
-                }
-            }
             notProcessed = false;
             return isMet;
         }

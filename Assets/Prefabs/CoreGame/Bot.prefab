@@ -843,8 +843,8 @@ MonoBehaviour:
   _componentIndexCache: 6
   _addedNetworkObject: {fileID: 3811835367428141371}
   _networkObjectCache: {fileID: 3811835367428141371}
-  subRange: {x: 10, y: 0, z: 10}
-  upRange: {x: 3, y: 0, z: 3}
+  _subrange: {x: 3, y: 0, z: 3}
+  _upRange: {x: 3, y: 0, z: 3}
   intersectText: {fileID: 4677133127693144271}
   upIntersectRect: {fileID: 4733918100663828499}
   subIntersectRect: {fileID: 5362971941044819911}

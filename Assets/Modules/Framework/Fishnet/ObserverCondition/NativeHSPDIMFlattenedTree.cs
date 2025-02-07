@@ -23,7 +23,6 @@ namespace Framework.HSPDIMAlgo
         public NativeArray<NativeListElement> InsideDimensions;
         public void Dispose()
         {
-            depth.Dispose();
             if (Lowers.IsCreated) Lowers.Dispose();
             //if (LowerNodes.IsCreated) LowerNodes.Dispose();
             //if (LowerDimensions.IsCreated) LowerDimensions.Dispose();
@@ -205,7 +204,6 @@ namespace Framework.HSPDIMAlgo
     }
     public struct RangeIDInTree
     {
-        public int Id;
         public int Dim;
         public int Depth;
         public int Index;
@@ -214,9 +212,8 @@ namespace Framework.HSPDIMAlgo
         public int Start;
         public int Count;
         public int LowerIndexContainer;
-        public RangeIDInTree(int id, int dim, int depth, int index, int isUpper, bool isInside, int start, int count, int lowerIndexContainer = -1)
+        public RangeIDInTree(int dim, int depth, int index, int isUpper, bool isInside, int start, int count, int lowerIndexContainer = -1)
         {
-            Id = id;
             Dim = dim;
             Depth = depth;
             Index = index;
@@ -234,19 +231,21 @@ namespace Framework.HSPDIMAlgo
     }
     public struct RangeIDInList
     {
-        public int Id;
         public int Dim;
         public int Depth;
         public int Index;
+        public int IsUpper;
+        public bool IsInside;
         public int IndexContainer;
         public int LowerIndexContainer;
 
-        public RangeIDInList(int id, int dim, int depth, int index, int indexContainer, int lowerIndexContainer)
+        public RangeIDInList(int dim, int depth, int index, int isUpper, bool isInside, int indexContainer, int lowerIndexContainer)
         {
-            Id = id;
             Dim = dim;
             Depth = depth;
             Index = index;
+            IsUpper = isUpper;
+            IsInside = isInside;
             IndexContainer = indexContainer;
             LowerIndexContainer = lowerIndexContainer;
         }

@@ -4,13 +4,29 @@ using TMPro;
 using UnityEngine;
 namespace Framework.HSPDIMAlgo
 {
-    public class HSPDIMEntity : NetworkBehaviour
+    public interface IHSPDIMEntity
     {
-        public Vector3Bool Modified = Vector3Bool.@true;
-        [SerializeField] Vector3 subRange;
-        [SerializeField] Vector3 upRange;
-        public HSPDIMRange SubRange;
-        public HSPDIMRange UpRange;
+        public int Id { get; set; }
+        public bool Enable { get; set; }
+        public Vector3 Position { get; set; }
+        public Vector3Bool Modified { get; set; }
+        public Vector3 subRange { get; set; }
+        public Vector3 upRange { get; set; }
+        public HSPDIMRange SubRange { get; set; }
+        public HSPDIMRange UpRange { get; set; }
+        public void UpdatePos();
+    }
+    public class HSPDIMEntity : NetworkBehaviour, IHSPDIMEntity
+    {
+        public int Id { get; set; }
+        public bool Enable { get; set; }
+        public Vector3 Position { get; set; }
+        public Vector3Bool Modified { get; set; }
+        [SerializeField] private Vector3 _subrange; public Vector3 subRange { get { return _subrange; } set { _subrange = value; } }
+        [SerializeField] private Vector3 _upRange; public Vector3 upRange { get { return _upRange; } set { _upRange = value; } }
+        public HSPDIMRange SubRange { get; set; }
+        public HSPDIMRange UpRange { get; set; }
+
         [SerializeField] TextMeshPro intersectText;
         [SerializeField] GameObject upIntersectRect;
         [SerializeField] GameObject subIntersectRect;
@@ -54,7 +70,13 @@ namespace Framework.HSPDIMAlgo
         public override void OnStartServer()
         {
             base.OnStartServer();
-            HSPDIM.Instance.HSPDIMEntities.Add(ObjectId, this);
+            if (Id != ObjectId)
+            {
+                PDebug.Log("Change Id");
+            }
+            Id = ObjectId;
+            Enable = true;
+            //HSPDIM.Instance.HSPDIMEntities.Add(ObjectId, this);
             Modified = Vector3Bool.@true;
             HSPDIM.Instance.modifiedUpRanges.Add(UpRange);
             if (subRange != Vector3.zero)
@@ -65,7 +87,8 @@ namespace Framework.HSPDIMAlgo
         public override void OnStopServer()
         {
             base.OnStopServer();
-            HSPDIM.Instance.HSPDIMEntities.Remove(ObjectId);
+            Enable = false;
+            //HSPDIM.Instance.HSPDIMEntities.Remove(ObjectId);
             if (HSPDIM.Instance.isRunning)
             {
                 Modified = Vector3Bool.@true;
@@ -78,7 +101,7 @@ namespace Framework.HSPDIMAlgo
         }
         private void OnUpdateIntersection()
         {
-            //SubBoxCol = Physics.OverlapBox(transform.position, subRange / 2, Quaternion.identity, LayerMask.GetMask("HSPDIMUp"));
+            SubBoxCol = Physics.OverlapBox(transform.position, subRange / 2, Quaternion.identity, LayerMask.GetMask("HSPDIMUp"));
             //intersectText.text = $"{(SubRange.intersection.DefaultIfEmpty().Count() - 1)}";
             //intersectText.text = $"{SubBoxCol?.Count() - 1}:{(HSPDIM.Instance.FinalMatchingResult[ObjectId].Count - 1)}";
             intersectText.text = $"{SubBoxCol?.Count() - 1}:{(SubRange.intersection.Count() - 1)}";
@@ -99,6 +122,11 @@ namespace Framework.HSPDIMAlgo
             //    //PDebug.Log($"{SubRange}\nRange miss:\n{string.Join(",", miss.Select(r => r))}\nRange redundant:\n{string.Join("\n", redundant.Select(r => r))} \n{string.Join("\n", SubRange.overlapSets.Select((rs, i) => $"Dimension {i}:\n" + string.Join("\n", rs.Select(r => r))))}");
             //    //Time.timeScale = 0;
             //}
+        }
+
+        public void UpdatePos()
+        {
+            Position = new Vector3(transform.position.x, transform.position.z); ;
         }
     }
 }

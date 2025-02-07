@@ -31,7 +31,7 @@ namespace Framework.HSPDIMAlgo
         {
             if (boundValue > other.boundValue) return 1;
             else if (boundValue < other.boundValue) return -1;
-            else return range.entity.ObjectId.CompareTo(other.range.entity.ObjectId);
+            else return range.entity.Id.CompareTo(other.range.entity.Id);
         }
         public override string ToString()
         {
@@ -40,40 +40,38 @@ namespace Framework.HSPDIMAlgo
 
         public void UpdateBound()
         {
-            boundValue = range.oldPos[dimId] + isUpper * range.range[alterDim] / 2 + HSPDIM.mapSizeEstimate / 2;
-            index = (range.entity.IsServerInitialized && range.entity.enabled) ? HSPDIM.IndexCal(boundValue, range.depthLevel[dimId]) : -1;
+            boundValue = range.entity.Position[dimId] + isUpper * range.range[alterDim] / 2 + HSPDIM.mapSizeEstimate / 2;
+            index = range.entity.Enable ? HSPDIM.IndexCal(boundValue, range.depthLevel[dimId]) : -1;
         }
 
         public NativeBound ToNativeBound(int indexInContainer, bool isInside = false, int lowerIndexInContainer = -1)
         {
             return new NativeBound(boundValue,
                 default,
-                new(range.entity.ObjectId, dimId, range.depthLevel[dimId], this.index, isUpper, isInside, indexInContainer, 1, lowerIndexInContainer));
+                new(dimId, range.depthLevel[dimId], this.index, isUpper, isInside, indexInContainer, 1, lowerIndexInContainer));
         }
         public NativeBound ToNativeBound(int depth, int indexInContainer, bool isInside = false, int index = -1, int lowerIndexInContainer = -1)
         {
             return new NativeBound(boundValue,
-                new(range.entity.ObjectId, dimId, depth, index, indexInContainer, lowerIndexInContainer),
-                new(range.entity.ObjectId, dimId, range.depthLevel[dimId], this.index, isUpper, isInside, indexInContainer, 1, -1));
+                new(dimId, depth, index, isUpper, isInside, indexInContainer, lowerIndexInContainer),
+                default);
         }
     }
     public class HSPDIMRange
     {
         public Vector3 range;
-        public Vector3 oldPos;
         public Vector3Int depthLevel;
-        public HSPDIMEntity entity;
+        public IHSPDIMEntity entity;
         public HSPDIMBound[,] Bounds = new HSPDIMBound[HSPDIM.dimension, 3];
         public HashSet<HSPDIMRange>[] overlapSets = Enumerable.Range(0, HSPDIM.dimension).Select(_ => new HashSet<HSPDIMRange>()).ToArray();
         public HashSet<HSPDIMRange> intersection;
         public Action OnUpdateIntersection;
-        public HSPDIMRange(Vector3 range, HSPDIMEntity entity, short treeDepth)
+        public HSPDIMRange(Vector3 range, IHSPDIMEntity entity, short treeDepth)
         {
             this.range = range;
             this.entity = entity;
             intersection = new HashSet<HSPDIMRange>();
-            oldPos = new Vector3(entity.transform.position.x, entity.transform.position.z);
-
+            entity.UpdatePos();
             for (short j = 0; j < HSPDIM.dimension; j++)
             {
                 Bounds[j, 0] = Bounds[j, 0] ?? new HSPDIMBound(j, -1, this);
@@ -103,7 +101,7 @@ namespace Framework.HSPDIMAlgo
         }
         public void UpdateRange(int treeDepth)
         {
-            oldPos = new Vector3(entity.transform.position.x, entity.transform.position.z);
+            entity.UpdatePos();
             for (short i = 0; i < HSPDIM.dimension; i++)
             {
                 if (entity.Modified[i])
@@ -127,7 +125,7 @@ namespace Framework.HSPDIMAlgo
         }
         public override string ToString()
         {
-            return $"{entity.ObjectId}_{entity.name}_{GetHashCode()}_{range}_{oldPos}_{entity.Modified}_({Bounds[0, 0].boundValue}_{Bounds[0, 0].index},{Bounds[0, 1].boundValue}_{Bounds[0, 1].index},{Bounds[1, 0].boundValue}_{Bounds[1, 0].index},{Bounds[1, 1].boundValue}_{Bounds[1, 1].index})";
+            return $"{GetHashCode()}_{range}_{entity.Position}_{entity.Modified}_({Bounds[0, 0].boundValue}_{Bounds[0, 0].index},{Bounds[0, 1].boundValue}_{Bounds[0, 1].index},{Bounds[1, 0].boundValue}_{Bounds[1, 0].index},{Bounds[1, 1].boundValue}_{Bounds[1, 1].index})";
         }
     }
 

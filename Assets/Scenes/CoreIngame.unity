@@ -139,12 +139,12 @@ PrefabInstance:
     - target: {fileID: 404884919198887126, guid: 61f80dfedc08f8040b81b1045b36d915,
         type: 3}
       propertyPath: initBotCount
-      value: 5
+      value: 500
       objectReference: {fileID: 0}
     - target: {fileID: 1830955666484094318, guid: 61f80dfedc08f8040b81b1045b36d915,
         type: 3}
       propertyPath: maxCurrency
-      value: 5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1830955666484094318, guid: 61f80dfedc08f8040b81b1045b36d915,
         type: 3}

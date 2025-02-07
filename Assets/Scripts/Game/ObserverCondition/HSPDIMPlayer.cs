@@ -1,8 +1,7 @@
 using Framework.HSPDIMAlgo;
-using HSPDIMAlgo;
 
 public class HSPDIMPlayer : HSPDIMEntity
-{   
+{
     Player player;
     public override void OnStartNetwork()
     {
@@ -16,9 +15,9 @@ public class HSPDIMPlayer : HSPDIMEntity
     protected void Update()
     {
         if (!IsServerInitialized) return;
-        Modified.X = Modified.X || (player.Movable.Dir.Value.x != 0);
-        Modified.Y = Modified.Y || (player.Movable.Dir.Value.z != 0);
-        Modified.Z = Modified.Z || (player.Movable.Dir.Value.y != 0);
+        Modified = new(Modified.X || (player.Movable.Dir.Value.x != 0)
+            , Modified.Y || (player.Movable.Dir.Value.z != 0)
+            , Modified.Z || (player.Movable.Dir.Value.y != 0));
         if (Modified != Vector3Bool.@false && HSPDIM.UpdateInterval() && HSPDIM.Instance.isRunning)
         {
             HSPDIM.Instance.modifiedSubRanges.Add(SubRange);
