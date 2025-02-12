@@ -117,10 +117,6 @@ namespace Framework.HSPDIMAlgo
             {
                 intersection.IntersectWith(overlapSets[i]);
             }
-            if (intersection.Count() > 0)
-            {
-                //PDebug.Log($"range {entity.ObjectId} intersect {string.Join(",", intersection.Select(s => s))}");
-            }
             OnUpdateIntersection?.Invoke();
         }
         public override string ToString()

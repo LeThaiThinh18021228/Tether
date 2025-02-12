@@ -1,7 +1,6 @@
 using Bot;
 using FishNet;
 using Framework.HSPDIMAlgo;
-using HSPDIMAlgo;
 using MasterServerToolkit.MasterServer;
 using UnityEngine;
 
@@ -27,6 +26,6 @@ public class GameManager : GameManagerBase<GameManager>
     {
         base.OnStartServer();
         Instance.GameStartCondition += (x) => { return BotManager.isSpawnBotCompleted; };
-        GameManager.Instance.State.OnChange += HSPDIM.InitMappingAndMatching;
+        GameManager.Instance.State.OnChange += HSPDIM.OnGameStart;
     }
 }

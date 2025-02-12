@@ -24,19 +24,21 @@ namespace Framework.HSPDIMAlgo
         public void Dispose()
         {
             if (Lowers.IsCreated) Lowers.Dispose();
-            //if (LowerNodes.IsCreated) LowerNodes.Dispose();
-            //if (LowerDimensions.IsCreated) LowerDimensions.Dispose();
             if (Uppers.IsCreated) Uppers.Dispose();
-            //if (UpperNodes.IsCreated) UpperNodes.Dispose();
-            //if (UpperDimensions.IsCreated) UpperDimensions.Dispose();
             if (Covers.IsCreated) Covers.Dispose();
-            //if (CoverNodes.IsCreated) CoverNodes.Dispose();
-            //if (CoverDimensions.IsCreated) CoverDimensions.Dispose();
             if (Insides.IsCreated) Insides.Dispose();
-            //if (InsideNodes.IsCreated) InsideNodes.Dispose();
-            //if (InsideDimensions.IsCreated) InsideDimensions.Dispose();
         }
-
+        public void DisposePersistent()
+        {
+            if (LowerNodes.IsCreated) LowerNodes.Dispose();
+            if (LowerDimensions.IsCreated) LowerDimensions.Dispose();
+            if (UpperNodes.IsCreated) UpperNodes.Dispose();
+            if (UpperDimensions.IsCreated) UpperDimensions.Dispose();
+            if (CoverNodes.IsCreated) CoverNodes.Dispose();
+            if (CoverDimensions.IsCreated) CoverDimensions.Dispose();
+            if (InsideNodes.IsCreated) InsideNodes.Dispose();
+            if (InsideDimensions.IsCreated) InsideDimensions.Dispose();
+        }
         public override string ToString()
         {
             string s = "";
@@ -120,8 +122,12 @@ namespace Framework.HSPDIMAlgo
         public void Dispose()
         {
             if (Bounds.IsCreated) Bounds.Dispose();
-            //if (ElementList.IsCreated) ElementList.Dispose();
-            //if (ElementDimensions.IsCreated) ElementDimensions.Dispose();
+
+        }
+        public void DisposePersistent()
+        {
+            if (ElementList.IsCreated) ElementList.Dispose();
+            if (ElementDimensions.IsCreated) ElementDimensions.Dispose();
         }
         public override string ToString()
         {

@@ -139,7 +139,7 @@ PrefabInstance:
     - target: {fileID: 404884919198887126, guid: 61f80dfedc08f8040b81b1045b36d915,
         type: 3}
       propertyPath: initBotCount
-      value: 500
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 1830955666484094318, guid: 61f80dfedc08f8040b81b1045b36d915,
         type: 3}
