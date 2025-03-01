@@ -72,7 +72,8 @@ namespace Framework.ADS
                 TreeNode<T> curNode = Root;
                 while (curNode.depth < depth)
                 {
-                    if (index - curNode.index * MathF.Pow(2, (depth - curNode.depth)) >= MathF.Pow(2, depth - curNode.depth) / 2)
+                    int factor = 1 << (depth - curNode.depth);
+                    if (index - curNode.index * factor >= factor / 2)
                     {
                         curNode = curNode.Right;
                     }
@@ -129,7 +130,7 @@ namespace Framework.ADS
         {
             for (short j = 0; j <= depth; j++)
             {
-                float maxIndex = Mathf.Pow(2, j);
+                float maxIndex = 1 << j;
                 for (int k = 0; k < maxIndex; k++)
                 {
                     yield return this[j, k];

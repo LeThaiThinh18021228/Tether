@@ -6,7 +6,7 @@ namespace Framework
     [Serializable]
     public class PoolConfig : SingletonScriptableObject<PoolConfig>
     {
-#if (!UNITY_SERVER || GAME_SERVER) && UNITY_EDITOR
+#if (!UNITY_SERVER || GAME_SERVER) || UNITY_EDITOR
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         static void Init()
         {

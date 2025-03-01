@@ -52,6 +52,6 @@ public class CurrencyGenerator : NetworkBehaviour
     [Server]
     public void SpawnCurrency()
     {
-        currencyPrefab.InstantiateNetworked<Currency>(null, transform, MapManager.RandomPositionInsideMap() / 2);
+        currencyPrefab.InstantiateNetworked<Currency>(null, transform, MapManager.RandomPositionInsideMap(Vector3.zero) / 2);
     }
 }

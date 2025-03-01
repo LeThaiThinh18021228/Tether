@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 namespace Framework.HSPDIMAlgo
@@ -13,11 +14,13 @@ namespace Framework.HSPDIMAlgo
         public int index = -1;
         public short alterDim;
         public HSPDIMRange range;
-        public HSPDIMBound(short dimId, short isUpper, HSPDIMRange range)
+        public IHSPDIMEntity entity;
+        public HSPDIMBound(short dimId, short isUpper, HSPDIMRange range, IHSPDIMEntity entity)
         {
             this.dimId = dimId;
             this.isUpper = isUpper;
             this.range = range;
+            this.entity = entity;
             alterDim = dimId;
             if (HSPDIM.dimension == 2 && dimId == 1)
             {
@@ -26,60 +29,60 @@ namespace Framework.HSPDIMAlgo
             UpdateBound();
             index = -1;
         }
-
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public int CompareTo(HSPDIMBound other)
         {
             if (boundValue > other.boundValue) return 1;
             else if (boundValue < other.boundValue) return -1;
-            else return range.entity.Id.CompareTo(other.range.entity.Id);
+            else return entity.Id.CompareTo(other.entity.Id);
         }
         public override string ToString()
         {
             return $"{boundValue}({isUpper})";
         }
-
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void UpdateBound()
         {
-            boundValue = range.entity.Position[dimId] + isUpper * range.range[alterDim] / 2 + HSPDIM.mapSizeEstimate / 2;
-            index = range.entity.Enable ? HSPDIM.IndexCal(boundValue, range.depthLevel[dimId]) : -1;
+            boundValue = entity.Position[dimId] + isUpper * range.range[alterDim] / 2 + HSPDIM.mapSizeEstimate / 2;
+            index = entity.Enable ? HSPDIM.IndexCal(boundValue, range.depthLevel[dimId]) : -1;
         }
 
-        public NativeBound ToNativeBound(int indexInContainer, bool isInside = false, int lowerIndexInContainer = -1)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static NativeBound ToNativeBound(HSPDIMBound bound, int indexInContainer, bool isInside = false)
         {
-            return new NativeBound(boundValue,
-                default,
-                new(dimId, range.depthLevel[dimId], this.index, isUpper, isInside, indexInContainer, 1, lowerIndexInContainer));
-        }
-        public NativeBound ToNativeBound(int depth, int indexInContainer, bool isInside = false, int index = -1, int lowerIndexInContainer = -1)
-        {
-            return new NativeBound(boundValue,
-                new(dimId, depth, index, isUpper, isInside, indexInContainer, lowerIndexInContainer),
-                default);
+            var range = bound.range;
+            var entity = bound.entity;
+            int dim = bound.dimId;
+            return new NativeBound(bound.boundValue,
+                entity.Id, range.isSub, dim, range.depthLevel[dim], bound.index, range.Bounds[dim, 0].index, bound.isUpper, isInside, indexInContainer, 1, entity.Modified[dim]);
         }
     }
     public class HSPDIMRange
     {
+        public bool isSub;
         public Vector3 range;
         public Vector3Int depthLevel;
         public IHSPDIMEntity entity;
         public HSPDIMBound[,] Bounds = new HSPDIMBound[HSPDIM.dimension, 3];
-        public HashSet<HSPDIMRange>[] overlapSets = Enumerable.Range(0, HSPDIM.dimension).Select(_ => new HashSet<HSPDIMRange>()).ToArray();
-        public HashSet<HSPDIMRange> intersection;
+        public HashSet<int>[] overlapSetsId;
+        public HashSet<int> intersectionId;
         public Action OnUpdateIntersection;
-        public HSPDIMRange(Vector3 range, IHSPDIMEntity entity, short treeDepth)
+        public HSPDIMRange(Vector3 range, IHSPDIMEntity entity, short treeDepth, bool isSub, int preallocateHash = 100)
         {
+            this.isSub = isSub;
             this.range = range;
             this.entity = entity;
-            intersection = new HashSet<HSPDIMRange>();
+            overlapSetsId = Enumerable.Range(0, HSPDIM.dimension).Select(_ => new HashSet<int>(preallocateHash)).ToArray();
+            intersectionId = new HashSet<int>((int)Math.Sqrt(preallocateHash));
             entity.UpdatePos();
             for (short j = 0; j < HSPDIM.dimension; j++)
             {
-                Bounds[j, 0] = Bounds[j, 0] ?? new HSPDIMBound(j, -1, this);
-                Bounds[j, 1] = Bounds[j, 1] ?? new HSPDIMBound(j, 1, this);
-                Bounds[j, 2] = Bounds[j, 2] ?? new HSPDIMBound(j, 0, this);
+                Bounds[j, 0] = Bounds[j, 0] ?? new HSPDIMBound(j, -1, this, entity);
+                Bounds[j, 1] = Bounds[j, 1] ?? new HSPDIMBound(j, 1, this, entity);
+                Bounds[j, 2] = Bounds[j, 2] ?? new HSPDIMBound(j, 0, this, entity);
             }
-            //UpdateRange(treeDepth);
         }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void UpdateRange(short i, int treeDepth)
         {
             short dimId = i;
@@ -87,7 +90,7 @@ namespace Framework.HSPDIMAlgo
             {
                 dimId = 2;
             }
-            if (range[dimId] < HSPDIM.mapSizeEstimate / Mathf.Pow(2, treeDepth))
+            if (range[dimId] < HSPDIM.mapSizeEstimate / (1 << treeDepth))
             {
                 depthLevel[i] = treeDepth;
             }
@@ -99,6 +102,7 @@ namespace Framework.HSPDIMAlgo
             Bounds[i, 1].UpdateBound();
             Bounds[i, 2].UpdateBound();
         }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void UpdateRange(int treeDepth)
         {
             entity.UpdatePos();
@@ -110,15 +114,46 @@ namespace Framework.HSPDIMAlgo
                 }
             }
         }
-        public void UpdateIntersection()
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void UpdateIntersectionId()
         {
-            intersection = overlapSets[0];
-            for (int i = 1; i < HSPDIM.dimension; i++)
+            intersectionId.Clear();
+            intersectionId.UnionWith(overlapSetsId[0]);
+            for (int j = 1; j < HSPDIM.dimension; j++)
             {
-                intersection.IntersectWith(overlapSets[i]);
+                intersectionId.IntersectWith(overlapSetsId[j]);
             }
+            //int minIndex = 0;
+            //int minCount = overlapSetsId[0].Count;
+            //for (int i = 1; i < overlapSetsId.Length; i++)
+            //{
+            //    int currentCount = overlapSetsId[i].Count;
+            //    if (currentCount < minCount)
+            //    {
+            //        minCount = currentCount;
+            //        minIndex = i;
+            //    }
+            //}
+            //var smallestList = overlapSetsId[minIndex].ToArray();
+            //for (int i = 0; i < smallestList.Length; i++)
+            //{
+            //    bool presentInAll = true;
+            //    for (int j = 0; j < HSPDIM.dimension; j++)
+            //    {
+            //        if (!overlapSetsId[j].Contains(smallestList[i]))
+            //        {
+            //            presentInAll = false;
+            //            break;
+            //        }
+            //    }
+            //    if (presentInAll)
+            //    {
+            //        intersectionId.Add(smallestList[i]);
+            //    }
+            //}
             OnUpdateIntersection?.Invoke();
         }
+        
         public override string ToString()
         {
             return $"{GetHashCode()}_{range}_{entity.Position}_{entity.Modified}_({Bounds[0, 0].boundValue}_{Bounds[0, 0].index},{Bounds[0, 1].boundValue}_{Bounds[0, 1].index},{Bounds[1, 0].boundValue}_{Bounds[1, 0].index},{Bounds[1, 1].boundValue}_{Bounds[1, 1].index})";

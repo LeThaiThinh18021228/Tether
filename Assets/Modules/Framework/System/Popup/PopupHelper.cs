@@ -9,7 +9,7 @@ namespace Framework
         public static T Create<T>(GameObject prefab) where T : PopupBehaviour
         {
             if (PopupRoot == null)
-                PopupRoot = GameObject.FindObjectOfType<PopupRootSetter>().transform;
+                PopupRoot = GameObject.FindFirstObjectByType<PopupRootSetter>().transform;
 
             T popup = prefab.Create(PopupRoot, false).GetComponent<T>();
             popup.transform.SetAsLastSibling();

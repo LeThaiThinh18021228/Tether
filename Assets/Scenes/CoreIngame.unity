@@ -139,12 +139,12 @@ PrefabInstance:
     - target: {fileID: 404884919198887126, guid: 61f80dfedc08f8040b81b1045b36d915,
         type: 3}
       propertyPath: initBotCount
-      value: 5
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 1830955666484094318, guid: 61f80dfedc08f8040b81b1045b36d915,
         type: 3}
       propertyPath: maxCurrency
-      value: 0
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 1830955666484094318, guid: 61f80dfedc08f8040b81b1045b36d915,
         type: 3}
@@ -2046,6 +2046,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5927960477998474620, guid: 7eac22982fe8d5547be9015c7bdb378e,
+        type: 3}
+      propertyPath: _maximumTimedObserversDuration
+      value: 0.25
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2477,6 +2482,12 @@ MonoBehaviour:
   _networkObjectCache: {fileID: 0}
   dontDestroyOnLoad: 0
   isRunning: 0
+  RemovedEntities: 
+  IsDynamic: 1
+  Strategy: 0
+  maxExeCount: 10000
+  exeTotalTimeLookupResult: 0
+  debugId: 1
 --- !u!1001 &9177943108470717230
 PrefabInstance:
   m_ObjectHideFlags: 0

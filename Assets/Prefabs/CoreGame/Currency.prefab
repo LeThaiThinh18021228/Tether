@@ -41,7 +41,7 @@ ParticleSystem:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3483758859962082746}
   serializedVersion: 8
-  lengthInSec: 3
+  lengthInSec: 2
   simulationSpeed: 1
   stopAction: 0
   cullingMode: 0
@@ -4889,7 +4889,7 @@ MonoBehaviour:
   _addedNetworkObject: {fileID: 5328327843749179054}
   _networkObjectCache: {fileID: 5328327843749179054}
   value: 25
-  HSPDIMEntity: {fileID: 0}
+  HSPDIMEntity: {fileID: 6941460238643103022}
 --- !u!114 &5328327843749179054
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4990,8 +4990,8 @@ MonoBehaviour:
   _componentIndexCache: 1
   _addedNetworkObject: {fileID: 5328327843749179054}
   _networkObjectCache: {fileID: 5328327843749179054}
-  subRange: {x: 0, y: 0, z: 0}
-  upRange: {x: 3, y: 0, z: 3}
+  _subrange: {x: 0, y: 0, z: 0}
+  _upRange: {x: 3, y: 0, z: 3}
   intersectText: {fileID: 5413207762073837113}
   upIntersectRect: {fileID: 5351773228770316005}
   subIntersectRect: {fileID: 4727102419795564849}
@@ -5074,7 +5074,7 @@ PrefabInstance:
         type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 383350809ebe1f642a18c24cc7c02b7d, type: 2}
+      objectReference: {fileID: 2100000, guid: 0960f507df40faa4ea033d24d5327f61, type: 2}
     - target: {fileID: 1422212077953255359, guid: 1e540d660e5117e4b8c65668bb0b9a8d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -5209,23 +5209,7 @@ PrefabInstance:
       propertyPath: m_Name
       value: HSPDIM
       objectReference: {fileID: 0}
-    - target: {fileID: 6930654764218188744, guid: c6cf6769445d12440bfa405de2cd1e38,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7778273146609144860, guid: c6cf6769445d12440bfa405de2cd1e38,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8032585987093689284, guid: c6cf6769445d12440bfa405de2cd1e38,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 1250179486561559713, guid: c6cf6769445d12440bfa405de2cd1e38, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

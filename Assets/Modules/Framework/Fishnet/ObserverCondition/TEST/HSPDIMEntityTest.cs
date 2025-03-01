@@ -4,6 +4,7 @@ using UnityEngine;
 public class HSPDIMEntityTest : IHSPDIMEntity
 {
     public int Id { get; set; }
+    public int OldId { get; set; }
     public bool Enable { get; set; }
     public Vector3 Position { get; set; }
     public Vector3Bool Modified { get; set; }
@@ -11,23 +12,25 @@ public class HSPDIMEntityTest : IHSPDIMEntity
     public Vector3 upRange { get; set; } = Vector3.zero;
     public HSPDIMRange SubRange { get; set; }
     public HSPDIMRange UpRange { get; set; }
-    public HSPDIMEntityTest(int id, bool IsUp, Vector3 range)
+    public HSPDIMEntityTest(int id, bool IsSub, Vector3 range, int preallocateHash)
     {
         Enable = true;
         Id = id;
-        Position = new Vector3(Random.Range(0, -HSPDIMTest.mapWidth / 2), 0, Random.Range(0, HSPDIMTest.mapWidth / 2));
+        float validPosRange = HSPDIMTest.mapWidth / 2 - range.x;
+        Position = new Vector3(Random.Range(-validPosRange, validPosRange), Random.Range(-validPosRange, validPosRange));
         Modified = Vector3Bool.@true;
-        if (IsUp)
+        HSPDIM.Instance.HSPDIMEntities.Add(Id, this);
+        if (!IsSub)
         {
             upRange = range;
-            UpRange = new(range, this, HSPDIM.upTreeDepth);
+            UpRange = new(range, this, HSPDIM.upTreeDepth, IsSub, preallocateHash);
             HSPDIM.Instance.upRanges.Add(UpRange);
             HSPDIM.Instance.modifiedUpRanges.Add(UpRange);
         }
         else
         {
             subRange = range;
-            SubRange = new(range, this, HSPDIM.subTreeDepth);
+            SubRange = new(range, this, HSPDIM.subTreeDepth, IsSub, preallocateHash);
             HSPDIM.Instance.subRanges.Add(SubRange);
             HSPDIM.Instance.modifiedSubRanges.Add(SubRange);
         }
@@ -43,7 +46,8 @@ public class HSPDIMEntityTest : IHSPDIMEntity
         Modified = new(modify, modify, false);
         if (modify)
         {
-            Position = new Vector3(Random.Range(0, -HSPDIMTest.mapWidth / 2), 0, Random.Range(0, HSPDIMTest.mapWidth / 2));
+            float validPosRange = HSPDIMTest.mapWidth / 2 - (upRange.x + subRange.x);
+            Position = new Vector3(Random.Range(-validPosRange, validPosRange), Random.Range(-validPosRange, validPosRange));
             if (subRange != Vector3.zero)
             {
                 HSPDIM.Instance.modifiedSubRanges.Add(SubRange);

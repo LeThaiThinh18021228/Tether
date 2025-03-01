@@ -38,11 +38,11 @@ namespace Bot
 #endif
             for (int i = 0; i < initBot; i++)
             {
-                SpawnBotObject(MapManager.RandomPositionInsideMap() / 2);
+                SpawnBotObject(MapManager.RandomPositionInsideMap(Vector3.zero) / 2);
                 //SpawnBotObject(new Vector3(Random.Range(-10f, 10f), 0, Random.Range(-10f, 10f)));
                 //SpawnClientBotProcess();
             }
-            DOVirtual.DelayedCall(5, () => { isSpawnBotCompleted = true; });
+            DOVirtual.DelayedCall(1, () => { isSpawnBotCompleted = true; });
 
         }
         private void OnTerminatedRoom(RoomController roomController)

@@ -13,7 +13,7 @@ namespace Framework
         public static event Callback OnSceneChanged;
 
         #region Runtime Init
-#if !UNITY_SERVER || GAME_SERVER
+#if (!UNITY_SERVER || GAME_SERVER) || UNITY_EDITOR
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         static void Init()
         {

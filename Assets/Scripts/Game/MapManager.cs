@@ -14,10 +14,10 @@ public class MapManager : SingletonNetwork<MapManager>
         ground.transform.SetScaleXZ(Width, Height);
     }
 
-    public static Vector3 RandomPositionInsideMap()
+    public static Vector3 RandomPositionInsideMap(Vector3 bound)
     {
-        float x = Random.Range(-Width / 2f, Width / 2f);
-        float y = Random.Range(-Height / 2f, Height / 2f);
+        float x = Random.Range(-(Width / 2f - bound.x/2), (Width / 2f - bound.x / 2));
+        float y = Random.Range(-(Height / 2f - bound.y/2), (Height / 2f - bound.y / 2));
         return new Vector3(x, 0, y);
     }
 }

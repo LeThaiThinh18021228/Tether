@@ -30,6 +30,7 @@ namespace Framework.HSPDIMAlgo
         }
         public void DisposePersistent()
         {
+            if (depth.IsCreated) depth.Dispose();
             if (LowerNodes.IsCreated) LowerNodes.Dispose();
             if (LowerDimensions.IsCreated) LowerDimensions.Dispose();
             if (UpperNodes.IsCreated) UpperNodes.Dispose();
@@ -122,6 +123,8 @@ namespace Framework.HSPDIMAlgo
         public void Dispose()
         {
             if (Bounds.IsCreated) Bounds.Dispose();
+            //if (ElementList.IsCreated) ElementList.Dispose();
+            //if (ElementDimensions.IsCreated) ElementDimensions.Dispose();
 
         }
         public void DisposePersistent()
@@ -161,17 +164,35 @@ namespace Framework.HSPDIMAlgo
     public struct NativeBound : IComparable<NativeBound>
     {
         public float BoundValue;
-        public RangeIDInList RangeIdInList;
-        public RangeIDInTree RangeIdInTree;
+        public int Id;
+        public bool IsSub;
+        public int Dim;
+        public int Depth;
+        public int Index;
+        public int LowerIndex;
+        public int IsUpper;
+        public bool IsInside;
+        public int Start;
+        public int Count;
+        public bool Modified;
 
-        public NativeBound(float boundValue, RangeIDInList rangeIDInList = default, RangeIDInTree rangeIdInTree = default)
+        public NativeBound(float boundValue, int id, bool isSub, int dim, int depth, int index, int lowerIndex, int isUpper, bool isInside, int start, int count, bool modified)
         {
             BoundValue = boundValue;
-            RangeIdInList = rangeIDInList;
-            RangeIdInTree = rangeIdInTree;
+            Id = id;
+            IsSub = isSub;
+            Dim = dim;
+            Depth = depth;
+            Index = index;
+            LowerIndex = lowerIndex;
+            IsUpper = isUpper;
+            IsInside = isInside;
+            Start = start;
+            Count = count;
+            Modified = modified;
         }
 
-        public int CompareTo(NativeBound other)
+        public readonly int CompareTo(NativeBound other)
         {
             if (BoundValue > other.BoundValue) return 1;
             if (BoundValue < other.BoundValue) return -1;
@@ -208,68 +229,15 @@ namespace Framework.HSPDIMAlgo
             Count = count;
         }
     }
-    public struct RangeIDInTree
-    {
-        public int Dim;
-        public int Depth;
-        public int Index;
-        public int IsUpper;
-        public bool IsInside;
-        public int Start;
-        public int Count;
-        public int LowerIndexContainer;
-        public RangeIDInTree(int dim, int depth, int index, int isUpper, bool isInside, int start, int count, int lowerIndexContainer = -1)
-        {
-            Dim = dim;
-            Depth = depth;
-            Index = index;
-            IsUpper = isUpper;
-            IsInside = isInside;
-            Start = start;
-            Count = count;
-            LowerIndexContainer = lowerIndexContainer;
-        }
-
-        public override string ToString()
-        {
-            return $"RangeID [{Dim},{Depth},{Index}] IsUpper = {IsUpper}, IsInside = {IsInside}, Start = {Start}, Count = {Count} LowerIndexContainer = {LowerIndexContainer}";
-        }
-    }
-    public struct RangeIDInList
-    {
-        public int Dim;
-        public int Depth;
-        public int Index;
-        public int IsUpper;
-        public bool IsInside;
-        public int IndexContainer;
-        public int LowerIndexContainer;
-
-        public RangeIDInList(int dim, int depth, int index, int isUpper, bool isInside, int indexContainer, int lowerIndexContainer)
-        {
-            Dim = dim;
-            Depth = depth;
-            Index = index;
-            IsUpper = isUpper;
-            IsInside = isInside;
-            IndexContainer = indexContainer;
-            LowerIndexContainer = lowerIndexContainer;
-        }
-
-        public override string ToString()
-        {
-            return $"RangeID [{Dim},{Index}] IndexContainer = {IndexContainer}";
-        }
-    }
     public struct OverlapID
     {
-        public RangeIDInTree rangeIDInTree;
-        public RangeIDInList rangeIDInList;
+        public NativeBound rangeIDInTree;
+        public NativeBound rangeIDInSortedListTree;
 
-        public OverlapID(RangeIDInTree rangeIDInTree, RangeIDInList rangeIDInList)
+        public OverlapID(NativeBound rangeIDInTree, NativeBound rangeIDInSortedListTree)
         {
             this.rangeIDInTree = rangeIDInTree;
-            this.rangeIDInList = rangeIDInList;
+            this.rangeIDInSortedListTree = rangeIDInSortedListTree;
         }
 
         public IEnumerable<HSPDIMRange> MapRangeToTree(BinaryTree<HSPDIMTreeNodeData> tree)
@@ -283,26 +251,28 @@ namespace Framework.HSPDIMAlgo
                     0 => node.covers,
                     _ => node.lowers // Fallback case
                 };
-            for (int i = rangeIDInTree.Start; i < rangeIDInTree.Start + rangeIDInTree.Count; i++)
+            for (int i = 0; i < rangeIDInTree.Count; i++)
             {
-                yield return container[i].range;
+                yield return container[rangeIDInTree.Start+i].range;
+            }
+        }
+        public void MapRangeToTreeArray(BinaryTree<HSPDIMTreeNodeData> tree, HSPDIMRange[] ranges)
+        {
+            var node = tree[rangeIDInTree.Depth, rangeIDInTree.Index].Data;
+            var container = rangeIDInTree.IsInside
+                ? node.insides
+                : rangeIDInTree.IsUpper switch
+                {
+                    -1 => node.lowers,
+                    1 => node.uppers,
+                    0 => node.covers,
+                    _ => node.lowers,
+                };
+            for (int i = 0; i < rangeIDInTree.Count; i++)
+            {
+                ranges[i] = container[rangeIDInTree.Start + i].range;
             }
         }
 
-        public IEnumerable<int> MapRangeToTree(NativeHSPDIMFlattenedTree flattendedTree)
-        {
-            NativeArray<NativeBound> container = rangeIDInTree.IsInside ? flattendedTree.Insides :
-                rangeIDInTree.IsUpper switch
-                {
-                    -1 => flattendedTree.Lowers,
-                    1 => flattendedTree.Uppers,
-                    0 => flattendedTree.Covers,
-                    _ => flattendedTree.Lowers // Fallback case
-                };
-            for (int i = rangeIDInTree.Start; i < rangeIDInTree.Start + rangeIDInTree.Count; i++)
-            {
-                yield return container[i].RangeIdInTree.Start;
-            }
-        }
     }
 }

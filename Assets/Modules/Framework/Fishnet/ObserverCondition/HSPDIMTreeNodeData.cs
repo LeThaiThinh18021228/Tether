@@ -17,29 +17,31 @@ namespace Framework.HSPDIMAlgo
         public List<HSPDIMBound> insides = new();
         public override string ToString()
         {
-            JSONNode tree = new JSONClass();
-            tree.Add("node", $"[{lowerBound},{upperBound}]");
+            JSONNode tree = new JSONClass
+            {
+                { "node", $"[{lowerBound},{upperBound}]" }
+            };
             if (lowers.Count > 0)
             {
-                JSONArray l = new JSONArray();
+                JSONArray l = new();
                 lowers.ForEach(x => l.Add(new JSONData(x.boundValue)));
                 tree.Add("l", l);
             }
             if (uppers.Count > 0)
             {
-                JSONArray u = new JSONArray();
+                JSONArray u = new();
                 uppers.ForEach(x => u.Add(new JSONData(x.boundValue)));
                 tree.Add("u", u);
             }
             if (covers.Count > 0)
             {
-                JSONArray c = new JSONArray();
+                JSONArray c = new();
                 covers.ForEach(x => c.Add(new JSONData(x.boundValue)));
                 tree.Add("co", c);
             }
             if (insides.Count > 0)
             {
-                JSONArray i = new JSONArray();
+                JSONArray i = new();
                 insides.ForEach(x => i.Add(new JSONData(x.boundValue)));
                 tree.Add("in", i);
             }
