@@ -139,12 +139,12 @@ PrefabInstance:
     - target: {fileID: 404884919198887126, guid: 61f80dfedc08f8040b81b1045b36d915,
         type: 3}
       propertyPath: initBotCount
-      value: 25
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 1830955666484094318, guid: 61f80dfedc08f8040b81b1045b36d915,
         type: 3}
       propertyPath: maxCurrency
-      value: 25
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1830955666484094318, guid: 61f80dfedc08f8040b81b1045b36d915,
         type: 3}
@@ -2484,8 +2484,9 @@ MonoBehaviour:
   isRunning: 0
   RemovedEntities: 
   IsDynamic: 1
-  Strategy: 0
+  Strategy: 2
   maxExeCount: 10000
+  exclude: 0
   exeTotalTimeLookupResult: 0
   debugId: 1
 --- !u!1001 &9177943108470717230

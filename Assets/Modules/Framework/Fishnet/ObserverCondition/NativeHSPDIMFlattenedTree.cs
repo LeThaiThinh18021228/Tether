@@ -53,7 +53,7 @@ namespace Framework.HSPDIMAlgo
                         s += $"node{j}[";
                         for (int k = LowerNodes[j].Start; k < LowerNodes[j].Start + LowerNodes[j].Count; k++)
                         {
-                            s += $"{Lowers[k]}, ";
+                            s += $"{Lowers[k]}_ {Lowers[k].Dim} , ";
                         }
                         s += $"]\n";
                     }
@@ -70,7 +70,7 @@ namespace Framework.HSPDIMAlgo
                         s += $"node{j}[";
                         for (int k = UpperNodes[j].Start; k < UpperNodes[j].Start + UpperNodes[j].Count; k++)
                         {
-                            s += $"{Uppers[k]}, ";
+                            s += $"{Uppers[k]}, {Uppers[k].Dim} ";
                         }
                         s += $"]\n";
                     }
@@ -87,7 +87,7 @@ namespace Framework.HSPDIMAlgo
                         s += $"node{j}[";
                         for (int k = InsideNodes[j].Start; k < InsideNodes[j].Start + InsideNodes[j].Count; k++)
                         {
-                            s += $"{Insides[k]}, ";
+                            s += $"{Insides[k]}, {Insides[k].Dim} ";
                         }
                         s += $"]\n";
                     }
@@ -152,7 +152,7 @@ namespace Framework.HSPDIMAlgo
                         }
                         for (int k = ElementList[j].Start; k < ElementList[j].Start + ElementList[j].Count; k++)
                         {
-                            s += $"{Bounds[k]}, ";
+                            s += $"{Bounds[k]}_{Bounds[k].Dim}, ";
                         }
                         s += $"]\n";
                     }

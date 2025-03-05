@@ -118,7 +118,7 @@ namespace Framework.HSPDIMAlgo
         }
         private void OnUpdateIntersection()
         {
-            if (!IsServerInitialized && HSPDIM.Instance.debugId) return;
+            if (!IsServerInitialized) return;
             SubBoxCol = Physics.OverlapBox(transform.position, subRange / 2, Quaternion.identity, LayerMask.GetMask("HSPDIMUp"));
             //intersectText.text = $"{(SubRange.intersection.DefaultIfEmpty().Count() - 1)}";
             //intersectText.text = $"{SubBoxCol?.Count() - 1}:{(HSPDIM.Instance.FinalMatchingResult[ObjectId].Count - 1)}";

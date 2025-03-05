@@ -42,22 +42,17 @@ public class HSPDIMEntityTest : IHSPDIMEntity
 
     public void ChangePos()
     {
-        bool modify = Random.Range(0, 1f) < HSPDIMTest.modifyRatio;
-        Modified = new(modify, modify, false);
-        if (modify)
+        Modified = Vector3Bool.@true;
+        float validPosRange = HSPDIMTest.mapWidth / 2 - (upRange.x + subRange.x) / 2;
+        Position = new Vector3(Random.Range(-validPosRange, validPosRange), Random.Range(-validPosRange, validPosRange));
+        if (subRange != Vector3.zero)
         {
-            float validPosRange = HSPDIMTest.mapWidth / 2 - (upRange.x + subRange.x);
-            Position = new Vector3(Random.Range(-validPosRange, validPosRange), Random.Range(-validPosRange, validPosRange));
-            if (subRange != Vector3.zero)
-            {
-                HSPDIM.Instance.modifiedSubRanges.Add(SubRange);
-            }
-            if (upRange != Vector3.zero)
-            {
-                HSPDIM.Instance.modifiedUpRanges.Add(UpRange);
-            }
+            HSPDIM.Instance.modifiedSubRanges.Add(SubRange);
         }
-
+        if (upRange != Vector3.zero)
+        {
+            HSPDIM.Instance.modifiedUpRanges.Add(UpRange);
+        }
     }
     public void UpdatePos()
     {
@@ -66,7 +61,7 @@ public class HSPDIMEntityTest : IHSPDIMEntity
 
     public override string ToString()
     {
-        return $"{Id}_{Position}_{Modified}";
+        return $"{Id}_{Position}_{Modified}_{upRange}_{subRange}";
     }
 
 }
