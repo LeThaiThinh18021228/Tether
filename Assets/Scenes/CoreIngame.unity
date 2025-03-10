@@ -139,12 +139,12 @@ PrefabInstance:
     - target: {fileID: 404884919198887126, guid: 61f80dfedc08f8040b81b1045b36d915,
         type: 3}
       propertyPath: initBotCount
-      value: 10
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 1830955666484094318, guid: 61f80dfedc08f8040b81b1045b36d915,
         type: 3}
       propertyPath: maxCurrency
-      value: 0
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 1830955666484094318, guid: 61f80dfedc08f8040b81b1045b36d915,
         type: 3}
@@ -205,6 +205,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6209642925452647940, guid: 61f80dfedc08f8040b81b1045b36d915,
+        type: 3}
+      propertyPath: width
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 6209642925452647940, guid: 61f80dfedc08f8040b81b1045b36d915,
+        type: 3}
+      propertyPath: height
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 6364556303278049537, guid: 61f80dfedc08f8040b81b1045b36d915,
         type: 3}
@@ -2484,7 +2494,7 @@ MonoBehaviour:
   isRunning: 0
   RemovedEntities: 
   IsDynamic: 1
-  Strategy: 2
+  Strategy: 0
   maxExeCount: 10000
   exclude: 0
   exeTotalTimeLookupResult: 0

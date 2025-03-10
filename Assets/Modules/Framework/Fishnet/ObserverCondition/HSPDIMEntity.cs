@@ -47,16 +47,16 @@ namespace Framework.HSPDIMAlgo
                 if (upRange != Vector3.zero)
                 {
                     upIntersectRect.SetActive(true);
-                    upIntersectRect.transform.localScale = new Vector3(upRange.x, upRange.z, 0);
-                    UpBox.size = new Vector3(upRange.x, 1, upRange.z);
+                    upIntersectRect.transform.localScale = new Vector3(upRange.x, upRange.y, 0);
+                    UpBox.size = new Vector3(upRange.x, 1, upRange.y);
                 }
                 if (subRange != Vector3.zero)
                 {
                     subIntersectRect.SetActive(true);
                     intersectText.gameObject.SetActive(true);
                     intersectText.text = "0";
-                    subIntersectRect.transform.localScale = new Vector3(subRange.x, subRange.z, 0);
-                    SubBox.size = new Vector3(subRange.x, 1, subRange.z);
+                    subIntersectRect.transform.localScale = new Vector3(subRange.x, subRange.y, 0);
+                    SubBox.size = new Vector3(subRange.x, 1, subRange.y);
                 }
             }
             if (IsServerInitialized)
@@ -119,7 +119,7 @@ namespace Framework.HSPDIMAlgo
         private void OnUpdateIntersection()
         {
             if (!IsServerInitialized) return;
-            SubBoxCol = Physics.OverlapBox(transform.position, subRange / 2, Quaternion.identity, LayerMask.GetMask("HSPDIMUp"));
+            SubBoxCol = Physics.OverlapBox(transform.position, new Vector3(subRange.x, 0, subRange.y)/2, Quaternion.identity, LayerMask.GetMask("HSPDIMUp"));
             //intersectText.text = $"{(SubRange.intersection.DefaultIfEmpty().Count() - 1)}";
             //intersectText.text = $"{SubBoxCol?.Count() - 1}:{(HSPDIM.Instance.FinalMatchingResult[ObjectId].Count - 1)}";
             intersectText.text = $"{SubBoxCol?.Count() - 1}:{SubRange.intersectionId.Count - 1}";

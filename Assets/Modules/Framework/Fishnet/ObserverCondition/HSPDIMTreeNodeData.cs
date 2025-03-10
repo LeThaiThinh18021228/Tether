@@ -3,6 +3,7 @@ using Framework.SimpleJSON;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Collections;
 using UnityEngine;
 
 namespace Framework.HSPDIMAlgo
@@ -15,6 +16,10 @@ namespace Framework.HSPDIMAlgo
         public List<HSPDIMBound> uppers = new();
         public List<HSPDIMBound> covers = new();
         public List<HSPDIMBound> insides = new();
+        public NativeList<NativeBound> Lowers;
+        public NativeList<NativeBound> Uppers;
+        public NativeList<NativeBound> Covers;
+        public NativeList<NativeBound> Insides;
         public override string ToString()
         {
             JSONNode tree = new JSONClass

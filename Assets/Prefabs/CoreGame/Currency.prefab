@@ -4991,7 +4991,7 @@ MonoBehaviour:
   _addedNetworkObject: {fileID: 5328327843749179054}
   _networkObjectCache: {fileID: 5328327843749179054}
   _subrange: {x: 0, y: 0, z: 0}
-  _upRange: {x: 3, y: 0, z: 3}
+  _upRange: {x: 3, y: 3, z: 0}
   intersectText: {fileID: 5413207762073837113}
   upIntersectRect: {fileID: 5351773228770316005}
   subIntersectRect: {fileID: 4727102419795564849}

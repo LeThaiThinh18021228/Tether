@@ -61,7 +61,6 @@ namespace Framework.HSPDIMAlgo
                         entityTests[i].ChangePos();
                     }
                 }
-                PDebug.Log(string.Join("\n", entityTests.ForEach(e => e.ToString())));
             }
         }
         protected override void OnDestroy()

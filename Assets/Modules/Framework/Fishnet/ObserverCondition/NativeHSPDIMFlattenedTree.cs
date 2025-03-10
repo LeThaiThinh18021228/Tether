@@ -232,9 +232,9 @@ namespace Framework.HSPDIMAlgo
     public struct OverlapID
     {
         public NativeBound rangeIDInTree;
-        public NativeBound rangeIDInSortedListTree;
+        public int rangeIDInSortedListTree;
 
-        public OverlapID(NativeBound rangeIDInTree, NativeBound rangeIDInSortedListTree)
+        public OverlapID(NativeBound rangeIDInTree, int rangeIDInSortedListTree)
         {
             this.rangeIDInTree = rangeIDInTree;
             this.rangeIDInSortedListTree = rangeIDInSortedListTree;

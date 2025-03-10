@@ -475,14 +475,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dontDestroyOnLoad: 0
   _alpha: 0.1
-  _countRange: 100
+  _countRange: 100000
   _threadCount: 8
   _modifyRatio: 1
   _mapWidth: 100
   _mapHeight: 100
-  alphaActive: 0
-  size: 10
-  preallocateExp: 0.75
+  alphaActive: 1
+  size: 1
+  preallocateExp: 0.55
 --- !u!4 &1770163309
 Transform:
   m_ObjectHideFlags: 0
