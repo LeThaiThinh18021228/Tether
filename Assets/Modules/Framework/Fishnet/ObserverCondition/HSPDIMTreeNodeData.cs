@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace Framework.HSPDIMAlgo
 {
-    public class HSPDIMTreeNodeData
+    public class HSPDIMTreeNodeData : IDisposable
     {
         public float lowerBound;
         public float upperBound;
@@ -16,10 +16,10 @@ namespace Framework.HSPDIMAlgo
         public List<HSPDIMBound> uppers = new();
         public List<HSPDIMBound> covers = new();
         public List<HSPDIMBound> insides = new();
-        public NativeList<NativeBound> Lowers;
-        public NativeList<NativeBound> Uppers;
-        public NativeList<NativeBound> Covers;
-        public NativeList<NativeBound> Insides;
+        public NativeList<NativeBound> Lowers = new(Allocator.Persistent);
+        public NativeList<NativeBound> Uppers = new(Allocator.Persistent);
+        public NativeList<NativeBound> Covers = new(Allocator.Persistent);
+        public NativeList<NativeBound> Insides = new(Allocator.Persistent);
         public override string ToString()
         {
             JSONNode tree = new JSONClass
@@ -55,6 +55,14 @@ namespace Framework.HSPDIMAlgo
         public bool IsEmpty()
         {
             return lowers.Count == 0 && uppers.Count == 0 && covers.Count == 0 && insides.Count == 0;
+        }
+
+        public void Dispose()
+        {
+            if (Lowers.IsCreated) Lowers.Dispose();
+            if (Uppers.IsCreated) Uppers.Dispose();
+            if (Covers.IsCreated) Covers.Dispose();
+            if (Insides.IsCreated) Insides.Dispose();
         }
     }
     

@@ -73,14 +73,17 @@ namespace Framework.HSPDIMAlgo
             overlapSetsId = Enumerable.Range(0, HSPDIM.dimension).Select(_ => new HashSet<int>(preallocateHash)).ToArray();
             intersectionId = new HashSet<int>((int)Math.Sqrt(preallocateHash));
             entity.UpdatePos();
+            depthLevel = new(treeDepth, treeDepth, treeDepth);
             for (short j = 0; j < HSPDIM.dimension; j++)
             {
                 Bounds[j, 0] = Bounds[j, 0] ?? new HSPDIMBound(j, -1, this, entity, isSub);
                 Bounds[j, 1] = Bounds[j, 1] ?? new HSPDIMBound(j, 1, this, entity, isSub);
                 Bounds[j, 2] = Bounds[j, 2] ?? new HSPDIMBound(j, 0, this, entity, isSub);
-                Boundss[j, 0] = new NativeBound(0, entity.Id, isSub, j, 0, 0, 0, -1, false, 0, 1, true);
-                Boundss[j, 1] = new NativeBound(0, entity.Id, isSub, j, 0, 0, 0, 1, false, 0, 1, true);
-                Boundss[j, 2] = new NativeBound(0, entity.Id, isSub, j, 0, 0, 0, 0, false, 0, 1, true);
+                float pos = entity.Position[j] + HSPDIM.mapSizeEstimate / 2;
+                float r = range[j] / 2;
+                Boundss[j, 0] = new NativeBound(pos - r, entity.Id, isSub, j, 0, entity.Enable ? HSPDIM.IndexCal(pos - r, depthLevel[j]) : -1, 0, -1, false, 0, 1, true);
+                Boundss[j, 1] = new NativeBound(pos + r, entity.Id, isSub, j, 0, entity.Enable ? HSPDIM.IndexCal(pos + r, depthLevel[j]) : -1, 0, 1, false, 0, 1, true);
+                Boundss[j, 2] = new NativeBound(pos, entity.Id, isSub, j, 0, entity.Enable ? HSPDIM.IndexCal(pos, depthLevel[j]) : -1, 0, 0, false, 0, 1, true);
             }
         }
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -97,6 +100,28 @@ namespace Framework.HSPDIMAlgo
             Bounds[i, 0].UpdateBound();
             Bounds[i, 1].UpdateBound();
             Bounds[i, 2].UpdateBound();
+            var pos = entity.Position[i] + HSPDIM.mapSizeEstimate / 2;
+            var r = range[i] / 2;
+            var modified = entity.Modified[i];
+            var lowerPos = pos - r;
+            var upperPos = pos + r;
+            var depth = depthLevel[i];
+            var lowerIndex = entity.Enable ? HSPDIM.IndexCal(lowerPos, treeDepth) : -1;
+            var upperIndex = entity.Enable ? HSPDIM.IndexCal(upperPos, treeDepth) : -1;
+            if (upperIndex - lowerIndex == 0)
+            {
+                Boundss[i, 0].UpdateBound(lowerPos,lowerIndex, depth, modified, lowerIndex, true);
+                Boundss[i, 1].UpdateBound(upperPos, upperIndex,depth, modified, lowerIndex, true);
+            }
+            else
+            {
+                Boundss[i, 0].UpdateBound(lowerPos,lowerIndex, depth, modified, lowerIndex, false);
+                Boundss[i, 1].UpdateBound(upperPos, upperIndex, depth, modified, lowerIndex, false);
+                if (upperIndex - lowerIndex == 2)
+                {
+                    Boundss[i, 2].UpdateBound(pos,entity.Enable ? HSPDIM.IndexCal(pos, depthLevel[i]) : -1, depth, modified, lowerIndex, false);
+                }
+            }
         }
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void UpdateRange(int treeDepth)

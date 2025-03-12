@@ -475,7 +475,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dontDestroyOnLoad: 0
   _alpha: 0.1
-  _countRange: 100000
+  _countRange: 2000
   _threadCount: 8
   _modifyRatio: 1
   _mapWidth: 100
@@ -580,8 +580,8 @@ MonoBehaviour:
   dontDestroyOnLoad: 0
   isRunning: 0
   RemovedEntities: 
-  IsDynamic: 1
-  Strategy: 2
+  IsDynamic: 0
+  Strategy: 3
   maxExeCount: 30
   exclude: 5
   exeTotalTimeLookupResult: 0

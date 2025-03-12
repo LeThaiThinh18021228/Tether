@@ -1,11 +1,15 @@
 using Framework.ADS;
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Unity.Collections;
 namespace Framework.HSPDIMAlgo
 {
     public struct NativeHSPDIMFlattenedTree : System.IDisposable
     {
+        public int lowerCount;
+        public int insideCount;
+        public int coverCount;
         public NativeArray<short> depth;
         public NativeArray<NativeBound> Lowers;
         public NativeArray<NativeBound> Uppers;
@@ -178,40 +182,53 @@ namespace Framework.HSPDIMAlgo
 
         public NativeBound(float boundValue, int id, bool isSub, int dim, int depth, int index, int lowerIndex, int isUpper, bool isInside, int start, int count, bool modified)
         {
-            BoundValue = boundValue;
-            Id = id;
-            IsSub = isSub;
-            Dim = dim;
-            Depth = depth;
-            Index = index;
-            LowerIndex = lowerIndex;
-            IsUpper = isUpper;
-            IsInside = isInside;
-            Start = start;
-            Count = count;
-            Modified = modified;
+            BoundValue = boundValue; //
+            Id = id; //
+            IsSub = isSub; //
+            Dim = dim; //
+            Depth = depth; //
+            Index = index; //
+            LowerIndex = lowerIndex; //
+            IsUpper = isUpper; //
+            IsInside = isInside; //
+            Start = start; //
+            Count = count; //
+            Modified = modified; //
         }
 
         public readonly int CompareTo(NativeBound other)
         {
             if (BoundValue > other.BoundValue) return 1;
             if (BoundValue < other.BoundValue) return -1;
-            return 0;
+            return Id.CompareTo(other.Id);
         }
         public override string ToString()
         {
             return BoundValue.ToString();
         }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal void UpdateBound(float boundValue,int index, int depth, bool modified, int lowerIndex, bool isInside)
+        {
+            BoundValue = boundValue;
+            Modified = HSPDIM.ModifiedValid;
+            Index = index;
+            Depth = depth;
+            LowerIndex = lowerIndex;
+            IsInside = isInside;
+
+        }
     }
     public struct NativeNode
     {
+        public short Dim;
         public short Depth;
         public int Index;
         public int Start;
         public int Count;
 
-        public NativeNode(short depth, int index, int start, int count)
+        public NativeNode(short dim,short depth, int index, int start, int count)
         {
+            Dim = dim;
             Depth = depth;
             Index = index;
             Start = start;
