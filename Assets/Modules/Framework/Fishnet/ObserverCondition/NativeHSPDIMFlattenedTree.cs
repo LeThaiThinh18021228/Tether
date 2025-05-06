@@ -184,15 +184,15 @@ namespace Framework.HSPDIMAlgo
         {
             BoundValue = boundValue; //
             Id = id; //
-            IsSub = isSub; //
-            Dim = dim; //
+            IsSub = isSub; 
+            Dim = dim; 
             Depth = depth; //
             Index = index; //
             LowerIndex = lowerIndex; //
-            IsUpper = isUpper; //
+            IsUpper = isUpper; 
             IsInside = isInside; //
-            Start = start; //
-            Count = count; //
+            Start = start; 
+            Count = count; 
             Modified = modified; //
         }
 
@@ -202,20 +202,26 @@ namespace Framework.HSPDIMAlgo
             if (BoundValue < other.BoundValue) return -1;
             return Id.CompareTo(other.Id);
         }
-        public override string ToString()
+        public override readonly string ToString()
         {
-            return BoundValue.ToString();
+            return $"{BoundValue}_{Modified}";
         }
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal void UpdateBound(float boundValue,int index, int depth, bool modified, int lowerIndex, bool isInside)
+        internal void UpdateBound(int id, float boundValue,int index, int depth, int lowerIndex, bool isInside, bool modified)
         {
+            Id = id;
             BoundValue = boundValue;
-            Modified = HSPDIM.ModifiedValid;
             Index = index;
             Depth = depth;
             LowerIndex = lowerIndex;
             IsInside = isInside;
-
+            Modified = modified;
+        }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal void UpdateRemoveBound(bool Modified)
+        {
+            Index = -1;
+            LowerIndex = -1;
         }
     }
     public struct NativeNode

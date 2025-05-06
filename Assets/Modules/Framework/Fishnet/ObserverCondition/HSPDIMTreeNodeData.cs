@@ -1,5 +1,6 @@
 using Framework;
 using Framework.SimpleJSON;
+using Sirenix.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -50,11 +51,64 @@ namespace Framework.HSPDIMAlgo
                 insides.ForEach(x => i.Add(new JSONData(x.boundValue)));
                 tree.Add("in", i);
             }
+            if (Lowers.Length > 0)
+            {
+                JSONArray l = new();
+                foreach (var b in Lowers)
+                {
+                    l.Add(new JSONData(b.ToString()));
+                    if (HSPDIM.Instance.HSPDIMEntities[b.Id].Modified[b.Dim] != b.Modified)
+                    {
+                        PDebug.LogError(HSPDIM.Instance.HSPDIMEntities[b.Id].UpRange.ToString() + HSPDIM.Instance.HSPDIMEntities[b.Id].UpRange.Boundss[0,0].Modified + HSPDIM.Instance.HSPDIMEntities[b.Id].UpRange.Boundss[1, 0].Modified);
+                    }
+                }
+                tree.Add("l", l);
+            }
+            if (Uppers.Length > 0)
+            {
+                JSONArray u = new();
+                foreach (var b in Uppers)
+                {
+                    u.Add(new JSONData(b.ToString()));
+                    if (HSPDIM.Instance.HSPDIMEntities[b.Id].Modified[b.Dim] != b.Modified)
+                    {
+                        PDebug.LogError(HSPDIM.Instance.HSPDIMEntities[b.Id].UpRange.ToString() + HSPDIM.Instance.HSPDIMEntities[b.Id].UpRange.Boundss[0, 0].Modified + HSPDIM.Instance.HSPDIMEntities[b.Id].UpRange.Boundss[1, 0].Modified);
+                    }
+                }
+                tree.Add("u", u);
+            }
+            if (Covers.Length > 0)
+            {
+                JSONArray c = new();
+                foreach (var b in Covers)
+                {
+                    c.Add(new JSONData(b.ToString()));
+                    if (HSPDIM.Instance.HSPDIMEntities[b.Id].Modified[b.Dim] != b.Modified)
+                    {
+                        PDebug.LogError(HSPDIM.Instance.HSPDIMEntities[b.Id].UpRange.ToString() + HSPDIM.Instance.HSPDIMEntities[b.Id].UpRange.Boundss[0, 0].Modified + HSPDIM.Instance.HSPDIMEntities[b.Id].UpRange.Boundss[1, 0].Modified);
+                    }
+                }
+                tree.Add("co", c);
+            }
+            if (Insides.Length > 0)
+            {
+                JSONArray i = new();
+                foreach (var b in Insides)
+                {
+                    i.Add(new JSONData(b.ToString()));
+                    if (HSPDIM.Instance.HSPDIMEntities[b.Id].Modified[b.Dim] != b.Modified)
+                    {
+                        PDebug.LogError(HSPDIM.Instance.HSPDIMEntities[b.Id].UpRange.ToString() + HSPDIM.Instance.HSPDIMEntities[b.Id].UpRange.Boundss[0, 0].Modified + HSPDIM.Instance.HSPDIMEntities[b.Id].UpRange.Boundss[1, 0].Modified);
+                    }
+                }
+                tree.Add("in", i);
+            }
             return tree.ToString();
         }
         public bool IsEmpty()
         {
-            return lowers.Count == 0 && uppers.Count == 0 && covers.Count == 0 && insides.Count == 0;
+            return (lowers.Count == 0 && uppers.Count == 0 && covers.Count == 0 && insides.Count == 0)
+                && (Lowers.Length == 0 && Uppers.Length == 0 && Covers.Length == 0 && Insides.Length == 0);
         }
 
         public void Dispose()

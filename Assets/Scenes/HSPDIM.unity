@@ -482,7 +482,7 @@ MonoBehaviour:
   _mapHeight: 100
   alphaActive: 1
   size: 1
-  preallocateExp: 0.55
+  preallocateExp: 0.7
 --- !u!4 &1770163309
 Transform:
   m_ObjectHideFlags: 0
@@ -580,9 +580,10 @@ MonoBehaviour:
   dontDestroyOnLoad: 0
   isRunning: 0
   RemovedEntities: 
-  IsDynamic: 0
-  Strategy: 3
-  maxExeCount: 30
+  IsDynamicMapping: 0
+  IsDynamicMatching: 0
+  Strategy: 2
+  maxExeCount: 50
   exclude: 5
   exeTotalTimeLookupResult: 0
   debugId: 0

@@ -81,47 +81,19 @@ namespace Framework.HSPDIMAlgo
                 Bounds[j, 2] = Bounds[j, 2] ?? new HSPDIMBound(j, 0, this, entity, isSub);
                 float pos = entity.Position[j] + HSPDIM.mapSizeEstimate / 2;
                 float r = range[j] / 2;
-                Boundss[j, 0] = new NativeBound(pos - r, entity.Id, isSub, j, 0, entity.Enable ? HSPDIM.IndexCal(pos - r, depthLevel[j]) : -1, 0, -1, false, 0, 1, true);
-                Boundss[j, 1] = new NativeBound(pos + r, entity.Id, isSub, j, 0, entity.Enable ? HSPDIM.IndexCal(pos + r, depthLevel[j]) : -1, 0, 1, false, 0, 1, true);
-                Boundss[j, 2] = new NativeBound(pos, entity.Id, isSub, j, 0, entity.Enable ? HSPDIM.IndexCal(pos, depthLevel[j]) : -1, 0, 0, false, 0, 1, true);
+                Boundss[j, 0] = new NativeBound(pos - r, entity.Id, isSub, j, -1,  -1, -1, -1, false, 0, 1, true);
+                Boundss[j, 1] = new NativeBound(pos + r, entity.Id, isSub, j, -1,  -1, -1, 1, false, 0, 1, true);
+                Boundss[j, 2] = new NativeBound(pos, entity.Id, isSub, j, -1, -1, -1, 0, false, 0, 1, true);
             }
         }
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void UpdateRange(short i, int treeDepth)
         {
-            if (range[i] < HSPDIM.mapSizeEstimate / (1 << treeDepth))
-            {
-                depthLevel[i] = treeDepth;
-            }
-            else
-            {
-                depthLevel[i] = HSPDIM.DepthCal(range[i]);
-            }
+            float threshold = HSPDIM.mapSizeEstimate / (1 << treeDepth);
+            depthLevel[i] = range[i] < threshold ? treeDepth : HSPDIM.DepthCal(range[i]);
             Bounds[i, 0].UpdateBound();
             Bounds[i, 1].UpdateBound();
             Bounds[i, 2].UpdateBound();
-            var pos = entity.Position[i] + HSPDIM.mapSizeEstimate / 2;
-            var r = range[i] / 2;
-            var modified = entity.Modified[i];
-            var lowerPos = pos - r;
-            var upperPos = pos + r;
-            var depth = depthLevel[i];
-            var lowerIndex = entity.Enable ? HSPDIM.IndexCal(lowerPos, treeDepth) : -1;
-            var upperIndex = entity.Enable ? HSPDIM.IndexCal(upperPos, treeDepth) : -1;
-            if (upperIndex - lowerIndex == 0)
-            {
-                Boundss[i, 0].UpdateBound(lowerPos,lowerIndex, depth, modified, lowerIndex, true);
-                Boundss[i, 1].UpdateBound(upperPos, upperIndex,depth, modified, lowerIndex, true);
-            }
-            else
-            {
-                Boundss[i, 0].UpdateBound(lowerPos,lowerIndex, depth, modified, lowerIndex, false);
-                Boundss[i, 1].UpdateBound(upperPos, upperIndex, depth, modified, lowerIndex, false);
-                if (upperIndex - lowerIndex == 2)
-                {
-                    Boundss[i, 2].UpdateBound(pos,entity.Enable ? HSPDIM.IndexCal(pos, depthLevel[i]) : -1, depth, modified, lowerIndex, false);
-                }
-            }
         }
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void UpdateRange(int treeDepth)
@@ -134,6 +106,12 @@ namespace Framework.HSPDIMAlgo
                     UpdateRange(i, treeDepth);
                 }
             }
+        }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void UpdateRangeId(int treeDepth)
+        {
+            entity.UpdatePos();
+
         }
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void UpdateIntersectionId()
@@ -177,7 +155,7 @@ namespace Framework.HSPDIMAlgo
         
         public override string ToString()
         {
-            return $"{GetHashCode()}_{range}_{entity.Position}_{entity.Modified}_({Bounds[0, 0].boundValue}_{Bounds[0, 0].index},{Bounds[0, 1].boundValue}_{Bounds[0, 1].index},{Bounds[1, 0].boundValue}_{Bounds[1, 0].index},{Bounds[1, 1].boundValue}_{Bounds[1, 1].index})";
+            return $"{((HSPDIMEntity)entity).name}_{entity.Id}_{range}_{isSub}_{entity.Position}_{entity.Modified}_({Bounds[0, 0].boundValue}_{Bounds[0, 0].index},{Bounds[0, 1].boundValue}_{Bounds[0, 1].index},{Bounds[1, 0].boundValue}_{Bounds[1, 0].index},{Bounds[1, 1].boundValue}_{Bounds[1, 1].index})";
         }
     }
 
