@@ -32,13 +32,13 @@ This Unity project is monolithic and contains a lot of unrelated game-logic code
 
 ## Visual Validation
 1. Open the **CoreInGame** scene (`Assets/Scenes/CoreInGame.unity`).  
-2. In the menu, go to **Tools → Custom Build Window -> Click on BuildWinMaster**.  
-3. In the Inspector, ensure **Enable** is checked.  
+2. In the menu, go to **Tools → Custom Build Window -> Click on BuildWinMaster**, in the Inspector, ensure **Enable** is checked.  
 4. Click **Build All**. When it finishes, run `MasterServer.exe` to start the server.  
 5. Back in the Unity Editor, press **Play**, then click the **Server** and **Client** buttons in the Game view.  
 6. To adjust parameters:  
-   - **Currency Generator** (in Hierarchy): set **Max Currency** to change the update range.  
-   - **Bot Manager** (in Hierarchy): set **Init Bot** to change both subscription and update counts.
+   - **Currency Generator** (in Hierarchy): set **Max Currency** to change the update range (red rectangle).  
+   - **Bot Manager** (in Hierarchy): set **Init Bot** to change both subscription and update range counts.
+   - Update ranges represent as red rectangle and subcription range as green rectangle display on screen.
 
 ## Observing Results
 Check the **Console** (Warnings) for output lines like these:
