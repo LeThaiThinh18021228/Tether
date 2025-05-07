@@ -45,9 +45,9 @@ Check the **Console** (Warnings) for output lines like these:
 
 ![image](https://github.com/user-attachments/assets/f03757ce-df55-4ad1-9031-68ea5dc18bad)
 
-- Thread Count: 8, SubModCount: 15, UpModCount: 15 over 65
+- Thread Count: 8, SubModCount: 15, UpModCount: 15 over 65  # number of parallel threads, subcription range count, update range count and number of execution
 - exeTotalTime : 1.3118 # total runtime
-- exeTotalTimeMapping : 0.2446 # mapping step
+- exeTotalTimeMapping : 0.2446 # mapping step 
 - exeTotalTimeRecalculate : 0.0133 # recalculation step
 - exeTotalTimeInput : 0.2835 # preprocessing
 - exeTotalTimeMatching : 0.0831 # matching step
