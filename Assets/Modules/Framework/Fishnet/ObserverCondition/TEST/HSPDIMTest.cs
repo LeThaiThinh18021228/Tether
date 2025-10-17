@@ -1,4 +1,6 @@
 using Sirenix.Utilities;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using Unity.Jobs.LowLevel.Unsafe;
 using UnityEngine;
@@ -7,7 +9,8 @@ namespace Framework.HSPDIMAlgo
 {
     public class HSPDIMTest : SingletonMono<HSPDIMTest>
     {
-        public static float rangeValue;
+        public static List<float> sizes = new();
+        public static List<int> counts = new();
         [SerializeField] private float _alpha; public static float alpha { get { return Instance._alpha; } set { Instance._alpha = value; } }
         [SerializeField] private int _countRange; public static int countRange { get { return Instance._countRange; } set { Instance._countRange = value; } }
         [SerializeField] private int _threadCount; public static int threadCount { get { return Instance._threadCount; } set { Instance._threadCount = value; } }
@@ -15,6 +18,7 @@ namespace Framework.HSPDIMAlgo
         [SerializeField] private float _mapWidth; public static float mapWidth { get { return Instance._mapWidth; } set { Instance._mapWidth = value; } }
         [SerializeField] private float _mapHeight; public static float mapHeight { get { return Instance._mapHeight; } set { Instance._mapHeight = value; } }
         public bool alphaActive;
+        public int sizeVariant;
         public float size;
         public float preallocateExp;
 
@@ -29,22 +33,45 @@ namespace Framework.HSPDIMAlgo
         {
             if (alphaActive)
             {
-                rangeValue = Mathf.Sqrt((mapWidth * mapHeight) * alpha / countRange);
+                float coveragePerSize = (mapWidth * mapHeight) * alpha / sizeVariant;
+                int totalCountPortion = (int)(((long)Mathf.Pow(4, sizeVariant) - 1) / (4 - 1));
+                int totalCount = 0;
+                for (int i = 0; i < sizeVariant; i++)
+                {
+                    if (i == sizeVariant - 1)
+                    {
+                        counts.Add(countRange - totalCount);
+                        totalCount = countRange;
+                    }
+                    else
+                    {
+                        counts.Add((int)(countRange * (long)Mathf.Pow(4, i) / totalCountPortion));
+                        totalCount += counts[i];
+                    }
+
+                    sizes.Add(Mathf.Sqrt(coveragePerSize / counts[i]));
+                }
             }
             else
             {
-                rangeValue = size;
+                sizes.Add(size);
             }
             int preallocateHash = (int)Mathf.Pow(countRange, preallocateExp);
-            Debug.Log($"range value:{rangeValue} preallocateHash {preallocateHash}");
-            HSPDIM.minEntitySubRegSize = HSPDIM.minEntityUpRegSize = HSPDIMTest.rangeValue;
+            Debug.Log($"range value:{string.Join(",", sizes)} preallocateHash {preallocateHash}");
+            HSPDIM.minEntitySubRegSize = HSPDIM.minEntityUpRegSize = HSPDIMTest.sizes[^1];
             HSPDIM.entityCountEstimate = HSPDIMTest.countRange;
             HSPDIM.upTreeDepth = HSPDIM.DepthCal(HSPDIM.minEntityUpRegSize);
             HSPDIM.subTreeDepth = HSPDIM.DepthCal(HSPDIM.minEntitySubRegSize);
-            for (int i = 0; i < countRange; i++)
+            int offset = 0;
+            for (int i = 0; i < counts.Count; i++)
             {
-                entityTests[i] = new HSPDIMEntityTest(i, i < countRange / 2, new Vector3(rangeValue, rangeValue, rangeValue), preallocateHash);
+                for (int j = 0; j < counts[i]; j++)
+                {
+                    entityTests[offset] = new HSPDIMEntityTest(offset, offset % 2 == 0, new Vector3(sizes[i], sizes[i], sizes[i]), preallocateHash);
+                    offset++;
+                }
             }
+
 
             HSPDIM.Instance.InitMappingAndMatching();
         }
@@ -56,7 +83,7 @@ namespace Framework.HSPDIMAlgo
             {
                 for (int i = 0; i < countRange; i++)
                 {
-                    if (Random.Range(0f, 1f) < modifyRatio)
+                    if (UnityEngine.Random.Range(0f, 1f) < modifyRatio)
                     {
                         entityTests[i].ChangePos();
                     }

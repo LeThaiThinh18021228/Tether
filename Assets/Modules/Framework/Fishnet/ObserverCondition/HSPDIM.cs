@@ -177,147 +177,147 @@ namespace Framework.HSPDIMAlgo
 
                         }
                 }
-                    for (int i = 0; i < sublist.Length; i++)
-                    {
-                        var sub = sublist[i];
-                        sub.entity.Modified = Vector3Bool.@false;
-                        if (IsDynamicMatching)
-                            for (int j = 0; j < dimension; j++)
-                            {
-                                sub.Boundss[j, 0].Modified = false;
-                                sub.Boundss[j, 1].Modified = false;
-                                sub.Boundss[j, 2].Modified = false;
-                            }
-                    }
+                for (int i = 0; i < sublist.Length; i++)
+                {
+                    var sub = sublist[i];
+                    sub.entity.Modified = Vector3Bool.@false;
                     if (IsDynamicMatching)
-                    {
-                        for (int i = 0; i < dimension; i++)
+                        for (int j = 0; j < dimension; j++)
                         {
-                            foreach (var node in upTree[i])
-                            {
-                                ref var lower = ref node.Data.Lowers;
-                                for (int k = 0; k < lower.Length; k++)
-                                {
-                                    var b = lower[k];
-                                    b.Modified = false;
-                                    lower[k] = b;
-                                }
-
-                                ref var upper = ref node.Data.Uppers;
-                                for (int k = 0; k < upper.Length; k++)
-                                {
-                                    var b = upper[k];
-                                    b.Modified = false;
-                                    upper[k] = b;
-                                }
-
-                                ref var inside = ref node.Data.Insides;
-                                for (int k = 0; k < inside.Length; k++)
-                                {
-                                    var b = inside[k];
-                                    b.Modified = false;
-                                    inside[k] = b;
-                                }
-
-                                ref var cover = ref node.Data.Covers;
-                                for (int k = 0; k < cover.Length; k++)
-                                {
-                                    var b = cover[k];
-                                    b.Modified = false;
-                                    cover[k] = b;
-                                }
-                            }
-                            foreach (var node in subTree[i])
-                            {
-                                ref var lower = ref node.Data.Lowers;
-                                for (int k = 0; k < lower.Length; k++)
-                                {
-                                    var b = lower[k];
-                                    b.Modified = false;
-                                    lower[k] = b;
-                                }
-
-                                ref var upper = ref node.Data.Uppers;
-                                for (int k = 0; k < upper.Length; k++)
-                                {
-                                    var b = upper[k];
-                                    b.Modified = false;
-                                    upper[k] = b;
-                                }
-
-                                ref var inside = ref node.Data.Insides;
-                                for (int k = 0; k < inside.Length; k++)
-                                {
-                                    var b = inside[k];
-                                    b.Modified = false;
-                                    inside[k] = b;
-                                }
-
-                                ref var cover = ref node.Data.Covers;
-                                for (int k = 0; k < cover.Length; k++)
-                                {
-                                    var b = cover[k];
-                                    b.Modified = false;
-                                    cover[k] = b;
-                                }
-                            }
+                            sub.Boundss[j, 0].Modified = false;
+                            sub.Boundss[j, 1].Modified = false;
+                            sub.Boundss[j, 2].Modified = false;
                         }
-
-                    }
-
-                    stopwatchTotal.Stop();
-                    if (exeCount > exclude)
-                    {
-                        exeTotalTime += stopwatchTotal.Elapsed.TotalMilliseconds;
-                        exeTotalTimeMapping += stopwatchMapping.Elapsed.TotalMilliseconds;
-                        exeTotalTimeRecalculateModifyOverlap += stopwatchRecalculateModifyOverlap.Elapsed.TotalMilliseconds;
-                        exeTotalTimeInput += stopwatchInput.Elapsed.TotalMilliseconds;
-                        exeTotalTimeMatching += stopwatchMatching.Elapsed.TotalMilliseconds;
-                        exeTotalTimeOutput += stopwatchOutput.Elapsed.TotalMilliseconds;
-                        exeTotalTimeMergeOverlap += stopwatchMergeOverlap.Elapsed.TotalMilliseconds;
-                        exeTotalTimeLookupResult += stopwatchLookupResult.Elapsed.TotalMilliseconds;
-                        var total = exeTotalTime / (exeCount - exclude);
-                        var mapping = exeTotalTimeMapping / (exeCount - exclude);
-                        var input = exeTotalTimeInput / (exeCount - exclude);
-                        var recal = exeTotalTimeRecalculateModifyOverlap / (exeCount - exclude);
-                        var matching = exeTotalTimeMatching / (exeCount - exclude);
-                        var output = exeTotalTimeOutput / (exeCount - exclude);
-                        var merge = exeTotalTimeMergeOverlap / (exeCount - exclude);
-                        var lookup = exeTotalTimeLookupResult / (exeCount - exclude);
-
-                        PDebug.LogWarning($"Thread Count {JobsUtility.JobWorkerCount}, Sub Mod Count {modifiedSubRanges.Count}, Up Mod Count {modifiedUpRanges.Count} over {exeCount - exclude} " +
-                            $"exeTotalTime : {total} _ {stopwatchTotal.Elapsed.TotalMilliseconds}" +
-                            $"\nexeTotalTimeMapping : {mapping} _ {stopwatchMapping.Elapsed.TotalMilliseconds}" +
-                            $"\nexeTotalTimeRecalculateModifyOverlap : {recal} _ {stopwatchRecalculateModifyOverlap.Elapsed.TotalMilliseconds}" +
-                            $"\nexeTotalTimeInput : {input} _ {stopwatchInput.Elapsed.TotalMilliseconds}" +
-                            $"\nexeTotalTimeMatching {matching}  _ {stopwatchMatching.Elapsed.TotalMilliseconds}" +
-                            $"\nexeTimeOutPut : {output}  _ {stopwatchOutput.Elapsed.TotalMilliseconds}" +
-                            $"\nexeTotalTimeMergeOverlap: {merge} _ {stopwatchMergeOverlap.Elapsed.TotalMilliseconds}" +
-                            $"\nexeTotalTimeLookupResult: {lookup}  _ {stopwatchLookupResult.Elapsed.TotalMilliseconds}" +
-                            $"\nMem {totalMemAlgo / 1024f / (exeCount - exclude)} " +
-                            $"\n time with average overlap {intersectTotal / (exeCount - exclude)} {overlapTotal / (exeCount - exclude)}: {overlapCurrent}" +
-                            $"\n{FormatText(total)}" +
-                            $"\n{FormatText(mapping)}" +
-                            $"\n{FormatText(recal)}" +
-                            $"\n{FormatText(input)}" +
-                            $"\n{FormatText(matching)}" +
-                            $"\n{FormatText(output)}" +
-                            $"\n{FormatText(merge)}" +
-                            $"\n{FormatText(lookup)}");
-
-                        if (exeCount - exclude >= maxExeCount)
-                        {
-                            Application.Quit();
-                            Time.timeScale = 0;
-                        }
-                    }
-
-                    modifiedUpRanges.Clear();
-                    modifiedSubRanges.Clear();
-                    //LogTree(upTree);
-                    //LogTree(subTree);
                 }
+                if (IsDynamicMatching)
+                {
+                    for (int i = 0; i < dimension; i++)
+                    {
+                        foreach (var node in upTree[i])
+                        {
+                            ref var lower = ref node.Data.Lowers;
+                            for (int k = 0; k < lower.Length; k++)
+                            {
+                                var b = lower[k];
+                                b.Modified = false;
+                                lower[k] = b;
+                            }
+
+                            ref var upper = ref node.Data.Uppers;
+                            for (int k = 0; k < upper.Length; k++)
+                            {
+                                var b = upper[k];
+                                b.Modified = false;
+                                upper[k] = b;
+                            }
+
+                            ref var inside = ref node.Data.Insides;
+                            for (int k = 0; k < inside.Length; k++)
+                            {
+                                var b = inside[k];
+                                b.Modified = false;
+                                inside[k] = b;
+                            }
+
+                            ref var cover = ref node.Data.Covers;
+                            for (int k = 0; k < cover.Length; k++)
+                            {
+                                var b = cover[k];
+                                b.Modified = false;
+                                cover[k] = b;
+                            }
+                        }
+                        foreach (var node in subTree[i])
+                        {
+                            ref var lower = ref node.Data.Lowers;
+                            for (int k = 0; k < lower.Length; k++)
+                            {
+                                var b = lower[k];
+                                b.Modified = false;
+                                lower[k] = b;
+                            }
+
+                            ref var upper = ref node.Data.Uppers;
+                            for (int k = 0; k < upper.Length; k++)
+                            {
+                                var b = upper[k];
+                                b.Modified = false;
+                                upper[k] = b;
+                            }
+
+                            ref var inside = ref node.Data.Insides;
+                            for (int k = 0; k < inside.Length; k++)
+                            {
+                                var b = inside[k];
+                                b.Modified = false;
+                                inside[k] = b;
+                            }
+
+                            ref var cover = ref node.Data.Covers;
+                            for (int k = 0; k < cover.Length; k++)
+                            {
+                                var b = cover[k];
+                                b.Modified = false;
+                                cover[k] = b;
+                            }
+                        }
+                    }
+
+                }
+
+                stopwatchTotal.Stop();
+                if (exeCount > exclude)
+                {
+                    exeTotalTime += stopwatchTotal.Elapsed.TotalMilliseconds;
+                    exeTotalTimeMapping += stopwatchMapping.Elapsed.TotalMilliseconds;
+                    exeTotalTimeRecalculateModifyOverlap += stopwatchRecalculateModifyOverlap.Elapsed.TotalMilliseconds;
+                    exeTotalTimeInput += stopwatchInput.Elapsed.TotalMilliseconds;
+                    exeTotalTimeMatching += stopwatchMatching.Elapsed.TotalMilliseconds;
+                    exeTotalTimeOutput += stopwatchOutput.Elapsed.TotalMilliseconds;
+                    exeTotalTimeMergeOverlap += stopwatchMergeOverlap.Elapsed.TotalMilliseconds;
+                    exeTotalTimeLookupResult += stopwatchLookupResult.Elapsed.TotalMilliseconds;
+                    var total = exeTotalTime / (exeCount - exclude);
+                    var mapping = exeTotalTimeMapping / (exeCount - exclude);
+                    var input = exeTotalTimeInput / (exeCount - exclude);
+                    var recal = exeTotalTimeRecalculateModifyOverlap / (exeCount - exclude);
+                    var matching = exeTotalTimeMatching / (exeCount - exclude);
+                    var output = exeTotalTimeOutput / (exeCount - exclude);
+                    var merge = exeTotalTimeMergeOverlap / (exeCount - exclude);
+                    var lookup = exeTotalTimeLookupResult / (exeCount - exclude);
+
+                    PDebug.LogWarning($"Thread Count {JobsUtility.JobWorkerCount}, Sub Mod Count {modifiedSubRanges.Count}, Up Mod Count {modifiedUpRanges.Count} over {exeCount - exclude} " +
+                        $"exeTotalTime : {total} _ {stopwatchTotal.Elapsed.TotalMilliseconds}" +
+                        $"\nexeTotalTimeMapping : {mapping} _ {stopwatchMapping.Elapsed.TotalMilliseconds}" +
+                        $"\nexeTotalTimeRecalculateModifyOverlap : {recal} _ {stopwatchRecalculateModifyOverlap.Elapsed.TotalMilliseconds}" +
+                        $"\nexeTotalTimeInput : {input} _ {stopwatchInput.Elapsed.TotalMilliseconds}" +
+                        $"\nexeTotalTimeMatching {matching}  _ {stopwatchMatching.Elapsed.TotalMilliseconds}" +
+                        $"\nexeTimeOutPut : {output}  _ {stopwatchOutput.Elapsed.TotalMilliseconds}" +
+                        $"\nexeTotalTimeMergeOverlap: {merge} _ {stopwatchMergeOverlap.Elapsed.TotalMilliseconds}" +
+                        $"\nexeTotalTimeLookupResult: {lookup}  _ {stopwatchLookupResult.Elapsed.TotalMilliseconds}" +
+                        $"\nMem {totalMemAlgo / 1024f / (exeCount - exclude)} " +
+                        $"\n time with average overlap {intersectTotal / (exeCount - exclude)} {overlapTotal / (exeCount - exclude)}: {overlapCurrent}" +
+                        $"\n{FormatText(total)}" +
+                        $"\n{FormatText(mapping)}" +
+                        $"\n{FormatText(recal)}" +
+                        $"\n{FormatText(input)}" +
+                        $"\n{FormatText(matching)}" +
+                        $"\n{FormatText(output)}" +
+                        $"\n{FormatText(merge)}" +
+                        $"\n{FormatText(lookup)}");
+
+                    if (exeCount - exclude >= maxExeCount)
+                    {
+                        Application.Quit();
+                        Time.timeScale = 0;
+                    }
+                }
+
+                modifiedUpRanges.Clear();
+                modifiedSubRanges.Clear();
+                //LogTree(upTree);
+                //LogTree(subTree);
             }
+        }
         
         public void OnGameStart(GameState prev, GameState next, bool asServer)
         {
@@ -382,7 +382,7 @@ namespace Framework.HSPDIMAlgo
                 SortRange(flattenUpTree, upTree);
                 SortRange(flattenSubTree, subTree);
 
-                ulong overlapMaxSize = (ulong)(flattenUpTree.Lowers.Length + flattenUpTree.Uppers.Length + flattenUpTree.Insides.Length) * (ulong)(flattenSubTree.Lowers.Length + flattenSubTree.Uppers.Length + flattenSubTree.Insides.Length) / 8;
+                ulong overlapMaxSize = (ulong)((ulong)(flattenUpTree.Lowers.Length + flattenUpTree.Uppers.Length + flattenUpTree.Insides.Length) * (ulong)(flattenSubTree.Lowers.Length + flattenSubTree.Uppers.Length + flattenSubTree.Insides.Length) / 8);
                 overlapMaxSize = Math.Min(overlapMaxSize, (ulong)(2147483646 * 0.15f / UnsafeUtility.SizeOf<int3>()));
                 for (int i = 0; i < dimension; i++)
                 {
@@ -412,6 +412,110 @@ namespace Framework.HSPDIMAlgo
             {
                 upRanges[j].entity.Modified = Vector3Bool.@false;
             }
+
+            for (int i = 0; i < uplist.Length; i++)
+            {
+                var up = uplist[i];
+                up.entity.Modified = Vector3Bool.@false;
+                if (IsDynamicMatching)
+                    for (int j = 0; j < dimension; j++)
+                    {
+                        up.Boundss[j, 0].Modified = false;
+                        up.Boundss[j, 1].Modified = false;
+                        up.Boundss[j, 2].Modified = false;
+
+                    }
+            }
+            for (int i = 0; i < sublist.Length; i++)
+            {
+                var sub = sublist[i];
+                sub.entity.Modified = Vector3Bool.@false;
+                if (IsDynamicMatching)
+                    for (int j = 0; j < dimension; j++)
+                    {
+                        sub.Boundss[j, 0].Modified = false;
+                        sub.Boundss[j, 1].Modified = false;
+                        sub.Boundss[j, 2].Modified = false;
+                    }
+            }
+            if (true)
+            {
+                for (int i = 0; i < dimension; i++)
+                {
+                    foreach (var node in upTree[i])
+                    {
+                        ref var lower = ref node.Data.Lowers;
+                        for (int k = 0; k < lower.Length; k++)
+                        {
+                            var b = lower[k];
+                            b.Modified = false;
+                            lower[k] = b;
+                        }
+
+                        ref var upper = ref node.Data.Uppers;
+                        for (int k = 0; k < upper.Length; k++)
+                        {
+                            var b = upper[k];
+                            b.Modified = false;
+                            upper[k] = b;
+                        }
+
+                        ref var inside = ref node.Data.Insides;
+                        for (int k = 0; k < inside.Length; k++)
+                        {
+                            var b = inside[k];
+                            b.Modified = false;
+                            inside[k] = b;
+                        }
+
+                        ref var cover = ref node.Data.Covers;
+                        for (int k = 0; k < cover.Length; k++)
+                        {
+                            var b = cover[k];
+                            b.Modified = false;
+                            cover[k] = b;
+                        }
+                    }
+                    foreach (var node in subTree[i])
+                    {
+                        ref var lower = ref node.Data.Lowers;
+                        for (int k = 0; k < lower.Length; k++)
+                        {
+                            var b = lower[k];
+                            b.Modified = false;
+                            lower[k] = b;
+                        }
+
+                        ref var upper = ref node.Data.Uppers;
+                        for (int k = 0; k < upper.Length; k++)
+                        {
+                            var b = upper[k];
+                            b.Modified = false;
+                            upper[k] = b;
+                        }
+
+                        ref var inside = ref node.Data.Insides;
+                        for (int k = 0; k < inside.Length; k++)
+                        {
+                            var b = inside[k];
+                            b.Modified = false;
+                            inside[k] = b;
+                        }
+
+                        ref var cover = ref node.Data.Covers;
+                        for (int k = 0; k < cover.Length; k++)
+                        {
+                            var b = cover[k];
+                            b.Modified = false;
+                            cover[k] = b;
+                        }
+                    }
+                }
+
+            }
+
+
+
             modifiedUpRanges.Clear();
             modifiedSubRanges.Clear();
             isRunning = true;
@@ -597,7 +701,7 @@ namespace Framework.HSPDIMAlgo
                 FlattenedSortListTree = flattenTree,
                 isDynamic = IsDynamicMapping
             };
-            JobHandle jobHandle = job.Schedule(flattenTree.LowerNodes.Length, 1);
+            JobHandle jobHandle = job.Schedule(flattenTree.LowerNodes.Length, 16);
             jobHandle.Complete();
 
             if (IsDynamicMapping)
@@ -1325,7 +1429,7 @@ namespace Framework.HSPDIMAlgo
 
                     if (rangeIdModified.Count > 0)
                     {
-                        ulong overlapMaxSize = (ulong)(flattenUpTree.Lowers.Length + flattenUpTree.Uppers.Length + flattenUpTree.Insides.Length) * (ulong)(flattenSubTree.Lowers.Length + flattenSubTree.Uppers.Length + flattenSubTree.Insides.Length) / 8;
+                        ulong overlapMaxSize = (ulong)((ulong)(flattenUpTree.Lowers.Length + flattenUpTree.Uppers.Length + flattenUpTree.Insides.Length) * (ulong)(flattenSubTree.Lowers.Length + flattenSubTree.Uppers.Length + flattenSubTree.Insides.Length) / 8);
                         overlapMaxSize = Math.Min(overlapMaxSize, (ulong)(2147483646 * 0.15f / UnsafeUtility.SizeOf<int3>()));
                         NativeParallelHashSet<int3> outputResult = new((int)overlapMaxSize, Allocator.Persistent);
                         RecalculateModifiedOverlapJob job = new()
@@ -1334,7 +1438,7 @@ namespace Framework.HSPDIMAlgo
                             ResultOutput = outputResult.AsParallelWriter(),
                             RangeIDModified = rangeIdModified,
                         };
-                        JobHandle jobHandle = job.Schedule(resultInput.Length, 64);
+                        JobHandle jobHandle = job.Schedule(resultInput.Length, 16);
                         jobHandle.Complete();
                         Result[i].Dispose();
                         Result[i] = outputResult;
@@ -1359,7 +1463,7 @@ namespace Framework.HSPDIMAlgo
                 dynamic = IsDynamicMatching,
                 //Message = logQueue.AsParallelWriter(),
             };
-            JobHandle handle = job.Schedule(flattenedSortListTree.LowerNodes.Length, 1);
+            JobHandle handle = job.Schedule(flattenedSortListTree.LowerNodes.Length, 16);
             handle.Complete();
             stopwatchMatching.Stop();
         }

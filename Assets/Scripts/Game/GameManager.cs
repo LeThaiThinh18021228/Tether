@@ -1,4 +1,3 @@
-using Bot;
 using FishNet;
 using Framework.HSPDIMAlgo;
 using MasterServerToolkit.MasterServer;
@@ -9,7 +8,6 @@ public class GameManager : GameManagerBase<GameManager>
     public HSPDIM HSPDIM;
     public MapManager MapManager;
     public CurrencyGenerator CurrencyGenerator;
-    public BotManager BotManager;
     public GameObject WardRoot;
 
     [SerializeField] protected RoomServerManager roomServerManager;
@@ -25,7 +23,6 @@ public class GameManager : GameManagerBase<GameManager>
     public override void OnStartServer()
     {
         base.OnStartServer();
-        Instance.GameStartCondition += (x) => { return BotManager.isSpawnBotCompleted; };
         GameManager.Instance.State.OnChange += HSPDIM.OnGameStart;
     }
 }
