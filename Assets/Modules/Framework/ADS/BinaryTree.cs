@@ -54,15 +54,12 @@ namespace Framework.ADS
 
         public void InitNode(TreeNode<T> root)
         {
-            if (root.depth > this.depth) return;
+            if (root.depth >= this.depth) return;
             root.Left = new TreeNode<T>((short)(root.depth + 1), root.index * 2);
             root.Right = new TreeNode<T>((short)(root.depth + 1), root.index * 2 + 1);
-            if (root.depth < this.depth)
-            {
-                InitNode(root.Left);
-                InitNode(root.Right);
-            }
 
+            InitNode(root.Left);
+            InitNode(root.Right);
         }
 
         public TreeNode<T> this[int depth, int index]

@@ -339,6 +339,7 @@ namespace Framework.HSPDIMAlgo
         }
         public void InitMappingAndMatching()
         {
+            DisposeExistingNativeContainers();
             HSPDIMEntities.EnsureCapacity(entityCountEstimate);
             upRanges.Capacity = entityCountEstimate;
             subRanges.Capacity = entityCountEstimate;
@@ -519,6 +520,53 @@ namespace Framework.HSPDIMAlgo
             modifiedUpRanges.Clear();
             modifiedSubRanges.Clear();
             isRunning = true;
+        }
+        void DisposeExistingNativeContainers()
+        {
+            DisposeTreeArray(upTree);
+            upTree = null;
+            DisposeTreeArray(subTree);
+            subTree = null;
+
+            DisposeFlattenTree(ref flattenUpTree);
+            DisposeFlattenTree(ref flattenSubTree);
+
+            for (int i = 0; i < Result.Length; i++)
+            {
+                if (Result[i].IsCreated)
+                {
+                    Result[i].Dispose();
+                    Result[i] = default;
+                }
+            }
+        }
+
+        static void DisposeTreeArray(BinaryTree<HSPDIMTreeNodeData>[] treeArray)
+        {
+            if (treeArray == null)
+            {
+                return;
+            }
+
+            for (int i = 0; i < treeArray.Length; i++)
+            {
+                if (treeArray[i] == null)
+                {
+                    continue;
+                }
+
+                foreach (var node in treeArray[i])
+                {
+                    node.Data.Dispose();
+                }
+            }
+        }
+
+        static void DisposeFlattenTree(ref NativeHSPDIMFlattenedTree tree)
+        {
+            tree.Dispose();
+            tree.DisposePersistent();
+            tree = default;
         }
         void InitFlatteningTreeId(int length, int modifiedLength, BinaryTree<HSPDIMTreeNodeData>[] tree, ref NativeHSPDIMFlattenedTree flattenedTree)
         {
