@@ -668,6 +668,7 @@ namespace Framework.HSPDIMAlgo
         void ConvertFlattenedSortListTreeId(int length, int modifiedLength, BinaryTree<HSPDIMTreeNodeData>[] tree, ref NativeHSPDIMFlattenedTree flattenedTree)
         {
             stopwatchInput.Start();
+            flattenedTree.Dispose();
             int startLower = 0;
             int startUpper = 0;
             int startCover = 0;
