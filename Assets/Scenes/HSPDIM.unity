@@ -150,15 +150,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dontDestroyOnLoad: 0
   _alpha: 0.1
-  _countRange: 2000
+  _countRange: 100000
   _threadCount: 8
   _modifyRatio: 1
   _mapWidth: 100
   _mapHeight: 100
   alphaActive: 1
-  sizeVariant: 1
+  sizeVariant: 8
   size: 1
-  preallocateExp: 0.7
+  preallocateExp: 0.5
 --- !u!4 &1770163309
 Transform:
   m_ObjectHideFlags: 0

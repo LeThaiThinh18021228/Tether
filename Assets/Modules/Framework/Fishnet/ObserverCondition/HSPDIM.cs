@@ -383,7 +383,7 @@ namespace Framework.HSPDIMAlgo
                 SortRange(flattenUpTree, upTree);
                 SortRange(flattenSubTree, subTree);
 
-                ulong overlapMaxSize = (ulong)((ulong)(flattenUpTree.Lowers.Length + flattenUpTree.Uppers.Length + flattenUpTree.Insides.Length) * (ulong)(flattenSubTree.Lowers.Length + flattenSubTree.Uppers.Length + flattenSubTree.Insides.Length) / 8);
+                ulong overlapMaxSize = (ulong)((ulong)(flattenUpTree.Lowers.Length + flattenUpTree.Uppers.Length + flattenUpTree.Insides.Length) * (ulong)(flattenSubTree.Lowers.Length + flattenSubTree.Uppers.Length + flattenSubTree.Insides.Length) / 4);
                 overlapMaxSize = Math.Min(overlapMaxSize, (ulong)(2147483646 * 0.15f / UnsafeUtility.SizeOf<int3>()));
                 for (int i = 0; i < dimension; i++)
                 {
@@ -1477,7 +1477,7 @@ namespace Framework.HSPDIMAlgo
 
                     if (rangeIdModified.Count > 0)
                     {
-                        ulong overlapMaxSize = (ulong)((ulong)(flattenUpTree.Lowers.Length + flattenUpTree.Uppers.Length + flattenUpTree.Insides.Length) * (ulong)(flattenSubTree.Lowers.Length + flattenSubTree.Uppers.Length + flattenSubTree.Insides.Length) / 8);
+                        ulong overlapMaxSize = (ulong)((ulong)(flattenUpTree.Lowers.Length + flattenUpTree.Uppers.Length + flattenUpTree.Insides.Length) * (ulong)(flattenSubTree.Lowers.Length + flattenSubTree.Uppers.Length + flattenSubTree.Insides.Length) / 4);
                         overlapMaxSize = Math.Min(overlapMaxSize, (ulong)(2147483646 * 0.15f / UnsafeUtility.SizeOf<int3>()));
                         NativeParallelHashSet<int3> outputResult = new((int)overlapMaxSize, Allocator.Persistent);
                         RecalculateModifiedOverlapJob job = new()

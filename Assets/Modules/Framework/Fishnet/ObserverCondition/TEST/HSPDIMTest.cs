@@ -33,23 +33,20 @@ namespace Framework.HSPDIMAlgo
         {
             if (alphaActive)
             {
-                float coveragePerSize = (mapWidth * mapHeight) * alpha / sizeVariant;
+                float size = (mapWidth * mapHeight) * alpha;
                 int totalCountPortion = (int)(((long)Mathf.Pow(4, sizeVariant) - 1) / (4 - 1));
-                int totalCount = 0;
+                int countPerSize = countRange / sizeVariant;
                 for (int i = 0; i < sizeVariant; i++)
                 {
-                    if (i == sizeVariant - 1)
+                    sizes.Add(Mathf.Sqrt(size * (long)Mathf.Pow(4, i) / totalCountPortion / countPerSize));
+                    if (i == sizeVariant - 1 & sizeVariant > 1)
                     {
-                        counts.Add(countRange - totalCount);
-                        totalCount = countRange;
+                        counts.Add(countRange - i * countPerSize);
                     }
                     else
                     {
-                        counts.Add((int)(countRange * (long)Mathf.Pow(4, i) / totalCountPortion));
-                        totalCount += counts[i];
+                        counts.Add(countPerSize);
                     }
-
-                    sizes.Add(Mathf.Sqrt(coveragePerSize / counts[i]));
                 }
             }
             else
