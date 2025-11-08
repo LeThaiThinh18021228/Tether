@@ -62,9 +62,10 @@ namespace Framework.HSPDIMAlgo
             int offset = 0;
             for (int i = 0; i < counts.Count; i++)
             {
+                float size = sizes[i];
                 for (int j = 0; j < counts[i]; j++)
                 {
-                    entityTests[offset] = new HSPDIMEntityTest(offset, offset % 2 == 0, new Vector3(sizes[i], sizes[i], sizes[i]), preallocateHash);
+                    entityTests[offset] = new HSPDIMEntityTest(offset, offset % 2 == 0, new Vector3(size, size, size), preallocateHash);
                     offset++;
                 }
             }

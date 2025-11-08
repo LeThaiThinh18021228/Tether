@@ -383,7 +383,7 @@ namespace Framework.HSPDIMAlgo
                 SortRange(flattenUpTree, upTree);
                 SortRange(flattenSubTree, subTree);
 
-                ulong overlapMaxSize = (ulong)((ulong)(flattenUpTree.Lowers.Length + flattenUpTree.Uppers.Length + flattenUpTree.Insides.Length) * (ulong)(flattenSubTree.Lowers.Length + flattenSubTree.Uppers.Length + flattenSubTree.Insides.Length) / 4);
+                ulong overlapMaxSize = (ulong)((ulong)(flattenUpTree.Lowers.Length + flattenUpTree.Uppers.Length + flattenUpTree.Insides.Length) * (ulong)(flattenSubTree.Lowers.Length + flattenSubTree.Uppers.Length + flattenSubTree.Insides.Length) / 8);
                 overlapMaxSize = Math.Min(overlapMaxSize, (ulong)(2147483646 * 0.15f / UnsafeUtility.SizeOf<int3>()));
                 for (int i = 0; i < dimension; i++)
                 {
@@ -1487,7 +1487,7 @@ namespace Framework.HSPDIMAlgo
                             ResultOutput = outputResult.AsParallelWriter(),
                             RangeIDModified = rangeIdModified,
                         };
-                        JobHandle jobHandle = job.Schedule(resultInput.Length, 16);
+                        JobHandle jobHandle = job.Schedule(resultInput.Length, 1);
                         jobHandle.Complete();
                         Result[i].Dispose();
                         Result[i] = outputResult;
@@ -1512,7 +1512,7 @@ namespace Framework.HSPDIMAlgo
                 dynamic = IsDynamicMatching,
                 //Message = logQueue.AsParallelWriter(),
             };
-            JobHandle handle = job.Schedule(flattenedSortListTree.LowerNodes.Length, 16);
+            JobHandle handle = job.Schedule(flattenedSortListTree.LowerNodes.Length, 8);
             handle.Complete();
             stopwatchMatching.Stop();
         }
@@ -2163,6 +2163,8 @@ namespace Framework.HSPDIMAlgo
             PDebug.Log(stringBuilder);
         }
 
+
+
         [BurstCompile]
         public struct MatchingRangeToTreeIdJob2 : IJobParallelFor
         {
@@ -2557,6 +2559,7 @@ namespace Framework.HSPDIMAlgo
                 }
             }
         }
+        
         [BurstCompile]
         public struct RecalculateModifiedOverlapJob : IJobParallelFor
         {
