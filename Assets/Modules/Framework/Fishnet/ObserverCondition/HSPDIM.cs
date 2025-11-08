@@ -98,7 +98,7 @@ namespace Framework.HSPDIMAlgo
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int IndexCal(float subjectPos, int depth)
         {
-            return Mathf.FloorToInt(subjectPos / mapSizeEstimate * (1<< depth));
+            return (int)math.floor(subjectPos / mapSizeEstimate * (1<< depth));
         }
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string FormatText(double value)
@@ -2165,7 +2165,7 @@ namespace Framework.HSPDIMAlgo
 
 
 
-        [BurstCompile]
+        [BurstCompile()]
         public struct MatchingRangeToTreeIdJob2 : IJobParallelFor
         {
             [ReadOnly] public NativeHSPDIMFlattenedTree FlattenedSortListTree;
@@ -2278,8 +2278,10 @@ namespace Framework.HSPDIMAlgo
                 int rightLeaf = IndexCal(sortedListRange[endBoundIndex].BoundValue, treeDepth);
 
                 NativeList<NativeBound> newIns = new NativeList<NativeBound>(Allocator.Temp);
-                FlatRedBlackTree<NativeBound> subset = new(Allocator.Temp);
-                FlatRedBlackTree<NativeBound> upset = new(Allocator.Temp);
+                //FlatRedBlackTree<NativeBound> subset = new(Allocator.Temp);
+                //FlatRedBlackTree<NativeBound> upset = new(Allocator.Temp);
+                NativeList<NativeBound> subset = new NativeList<NativeBound>(Allocator.Temp);
+                NativeList<NativeBound> upset = new NativeList<NativeBound>(Allocator.Temp);
 
                 int j = 0;
                 int m2 = leftLeaf;
@@ -2482,7 +2484,83 @@ namespace Framework.HSPDIMAlgo
                 indexTree.Dispose();
             }
 
-            private void SortMatchInside(NativeBound boundInSortedList,NativeArray<int3> indexTree, int dimensionIndex, int m, FlatRedBlackTree<NativeBound> subset, FlatRedBlackTree<NativeBound> upset, short treeDepth, bool headEnd)
+            //private void SortMatchInside(NativeBound boundInSortedList,NativeArray<int3> indexTree, int dimensionIndex, int m, FlatRedBlackTree<NativeBound> subset, FlatRedBlackTree<NativeBound> upset, short treeDepth, bool headEnd)
+            //{
+            //    NativeParallelHashSet<int3>.ParallelWriter result = (dimensionIndex == 0) ? Result0 : Result1;
+            //    var insideNodes = FlattenTree.InsideNodes;
+            //    var insides = FlattenTree.Insides;
+
+            //    int nodeIndexInTree = (1 << treeDepth) + m - 1;
+            //    int nodeIndex = nodeIndexInTree + FlattenTree.UpperDimensions[dimensionIndex].Start;
+
+            //    var node = insideNodes[nodeIndex];
+            //    int nodeCount = node.Count;
+            //    int nodeStart = node.Start;
+            //    var idxVal = indexTree[nodeIndexInTree];
+            //    int z = idxVal.z;
+
+            //    if (nodeCount > 0 && z < nodeCount)
+            //    {
+            //        var boundInTree = insides[nodeStart + z];
+            //        while (boundInTree.BoundValue <= boundInSortedList.BoundValue)
+            //        {
+            //            if (boundInTree.IsUpper == -1)
+            //            {
+            //                subset.Insert(boundInTree);
+            //            }
+            //            else if (boundInTree.IsUpper == 1)
+            //            {
+            //                subset.Delete(boundInTree);
+            //                var upsetValues = new NativeList<NativeBound>(Allocator.Temp);
+            //                upset.InOrderTraversal(ref upsetValues);
+            //                for (int q = 0; q < upsetValues.Length; q++)
+            //                {
+            //                    var up = upsetValues[q];
+            //                    if (boundInTree.Id < up.Id)
+            //                        result.Add(new int3(boundInTree.Id, up.Id, boundInTree.IsSub ? 1 : 0));
+            //                    else
+            //                        result.Add(new int3(up.Id, boundInTree.Id, boundInTree.IsSub ? 0 : 1));
+            //                }
+            //                upsetValues.Dispose();
+            //            }
+
+            //            z++;
+            //            if (z < nodeCount)
+            //                boundInTree = insides[nodeStart + z];
+            //            else
+            //                break;
+            //        }
+            //        idxVal.z = z;
+            //        indexTree[nodeIndexInTree] = idxVal;
+            //    }
+            //    if (boundInSortedList.IsUpper == -1)
+            //    {
+            //        if (headEnd)
+            //        {
+            //            upset.Insert(boundInSortedList);
+            //        }
+            //    }
+            //    else if (boundInSortedList.IsUpper == 1)
+            //    {
+            //        if (headEnd)
+            //        {
+            //            upset.Delete(boundInSortedList);
+            //        }
+            //        var subsetValues = new NativeList<NativeBound>(Allocator.Temp);
+            //        subset.InOrderTraversal(ref subsetValues);
+            //        for (int q = 0; q < subsetValues.Length; q++)
+            //        {
+            //            var sub = subsetValues[q];
+            //            if (sub.Id < boundInSortedList.Id)
+            //                result.Add(new int3(sub.Id, boundInSortedList.Id, boundInSortedList.IsSub ? 0 : 1));
+            //            else
+            //                result.Add(new int3(boundInSortedList.Id, sub.Id, boundInSortedList.IsSub ? 1 : 0));
+            //        }
+            //        subsetValues.Dispose();
+
+            //    }
+            //}
+            private void SortMatchInside(NativeBound boundInSortedList,NativeArray<int3> indexTree, int dimensionIndex, int m, NativeList<NativeBound> subset, NativeList<NativeBound> upset, short treeDepth, bool headEnd)
             {
                 NativeParallelHashSet<int3>.ParallelWriter result = (dimensionIndex == 0) ? Result0 : Result1;
                 var insideNodes = FlattenTree.InsideNodes;
@@ -2504,22 +2582,26 @@ namespace Framework.HSPDIMAlgo
                     {
                         if (boundInTree.IsUpper == -1)
                         {
-                            subset.Insert(boundInTree);
+                            subset.Add(boundInTree);
                         }
                         else if (boundInTree.IsUpper == 1)
                         {
-                            subset.Delete(boundInTree);
-                            var upsetValues = new NativeList<NativeBound>(Allocator.Temp);
-                            upset.InOrderTraversal(ref upsetValues);
-                            for (int q = 0; q < upsetValues.Length; q++)
+                            for (int idx = 0; idx < subset.Length; idx++)
                             {
-                                var up = upsetValues[q];
+                                if (subset[idx].Id == boundInTree.Id)
+                                {
+                                    subset.RemoveAt(idx);
+                                    break;
+                                }
+                            }
+                            for (int q = 0; q < upset.Length; q++)
+                            {
+                                var up = upset[q];
                                 if (boundInTree.Id < up.Id)
                                     result.Add(new int3(boundInTree.Id, up.Id, boundInTree.IsSub ? 1 : 0));
                                 else
                                     result.Add(new int3(up.Id, boundInTree.Id, boundInTree.IsSub ? 0 : 1));
                             }
-                            upsetValues.Dispose();
                         }
 
                         z++;
@@ -2535,31 +2617,35 @@ namespace Framework.HSPDIMAlgo
                 {
                     if (headEnd)
                     {
-                        upset.Insert(boundInSortedList);
+                        upset.Add(boundInSortedList);
                     }
                 }
                 else if (boundInSortedList.IsUpper == 1)
                 {
                     if (headEnd)
                     {
-                        upset.Delete(boundInSortedList);
-                    }
-                    var subsetValues = new NativeList<NativeBound>(Allocator.Temp);
-                    subset.InOrderTraversal(ref subsetValues);
-                    for (int q = 0; q < subsetValues.Length; q++)
+                        for (int idx = 0; idx < upset.Length; idx++)
+                        {
+                            if (upset[idx].Id == boundInSortedList.Id)
+                            {
+                                upset.RemoveAt(idx);
+                                break;
+                            }
+                        }
+                    }                    
+                    for (int q = 0; q < subset.Length; q++)
                     {
-                        var sub = subsetValues[q];
+                        var sub = subset[q];
                         if (sub.Id < boundInSortedList.Id)
                             result.Add(new int3(sub.Id, boundInSortedList.Id, boundInSortedList.IsSub ? 0 : 1));
                         else
                             result.Add(new int3(boundInSortedList.Id, sub.Id, boundInSortedList.IsSub ? 1 : 0));
                     }
-                    subsetValues.Dispose();
-
                 }
             }
+
         }
-        
+
         [BurstCompile]
         public struct RecalculateModifiedOverlapJob : IJobParallelFor
         {
