@@ -42,7 +42,7 @@ namespace Bot
                 //SpawnBotObject(new Vector3(Random.Range(-10f, 10f), 0, Random.Range(-10f, 10f)));
                 //SpawnClientBotProcess();
             }
-            DOVirtual.DelayedCall(1, () => { isSpawnBotCompleted = true; });
+            DOVirtual.DelayedCall(1, () => { isSpawnBotCompleted = true;});
 
         }
         private void OnTerminatedRoom(RoomController roomController)

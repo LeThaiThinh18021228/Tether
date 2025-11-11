@@ -2,6 +2,7 @@ using Framework.HSPDIMAlgo;
 using UnityEngine;
 namespace Bot
 {
+    [RequireComponent(typeof(HSPDIMPlayer))]
     public class BotPlayer : Player
     {
         private BotAgent agent;
@@ -15,6 +16,8 @@ namespace Bot
             agent = GetComponent<BotAgent>();
             HSPDIMEntity = GetComponent<HSPDIMPlayer>();
             GameManager.Instance.State.OnChange += GameState_OnChange;
+            Vector3 des = MapManager.RandomPositionInsideMap(new Vector3(10, 10, 10));
+            Movable.SetDes(des);
         }
 
         private void GameState_OnChange(GameState prev, GameState next, bool asServer)

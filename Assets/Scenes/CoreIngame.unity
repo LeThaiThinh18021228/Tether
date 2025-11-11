@@ -317,6 +317,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f41f06c242eda6e4cba51570db0bf9bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1415027 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 404884919198887126, guid: 61f80dfedc08f8040b81b1045b36d915,
+    type: 3}
+  m_PrefabInstance: {fileID: 1415023}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1415028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96eed0f2c33bc4d489f533c263f5eaad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1415028 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6106178980993790742, guid: 61f80dfedc08f8040b81b1045b36d915,
@@ -1715,6 +1727,7 @@ MonoBehaviour:
   dontDestroyOnLoad: 0
   HSPDIM: {fileID: 2006888855}
   MapManager: {fileID: 1415026}
+  BotManager: {fileID: 1415027}
   CurrencyGenerator: {fileID: 1415025}
   WardRoot: {fileID: 1547850615}
   roomServerManager: {fileID: 0}
