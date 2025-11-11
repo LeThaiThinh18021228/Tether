@@ -150,7 +150,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dontDestroyOnLoad: 0
   _alpha: 0.1
-  _countRange: 100
+  _countRange: 2000
   _threadCount: 8
   _modifyRatio: 1
   _mapWidth: 100

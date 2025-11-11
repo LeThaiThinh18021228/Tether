@@ -96,6 +96,7 @@ namespace Framework.HSPDIMAlgo
             return depth;
         }
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [BurstCompile]
         public static int IndexCal(float subjectPos, int depth)
         {
             return (int)math.floor(subjectPos / mapSizeEstimate * (1<< depth));
@@ -2272,16 +2273,16 @@ namespace Framework.HSPDIMAlgo
                 int endBoundIndex = sortedListRange.Length - 1;
 
                 int totalNodes = (1 << (treeDepth + 1)) - 1;
-                NativeArray<int3> indexTree = new(totalNodes, Allocator.Temp, NativeArrayOptions.ClearMemory);
+                NativeArray<int3> indexTree = new(totalNodes, Allocator.Temp);
 
                 int leftLeaf = IndexCal(sortedListRange[0].BoundValue, treeDepth);
                 int rightLeaf = IndexCal(sortedListRange[endBoundIndex].BoundValue, treeDepth);
 
-                NativeList<NativeBound> newIns = new NativeList<NativeBound>(Allocator.Temp);
+                NativeList<NativeBound> newIns = new(Allocator.Temp);
                 //FlatRedBlackTree<NativeBound> subset = new(Allocator.Temp);
                 //FlatRedBlackTree<NativeBound> upset = new(Allocator.Temp);
-                NativeList<NativeBound> subset = new NativeList<NativeBound>(Allocator.Temp);
-                NativeList<NativeBound> upset = new NativeList<NativeBound>(Allocator.Temp);
+                NativeList<NativeBound> subset = new(Allocator.Temp);
+                NativeList<NativeBound> upset = new(Allocator.Temp);
 
                 int j = 0;
                 int m2 = leftLeaf;
@@ -2484,82 +2485,83 @@ namespace Framework.HSPDIMAlgo
                 indexTree.Dispose();
             }
 
-            //private void SortMatchInside(NativeBound boundInSortedList,NativeArray<int3> indexTree, int dimensionIndex, int m, FlatRedBlackTree<NativeBound> subset, FlatRedBlackTree<NativeBound> upset, short treeDepth, bool headEnd)
-            //{
-            //    NativeParallelHashSet<int3>.ParallelWriter result = (dimensionIndex == 0) ? Result0 : Result1;
-            //    var insideNodes = FlattenTree.InsideNodes;
-            //    var insides = FlattenTree.Insides;
+            /*private void SortMatchInside(NativeBound boundInSortedList,NativeArray<int3> indexTree, int dimensionIndex, int m, FlatRedBlackTree<NativeBound> subset, FlatRedBlackTree<NativeBound> upset, short treeDepth, bool headEnd)
+            {
+                NativeParallelHashSet<int3>.ParallelWriter result = (dimensionIndex == 0) ? Result0 : Result1;
+                var insideNodes = FlattenTree.InsideNodes;
+                var insides = FlattenTree.Insides;
 
-            //    int nodeIndexInTree = (1 << treeDepth) + m - 1;
-            //    int nodeIndex = nodeIndexInTree + FlattenTree.UpperDimensions[dimensionIndex].Start;
+                int nodeIndexInTree = (1 << treeDepth) + m - 1;
+                int nodeIndex = nodeIndexInTree + FlattenTree.UpperDimensions[dimensionIndex].Start;
 
-            //    var node = insideNodes[nodeIndex];
-            //    int nodeCount = node.Count;
-            //    int nodeStart = node.Start;
-            //    var idxVal = indexTree[nodeIndexInTree];
-            //    int z = idxVal.z;
+                var node = insideNodes[nodeIndex];
+                int nodeCount = node.Count;
+                int nodeStart = node.Start;
+                var idxVal = indexTree[nodeIndexInTree];
+                int z = idxVal.z;
 
-            //    if (nodeCount > 0 && z < nodeCount)
-            //    {
-            //        var boundInTree = insides[nodeStart + z];
-            //        while (boundInTree.BoundValue <= boundInSortedList.BoundValue)
-            //        {
-            //            if (boundInTree.IsUpper == -1)
-            //            {
-            //                subset.Insert(boundInTree);
-            //            }
-            //            else if (boundInTree.IsUpper == 1)
-            //            {
-            //                subset.Delete(boundInTree);
-            //                var upsetValues = new NativeList<NativeBound>(Allocator.Temp);
-            //                upset.InOrderTraversal(ref upsetValues);
-            //                for (int q = 0; q < upsetValues.Length; q++)
-            //                {
-            //                    var up = upsetValues[q];
-            //                    if (boundInTree.Id < up.Id)
-            //                        result.Add(new int3(boundInTree.Id, up.Id, boundInTree.IsSub ? 1 : 0));
-            //                    else
-            //                        result.Add(new int3(up.Id, boundInTree.Id, boundInTree.IsSub ? 0 : 1));
-            //                }
-            //                upsetValues.Dispose();
-            //            }
+                if (nodeCount > 0 && z < nodeCount)
+                {
+                    var boundInTree = insides[nodeStart + z];
+                    while (boundInTree.BoundValue <= boundInSortedList.BoundValue)
+                    {
+                        if (boundInTree.IsUpper == -1)
+                        {
+                            subset.Insert(boundInTree);
+                        }
+                        else if (boundInTree.IsUpper == 1)
+                        {
+                            subset.Delete(boundInTree);
+                            var upsetValues = new NativeList<NativeBound>(Allocator.Temp);
+                            upset.InOrderTraversal(ref upsetValues);
+                            for (int q = 0; q < upsetValues.Length; q++)
+                            {
+                                var up = upsetValues[q];
+                                if (boundInTree.Id < up.Id)
+                                    result.Add(new int3(boundInTree.Id, up.Id, boundInTree.IsSub ? 1 : 0));
+                                else
+                                    result.Add(new int3(up.Id, boundInTree.Id, boundInTree.IsSub ? 0 : 1));
+                            }
+                            upsetValues.Dispose();
+                        }
 
-            //            z++;
-            //            if (z < nodeCount)
-            //                boundInTree = insides[nodeStart + z];
-            //            else
-            //                break;
-            //        }
-            //        idxVal.z = z;
-            //        indexTree[nodeIndexInTree] = idxVal;
-            //    }
-            //    if (boundInSortedList.IsUpper == -1)
-            //    {
-            //        if (headEnd)
-            //        {
-            //            upset.Insert(boundInSortedList);
-            //        }
-            //    }
-            //    else if (boundInSortedList.IsUpper == 1)
-            //    {
-            //        if (headEnd)
-            //        {
-            //            upset.Delete(boundInSortedList);
-            //        }
-            //        var subsetValues = new NativeList<NativeBound>(Allocator.Temp);
-            //        subset.InOrderTraversal(ref subsetValues);
-            //        for (int q = 0; q < subsetValues.Length; q++)
-            //        {
-            //            var sub = subsetValues[q];
-            //            if (sub.Id < boundInSortedList.Id)
-            //                result.Add(new int3(sub.Id, boundInSortedList.Id, boundInSortedList.IsSub ? 0 : 1));
-            //            else
-            //                result.Add(new int3(boundInSortedList.Id, sub.Id, boundInSortedList.IsSub ? 1 : 0));
-            //        }
-            //        subsetValues.Dispose();
+                        z++;
+                        if (z < nodeCount)
+                            boundInTree = insides[nodeStart + z];
+                        else
+                            break;
+                    }
+                    idxVal.z = z;
+                    indexTree[nodeIndexInTree] = idxVal;
+                }
+                if (boundInSortedList.IsUpper == -1)
+                {
+                    if (headEnd)
+                    {
+                        upset.Insert(boundInSortedList);
+                    }
+                }
+                else if (boundInSortedList.IsUpper == 1)
+                {
+                    if (headEnd)
+                    {
+                        upset.Delete(boundInSortedList);
+                    }
+                    var subsetValues = new NativeList<NativeBound>(Allocator.Temp);
+                    subset.InOrderTraversal(ref subsetValues);
+                    for (int q = 0; q < subsetValues.Length; q++)
+                    {
+                        var sub = subsetValues[q];
+                        if (sub.Id < boundInSortedList.Id)
+                            result.Add(new int3(sub.Id, boundInSortedList.Id, boundInSortedList.IsSub ? 0 : 1));
+                        else
+                            result.Add(new int3(boundInSortedList.Id, sub.Id, boundInSortedList.IsSub ? 1 : 0));
+                    }
+                    subsetValues.Dispose();
 
-            //    }
-            //}
+                }
+            }
+            */
             private void SortMatchInside(NativeBound boundInSortedList,NativeArray<int3> indexTree, int dimensionIndex, int m, NativeList<NativeBound> subset, NativeList<NativeBound> upset, short treeDepth, bool headEnd)
             {
                 NativeParallelHashSet<int3>.ParallelWriter result = (dimensionIndex == 0) ? Result0 : Result1;

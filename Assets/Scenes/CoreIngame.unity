@@ -42,7 +42,8 @@ RenderSettings:
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 12
+  serializedVersion: 13
+  m_BakeOnSceneLoad: 0
   m_GISettings:
     serializedVersion: 2
     m_BounceScale: 1
@@ -316,18 +317,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f41f06c242eda6e4cba51570db0bf9bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1415027 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 404884919198887126, guid: 61f80dfedc08f8040b81b1045b36d915,
-    type: 3}
-  m_PrefabInstance: {fileID: 1415023}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1415028}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 96eed0f2c33bc4d489f533c263f5eaad, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1415028 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6106178980993790742, guid: 61f80dfedc08f8040b81b1045b36d915,
@@ -572,17 +561,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Version: 3
   m_UsePipelineSettings: 1
   m_AdditionalLightsShadowResolutionTier: 2
-  m_LightLayerMask: 1
-  m_RenderingLayers: 1
   m_CustomShadowLayers: 0
-  m_ShadowLayerMask: 1
-  m_ShadowRenderingLayers: 1
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 0
+  m_RenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_ShadowRenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_Version: 4
+  m_LightLayerMask: 1
+  m_ShadowLayerMask: 1
+  m_RenderingLayers: 1
+  m_ShadowRenderingLayers: 1
 --- !u!1 &112691621
 GameObject:
   m_ObjectHideFlags: 0
@@ -1017,7 +1012,6 @@ MonoBehaviour:
   m_ScreenCoordScaleBias: {x: 0, y: 0, z: 0, w: 0}
   m_RequiresDepthTexture: 0
   m_RequiresColorTexture: 0
-  m_Version: 2
   m_TaaSettings:
     m_Quality: 3
     m_FrameInfluence: 0.1
@@ -1025,6 +1019,7 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
+  m_Version: 2
 --- !u!114 &694684896
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1721,7 +1716,6 @@ MonoBehaviour:
   HSPDIM: {fileID: 2006888855}
   MapManager: {fileID: 1415026}
   CurrencyGenerator: {fileID: 1415025}
-  BotManager: {fileID: 1415027}
   WardRoot: {fileID: 1547850615}
   roomServerManager: {fileID: 0}
 --- !u!1 &1299856243
