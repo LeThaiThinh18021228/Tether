@@ -89,8 +89,7 @@ namespace Framework.HSPDIMAlgo
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void UpdateRange(short i, int treeDepth)
         {
-            float threshold = HSPDIM.mapSizeEstimate / (1 << treeDepth);
-            depthLevel[i] = range[i] < threshold ? treeDepth : HSPDIM.DepthCal(range[i]);
+            depthLevel[i] = HSPDIM.DepthCal(range[i], treeDepth);
             Bounds[i, 0].UpdateBound();
             Bounds[i, 1].UpdateBound();
             Bounds[i, 2].UpdateBound();

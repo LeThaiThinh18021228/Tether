@@ -55,10 +55,10 @@ namespace Framework.HSPDIMAlgo
             }
             int preallocateHash = (int)Mathf.Pow(countRange, preallocateExp);
             Debug.Log($"range value:{string.Join(",", sizes)} preallocateHash {preallocateHash}");
-            HSPDIM.minEntitySubRegSize = HSPDIM.minEntityUpRegSize = HSPDIMTest.sizes[^1];
+            HSPDIM.minEntitySubRegSize = HSPDIM.minEntityUpRegSize = HSPDIMTest.sizes[0];
             HSPDIM.entityCountEstimate = HSPDIMTest.countRange;
-            HSPDIM.upTreeDepth = HSPDIM.DepthCal(HSPDIM.minEntityUpRegSize);
-            HSPDIM.subTreeDepth = HSPDIM.DepthCal(HSPDIM.minEntitySubRegSize);
+            HSPDIM.upTreeDepth = HSPDIM.TreeDepthCal(HSPDIM.minEntityUpRegSize);
+            HSPDIM.subTreeDepth = HSPDIM.TreeDepthCal(HSPDIM.minEntitySubRegSize);
             int offset = 0;
             for (int i = 0; i < counts.Count; i++)
             {

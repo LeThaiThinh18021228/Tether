@@ -150,13 +150,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dontDestroyOnLoad: 0
   _alpha: 0.1
-  _countRange: 2000
+  _countRange: 1000
   _threadCount: 8
   _modifyRatio: 1
   _mapWidth: 100
   _mapHeight: 100
   alphaActive: 1
-  sizeVariant: 1
+  sizeVariant: 2
   size: 1
   preallocateExp: 0.5
 --- !u!4 &1770163309
@@ -212,11 +212,14 @@ MonoBehaviour:
   RemovedEntities: 
   IsDynamicMapping: 0
   IsDynamicMatching: 0
-  Strategy: 2
+  Strategy: 0
   maxExeCount: 50
   exclude: 5
   exeTotalTimeLookupResult: 0
   debugId: 0
+  ValidateWithBFM: 1
+  OriginalAlgorithm: 1
+  NonLeafInsideCount: 0
 --- !u!4 &2118452241
 Transform:
   m_ObjectHideFlags: 0
@@ -244,18 +247,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26b716c41e9b56b4baafaf13a523ba2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: FishNet.Runtime::FishNet.Object.NetworkObject
-  <IsNested>k__BackingField: 0
-  <ComponentIndex>k__BackingField: 0
-  <PredictedSpawn>k__BackingField: {fileID: 0}
-  <PredictedOwner>k__BackingField: {fileID: 0}
-  _networkBehaviours: []
-  <SerializedRootNetworkBehaviour>k__BackingField: {fileID: 0}
-  <SerializedNestedNetworkObjects>k__BackingField: []
-  _isNetworked: 1
-  _isSpawnable: 1
-  _isGlobal: 0
-  _initializeOrder: 0
-  _defaultDespawnType: 0
   NetworkObserver: {fileID: 0}
   _enablePrediction: 0
   _predictionType: 0
@@ -278,6 +269,18 @@ MonoBehaviour:
     Position: {x: 0, y: 0, z: 0}
     Rotation: {x: 0, y: 0, z: 0, w: 0}
     LocalScale: {x: 0, y: 0, z: 0}
+  <IsNested>k__BackingField: 0
+  <ComponentIndex>k__BackingField: 0
+  <PredictedSpawn>k__BackingField: {fileID: 0}
+  <PredictedOwner>k__BackingField: {fileID: 0}
+  _networkBehaviours: []
+  <SerializedRootNetworkBehaviour>k__BackingField: {fileID: 0}
+  <SerializedNestedNetworkObjects>k__BackingField: []
+  _isNetworked: 1
+  _isSpawnable: 1
+  _isGlobal: 0
+  _initializeOrder: 0
+  _defaultDespawnType: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

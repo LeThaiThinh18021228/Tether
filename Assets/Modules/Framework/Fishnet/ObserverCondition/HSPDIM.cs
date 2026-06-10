@@ -82,18 +82,41 @@ namespace Framework.HSPDIMAlgo
         float intersectTotal = 0;
 
         public bool debugId;
+        public bool ValidateWithBFM;
+        public bool OriginalAlgorithm;
+        int upInsideBoundCurrent = 0;
+        int subInsideBoundCurrent = 0;
+        public int NonLeafInsideCount;
+        int nonLeafSameIndexCurrent = 0;
+        int bfmOverlapCurrent = 0;
+        int hspOverlapCurrent = 0;
+        int falseNegativeCurrent = 0;
+        int falsePositiveCurrent = 0;
+        double bfmOverlapTotal = 0;
+        double hspOverlapTotal = 0;
+        double falseNegativeTotal = 0;
+        double falsePositiveTotal = 0;
+        string falseNegativeSampleCurrent = "none";
+        string falsePositiveSampleCurrent = "none";
+        bool hasBfmValidationCurrent = false;
         #endregion
 
         [BurstDiscard]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static short DepthCal(float subjectSize)
+        public static short TreeDepthCal(float subjectSize)
         {
             short depth = 0;
-            while ((1<<( depth + 1)) <= mapSizeEstimate / subjectSize)
+            while ((1 << (depth + 1)) <= mapSizeEstimate / subjectSize)
             {
                 depth++;
             }
             return depth;
+        }
+        [BurstDiscard]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static short DepthCal(float subjectSize, int treeDepth)
+        {
+            return (short)Math.Min(TreeDepthCal(subjectSize) + 1, treeDepth);
         }
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         [BurstCompile]
@@ -165,6 +188,7 @@ namespace Framework.HSPDIMAlgo
                     RecalculateModifiedOverlapRef(uplist, sublist);
                 }
                 DynamicMatching();
+
                 for (int i = 0; i < uplist.Length; i++)
                 {
                     var up = uplist[i];
@@ -175,7 +199,6 @@ namespace Framework.HSPDIMAlgo
                             up.Boundss[j, 0].Modified = false;
                             up.Boundss[j, 1].Modified = false;
                             up.Boundss[j, 2].Modified = false;
-
                         }
                 }
                 for (int i = 0; i < sublist.Length; i++)
@@ -267,6 +290,7 @@ namespace Framework.HSPDIMAlgo
                 }
 
                 stopwatchTotal.Stop();
+                hasBfmValidationCurrent = TryValidateSequentialRefMatchingWithBFM();
                 if (exeCount > exclude)
                 {
                     exeTotalTime += stopwatchTotal.Elapsed.TotalMilliseconds;
@@ -319,6 +343,209 @@ namespace Framework.HSPDIMAlgo
                 //LogTree(subTree);
             }
         }
+
+        private bool TryValidateSequentialRefMatchingWithBFM()
+        {
+            bfmOverlapCurrent = 0;
+            hspOverlapCurrent = 0;
+            falseNegativeCurrent = 0;
+            falsePositiveCurrent = 0;
+            falseNegativeSampleCurrent = "none";
+            falsePositiveSampleCurrent = "none";
+            CountInsideBounds();
+            CountNonLeafSameIndexRanges();
+
+            if (!ValidateWithBFM)
+            {
+                return false;
+            }
+
+            if (Strategy != Strategy.SEQUENTIAL)
+            {
+                PDebug.LogWarning($"BFM validation skipped because Strategy is {Strategy}. Set Strategy to {Strategy.SEQUENTIAL}.");
+                return false;
+            }
+
+            foreach (HSPDIMRange subRange in subRanges)
+            {
+                if (subRange == null || !subRange.entity.Enable)
+                {
+                    continue;
+                }
+
+                // Refresh the final HSPIM result from per-dimension overlapSetsId.
+                subRange.UpdateIntersectionId();
+
+                HashSet<int> bfmIntersectionId = BuildBruteForceIntersectionId(subRange);
+                hspOverlapCurrent += subRange.intersectionId.Count;
+                bfmOverlapCurrent += bfmIntersectionId.Count;
+
+                foreach (int upId in bfmIntersectionId)
+                {
+                    if (!subRange.intersectionId.Contains(upId))
+                    {
+                        falseNegativeCurrent++;
+                        if (falseNegativeSampleCurrent == "none")
+                        {
+                            falseNegativeSampleCurrent = FormatMismatchPair(subRange, HSPDIMEntities[upId].UpRange);
+                        }
+                    }
+                }
+
+                foreach (int upId in subRange.intersectionId)
+                {
+                    if (!bfmIntersectionId.Contains(upId))
+                    {
+                        falsePositiveCurrent++;
+                        if (falsePositiveSampleCurrent == "none")
+                        {
+                            falsePositiveSampleCurrent = FormatMismatchPair(subRange, HSPDIMEntities[upId].UpRange);
+                        }
+                    }
+                }
+            }
+
+            float falseNegativeRate = bfmOverlapCurrent == 0 ? 0f : (float)falseNegativeCurrent / bfmOverlapCurrent;
+            float falsePositiveRate = hspOverlapCurrent == 0 ? 0f : (float)falsePositiveCurrent / hspOverlapCurrent;
+
+            if (exeCount > exclude)
+            {
+                bfmOverlapTotal += bfmOverlapCurrent;
+                hspOverlapTotal += hspOverlapCurrent;
+                falseNegativeTotal += falseNegativeCurrent;
+                falsePositiveTotal += falsePositiveCurrent;
+            }
+
+            PDebug.LogWarning(
+                $"BFM Validation [Sequential Ref] exe {exeCount}" +
+                $"\nSub Count: {subRanges.Count}, Up Count: {upRanges.Count}, Dimension: {dimension}" +
+                $"\nInside Bounds: Up {upInsideBoundCurrent}, Sub {subInsideBoundCurrent}, Up Ranges {upInsideBoundCurrent / 2}, Sub Ranges {subInsideBoundCurrent / 2}" +
+                $"\nNon Leaf Inside Count: {NonLeafInsideCount}, Non Leaf Same Index: {nonLeafSameIndexCurrent}" +
+                $"\nBFM Count: {bfmOverlapCurrent}, HSP Count: {hspOverlapCurrent}" +
+                $"\nFN Count: {falseNegativeCurrent}, FN Rate: {falseNegativeRate:0.######}" +
+                $"\nFP Count: {falsePositiveCurrent}, FP Rate: {falsePositiveRate:0.######}" +
+                $"\nTotal BFM: {bfmOverlapTotal}, Total HSP: {hspOverlapTotal}, Total FN: {falseNegativeTotal}, Total FP: {falsePositiveTotal}" +
+                $"\nFN Sample: {falseNegativeSampleCurrent}" +
+                $"\nFP Sample: {falsePositiveSampleCurrent}");
+
+            return true;
+        }
+
+        private void CountNonLeafSameIndexRanges()
+        {
+            nonLeafSameIndexCurrent = CountNonLeafSameIndexRanges(upRanges, upTreeDepth) + CountNonLeafSameIndexRanges(subRanges, subTreeDepth);
+        }
+
+        private static int CountNonLeafSameIndexRanges(List<HSPDIMRange> ranges, int treeDepth)
+        {
+            int count = 0;
+            foreach (HSPDIMRange range in ranges)
+            {
+                if (range == null || !range.entity.Enable)
+                {
+                    continue;
+                }
+
+                for (int dim = 0; dim < dimension; dim++)
+                {
+                    if (range.Bounds[dim, 0].index == range.Bounds[dim, 1].index && range.depthLevel[dim] != treeDepth)
+                    {
+                        count++;
+                    }
+                }
+            }
+
+            return count;
+        }
+
+        private string FormatMismatchPair(HSPDIMRange subRange, HSPDIMRange upRange)
+        {
+            if (subRange == null || upRange == null)
+            {
+                return "missing range";
+            }
+
+            StringBuilder builder = new();
+            builder.Append($"sub {subRange.entity.Id} up {upRange.entity.Id}");
+            for (int dim = 0; dim < dimension; dim++)
+            {
+                float subHalf = subRange.range[dim] * 0.5f;
+                float upHalf = upRange.range[dim] * 0.5f;
+                float subLower = subRange.entity.Position[dim] - subHalf;
+                float subUpper = subRange.entity.Position[dim] + subHalf;
+                float upLower = upRange.entity.Position[dim] - upHalf;
+                float upUpper = upRange.entity.Position[dim] + upHalf;
+                bool bfmOverlap = subLower < upUpper && upLower < subUpper;
+                bool hspDimOverlap = subRange.overlapSetsId[dim].Contains(upRange.entity.Id);
+
+                builder.Append($" | d{dim}: BFM {bfmOverlap}, HSPDim {hspDimOverlap}")
+                    .Append($" sub[{subLower:0.###},{subUpper:0.###}]")
+                    .Append($" up[{upLower:0.###},{upUpper:0.###}]")
+                    .Append($" subDepth {subRange.depthLevel[dim]} subIdx {subRange.Bounds[dim, 0].index}->{subRange.Bounds[dim, 1].index}")
+                    .Append($" upDepth {upRange.depthLevel[dim]} upIdx {upRange.Bounds[dim, 0].index}->{upRange.Bounds[dim, 1].index}");
+            }
+
+            return builder.ToString();
+        }
+
+        private void CountInsideBounds()
+        {
+            upInsideBoundCurrent = CountInsideBounds(upTree);
+            subInsideBoundCurrent = CountInsideBounds(subTree);
+        }
+
+        private static int CountInsideBounds(BinaryTree<HSPDIMTreeNodeData>[] tree)
+        {
+            int count = 0;
+            for (int i = 0; i < dimension; i++)
+            {
+                foreach (var node in tree[i])
+                {
+                    count += node.Data.insides.Count;
+                }
+            }
+
+            return count;
+        }
+
+        private HashSet<int> BuildBruteForceIntersectionId(HSPDIMRange subRange)
+        {
+            HashSet<int> intersectionId = new();
+            foreach (HSPDIMRange upRange in upRanges)
+            {
+                if (upRange == null || !upRange.entity.Enable)
+                {
+                    continue;
+                }
+
+                if (IntersectsAllDimensions(subRange, upRange))
+                {
+                    intersectionId.Add(upRange.entity.Id);
+                }
+            }
+
+            return intersectionId;
+        }
+
+        private static bool IntersectsAllDimensions(HSPDIMRange subRange, HSPDIMRange upRange)
+        {
+            for (int dim = 0; dim < dimension; dim++)
+            {
+                float subHalf = subRange.range[dim] * 0.5f;
+                float upHalf = upRange.range[dim] * 0.5f;
+                float subLower = subRange.entity.Position[dim] - subHalf;
+                float subUpper = subRange.entity.Position[dim] + subHalf;
+                float upLower = upRange.entity.Position[dim] - upHalf;
+                float upUpper = upRange.entity.Position[dim] + upHalf;
+
+                if (subLower >= upUpper || upLower >= subUpper)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
         
         public void OnGameStart(GameState prev, GameState next, bool asServer)
         {
@@ -340,11 +567,12 @@ namespace Framework.HSPDIMAlgo
         }
         public void InitMappingAndMatching()
         {
+            NonLeafInsideCount = 0;
             HSPDIMEntities.EnsureCapacity(entityCountEstimate);
             upRanges.Capacity = entityCountEstimate;
             subRanges.Capacity = entityCountEstimate;
-            subTreeDepth = DepthCal(minEntitySubRegSize);
-            upTreeDepth = DepthCal(minEntityUpRegSize);
+            subTreeDepth = TreeDepthCal(minEntitySubRegSize);
+            upTreeDepth = TreeDepthCal(minEntityUpRegSize);
             PDebug.Log(subTreeDepth);
             upTree = Enumerable.Range(0, dimension).Select(_ => new BinaryTree<HSPDIMTreeNodeData>(upTreeDepth)).ToArray();
             subTree = Enumerable.Range(0, dimension).Select(_ => new BinaryTree<HSPDIMTreeNodeData>(subTreeDepth)).ToArray();
@@ -874,7 +1102,7 @@ namespace Framework.HSPDIMAlgo
                         //sb.Append($"\n");
                         if (l == tree.depth)
                         {
-                            if (node.Data.insides.Count > 0)
+                            if (!OriginalAlgorithm && node.Data.insides.Count > 0)
                                 foreach (HSPDIMRange b in newIns)
                                 {
                                     if (m > IndexCal(b.Bounds[i, 0].boundValue, tree.depth))
@@ -890,7 +1118,7 @@ namespace Framework.HSPDIMAlgo
                                 };
                             if (m == m2)
                             {
-                                //SortMatchInside(boundInSortedList, tree, indexTree, i, m, subset, upset, false, null);
+                                SortMatchInside(boundInSortedList, tree, indexTree, i, m, subset, upset, false, null);
                             }
                         }
                         if ((k + 1) % 2 == 0) k = k / 2;
@@ -1744,7 +1972,7 @@ namespace Framework.HSPDIMAlgo
                         {
                             if (r.entity.Modified[i])
                             {
-                                AddRangeToTree(i, r, tree);
+                                AddRangeToTreeInsertionBinary(i, r, tree);
                             }
                         }
                     }
@@ -1758,7 +1986,7 @@ namespace Framework.HSPDIMAlgo
                         r.UpdateRange(tree[0].depth);
                         for (short i = 0; i < dimension; i++)
                         {
-                            AddRangeToTree(i, r, tree);
+                            AddRangeToTreeInsertionBinary(i, r, tree);
                         }
                     }
                 }
@@ -1863,7 +2091,7 @@ namespace Framework.HSPDIMAlgo
             upperIndexInContainer = upperContainer.BinarySearch(upperBound);
             if (upperIndexInContainer < 0) upperIndexInContainer = ~upperIndexInContainer;
             upperContainer.Insert(upperIndexInContainer, upperBound);
-            if (coverBound != null) tree[depth, lowerBound.index].Data.covers.Add(coverBound);
+            if (coverBound != null) tree[depth, coverBound.index].Data.covers.Add(coverBound);
         }
         public static void RemoveBoundFromTree(HSPDIMBound lowerBound, HSPDIMBound upperBound,BinaryTree<HSPDIMTreeNodeData> tree, bool inside, HSPDIMBound coverBound = null)
         {
@@ -1993,7 +2221,7 @@ namespace Framework.HSPDIMAlgo
             float pos = range.entity.Position[i] + HSPDIM.mapSizeEstimate / 2;
             float halfRange = range.range[i] / 2;
             int treeDepth = tree[i].depth;
-            int depth = range.range[i] < HSPDIM.mapSizeEstimate / (1 << treeDepth) ? treeDepth : HSPDIM.DepthCal(range.range[i]);
+            int depth = HSPDIM.DepthCal(range.range[i], treeDepth);
             float lowerPos = pos - halfRange;
             float upperPos = pos + halfRange;
             int lowerIndex = range.entity.Enable ? HSPDIM.IndexCal(lowerPos, depth) : -1;
@@ -2005,6 +2233,10 @@ namespace Framework.HSPDIMAlgo
             ref var upperBound = ref range.Boundss[i, 1];
             ref var coverBound = ref range.Boundss[i, 2];
             bool isInside = (upperIndex - lowerIndex) == 0;
+            if (isInside && depth != treeDepth)
+            {
+                Instance.NonLeafInsideCount++;
+            }
             lowerBound.UpdateBound(id, lowerPos, lowerIndex, depth, lowerIndex, isInside, modified);
             upperBound.UpdateBound(id, upperPos, upperIndex, depth, lowerIndex, isInside, modified);
 
